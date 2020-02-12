@@ -74,7 +74,7 @@ pub struct IMAGE_FILE_HEADER {
     pub NumberOfSymbols:        DWORD,
     pub SizeOfOptionalHeader:   WORD,
     pub Characteristics:        WORD,
-
+}
 
 
 #[derive(Debug)]
