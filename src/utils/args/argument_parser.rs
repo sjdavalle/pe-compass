@@ -14,12 +14,12 @@ impl ArgumentsParser<'_> {
         ArgumentsParser {
             inputs: App::new("\n\npe-compass")
                         .author("carlos diaz | @dfirence")
-                        .version("0.0.1")
-                        .about("Portable Executable Format Study")
+                        .version(" - v.0.0.1")
+                        .about("A Study of the Portable Executable Format")
                         .arg(
                             Arg::with_name("file")
                                 .short("f")
-                                .value_name("PEFILE")
+                                .value_name(" PE FILE ")
                                 .help("File System Path of PEFILE to inspect")
                                 .takes_value(true)
                         )
