@@ -33,7 +33,7 @@ pub const IMAGE_DIRECTORY_ENTRY_TLS:            WORD   = 9;
 pub const IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG:    WORD   = 10;
 pub const IMAGE_NUMBEROF_DIRECTORY_ENTRIES:     WORD   = 16;
 pub const IMAGE_ENCLAVE_SHORT_ID_LENGTH:        WORD   = ENCLAVE_SHORT_ID_LENGTH;
-pub const IMAGE_ENCLAVE_LONG_ID_LENGTH:        WORD   = ENCLAVE_LONG_ID_LENGTH; 
+pub const IMAGE_ENCLAVE_LONG_ID_LENGTH:         WORD   = ENCLAVE_LONG_ID_LENGTH; 
 /// # Additional Constants used in PE Structures
 pub const ENCLAVE_SHORT_ID_LENGTH:              WORD   = 16;
 pub const ENCLAVE_LONG_ID_LENGTH:               WORD   = 32;
