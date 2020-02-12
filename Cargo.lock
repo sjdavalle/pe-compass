@@ -67,6 +67,7 @@ name = "pe-compass"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "scroll",
  "serde",
  "serde_derive",
  "serde_json",
@@ -95,6 +96,12 @@ name = "ryu"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bfa8506c1de11c9c4e4c38863ccbe02a305c8188e85a05a784c9e11e1c3910c8"
+
+[[package]]
+name = "scroll"
+version = "0.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "abb2332cb595d33f7edd5700f4cbf94892e680c7f0ae56adab58a35190b66cb1"
 
 [[package]]
 name = "serde"

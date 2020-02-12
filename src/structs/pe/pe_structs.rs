@@ -33,11 +33,17 @@ pub const IMAGE_DIRECTORY_ENTRY_TLS:            WORD   = 9;
 pub const IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG:    WORD   = 10;
 pub const IMAGE_NUMBEROF_DIRECTORY_ENTRIES:     WORD   = 16;
 pub const IMAGE_ENCLAVE_SHORT_ID_LENGTH:        WORD   = ENCLAVE_SHORT_ID_LENGTH;
-pub const IMAGE_ENCLAVE_LONG_ID_LENGTH:         WORD   = ENCLAVE_LONG_ID_LENGTH; 
+pub const IMAGE_ENCLAVE_LONG_ID_LENGTH:         WORD   = ENCLAVE_LONG_ID_LENGTH;
+///
 /// # Additional Constants used in PE Structures
+/// 
 pub const ENCLAVE_SHORT_ID_LENGTH:              WORD   = 16;
 pub const ENCLAVE_LONG_ID_LENGTH:               WORD   = 32;
 ///
+/// # PE PATTERNS
+/// 
+pub const PE_MAGIC_HEADER: DWORD = 0x4d5a9000;
+/// 
 /// # IMAGE_DOS_HEADER
 /// 
 ///
@@ -57,10 +63,10 @@ pub struct IMAGE_DOS_HEADER {
     pub e_cs:        USHORT,         // Initial (relative) CS value
     pub e_lfarlc:    USHORT,         // File Address Relocation Table
     pub e_ovno:      USHORT,         // Overlay Number
-    pub e_res:       [USHORT, 4],    // Reserved Words
+    pub e_res:       [USHORT; 4],    // Reserved Words
     pub e_oemid:     USHORT,         // OEM Identifier
     pub e_oeminfo:   USHORT,         // OEM Information, e_oemid specific
-    pub e_res:       [USHORT, 10],   // Reserved Words
+    pub e_res:       [USHORT; 10],   // Reserved Words
     pub e_lfanew:    LONG            // File Address of new exe header
 }
 
@@ -201,8 +207,8 @@ pub struct IMAGE_DEBUG_MISC {
     pub DataType:   DWORD,
     pub Length:     DWORD,
     pub Unicode:    BOOLEAN,
-    pub Reserved:   [BYTE, 3],
-    pub Data:       [BYTE, 0],
+    pub Reserved:   [BYTE; 3],
+    pub Data:       [BYTE; 0],
 }
 
 

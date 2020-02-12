@@ -68,4 +68,14 @@ impl FileHandler {
             successful: true
         }
     }
+    pub fn read_stream(&self, marker: &mut [u8]) -> Result<(), Box<dyn std::error::Error>>
+    {
+        let mut _bufr = BufReader::new(&self.handle);
+        _bufr.read_exact(marker)?;
+        println!("{:#?}", _bufr);
+        println!("\n\nContent:\n{:#?}", marker);
+        let _magic: &[u8] = &marker[0..4];
+        println!("\n\nMagic Bytes: \n\n{:#?}", _magic); 
+        Ok(())
+    }
 }
