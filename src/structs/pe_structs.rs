@@ -245,6 +245,7 @@ pub struct IMAGE_DOS_HEADER {
 /// 
 /// 
 #[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_FILE_HEADER {
     pub Machine:                WORD,
     pub NumberOfSections:       WORD,
@@ -254,9 +255,12 @@ pub struct IMAGE_FILE_HEADER {
     pub SizeOfOptionalHeader:   WORD,
     pub Characteristics:        WORD,
 }
-
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_OPTIONAL_HEADER32 {
     pub Magic:                          WORD,
     pub MajorLinkerVersion:             BYTE,
@@ -290,8 +294,12 @@ pub struct IMAGE_OPTIONAL_HEADER32 {
     pub NumberOfRvaAndSizes:            DWORD,
     pub DataDirectory:                  [IMAGE_DATA_DIRECTORY; 16 as usize],
 }
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_OPTIONAL_HEADER64 {
     pub Magic:                          WORD,
     pub MajorLinkerVersion:             BYTE,
@@ -324,32 +332,43 @@ pub struct IMAGE_OPTIONAL_HEADER64 {
     pub NumberOfRvaAndSizes:            DWORD,
     pub DataDirectory:                  [IMAGE_DATA_DIRECTORY; 16 as usize],
 }
-
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_DATA_DIRECTORY {
     pub VirtualAddress:  ULONG,
     pub Size:            ULONG
 }
-
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_NT_HEADERS32 {
     pub Signature:      DWORD,
     pub FileHeader:     IMAGE_FILE_HEADER,
     pub OptionalHeader: IMAGE_OPTIONAL_HEADER32
 }
-
-
+///
+/// 
+/// 
+/// 
 #[derive(Debug)]
 pub struct IMAGE_NT_HEADERS64 {
     pub Signature:      DWORD,
     pub FileHeader:     IMAGE_FILE_HEADER,
     pub OptionalHeader: IMAGE_OPTIONAL_HEADER64
 }
-
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_COFF_SYMBOLS_HEADER {
     pub NumberOfSymbols:        DWORD,
     pub LvaToFirstSymbol:       DWORD,
@@ -360,9 +379,12 @@ pub struct IMAGE_COFF_SYMBOLS_HEADER {
     pub RvaToFirstByteOfData:   DWORD,
     pub RvaToLastByteOfData:    DWORD,
 }
-
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_DEBUG_DIRECTORY {
     pub Characteristics:    DWORD,
     pub TimeDateStamp:      DWORD,
@@ -373,9 +395,12 @@ pub struct IMAGE_DEBUG_DIRECTORY {
     pub AddressOfRawData:   DWORD,
     pub PointerToRawData:   DWORD,
 }
-
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_DEBUG_MISC {
     pub DataType:   DWORD,
     pub Length:     DWORD,
@@ -383,32 +408,44 @@ pub struct IMAGE_DEBUG_MISC {
     pub Reserved:   [BYTE; 3],
     pub Data:       [BYTE; 0],
 }
-
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_FUNCTION_ENTRY {
     pub StartingAddress:    DWORD,
     pub EndingAddress:      DWORD,
     pub EndOfPrologue:      DWORD,
 }
-
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_FUNCTION_ENTRY64 {
     pub StartingAddress:                    ULONGLONG,
     pub EndingAddress:                      ULONGLONG,
     pub EndOfPrologueOrUnwindInfoAddress:   ULONGLONG,
 }
-
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_ROM_HEADERS {
     pub FileHeader:     IMAGE_FILE_HEADER,
     pub OptionalHeader: IMAGE_ROM_OPTIONAL_HEADER,
 }
-
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_ROM_OPTIONAL_HEADER {
     pub Magic:                      WORD,
     pub MajorLinkerVersion:         BYTE,
@@ -424,17 +461,23 @@ pub struct IMAGE_ROM_OPTIONAL_HEADER {
     pub CprMask:                    [DWORD; 4],
     pub GpValue:                    DWORD,
 }
-
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_RUNTIME_FUNCTION_ENTRY {
     pub BeginAddress:       DWORD,
     pub EndAddress:         DWORD,
     pub UnwindInfoAddress:  DWORD,
 }
-
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_SECTION_HEADER {
     pub Name:                           [BYTE; 8],
     pub PhysicalAddressOrVirtualSize:   DWORD,
@@ -447,9 +490,12 @@ pub struct IMAGE_SECTION_HEADER {
     pub NumberOfLinenumbers:            WORD,
     pub Characteristics:                DWORD,
 }
-
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_RESOURCE_DIRECTORY {
     pub Characteristics:        DWORD,
     pub TimeDateStamp:          DWORD,
@@ -458,10 +504,12 @@ pub struct IMAGE_RESOURCE_DIRECTORY {
     pub NumberOfNamedEntries:   WORD,
     pub NumberOfIdEntries:      WORD
 }
-
-
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_ENCLAVE_CONFIG32 {
     pub Size:                        DWORD,
     pub MinimumRequiredConfigSize:   DWORD,
@@ -477,9 +525,12 @@ pub struct IMAGE_ENCLAVE_CONFIG32 {
     pub NumberOfThreads:             DWORD,
     pub EnclaveFlags:                DWORD,
 }
-
-
-#[derive(Debug)]
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 struct IMAGE_ENCLAVE_CONFIG64 {
     pub Size:                        DWORD,
     pub MinimumRequiredConfigSize:   DWORD,
