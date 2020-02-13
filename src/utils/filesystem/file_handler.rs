@@ -4,13 +4,20 @@
 /// having to spread filesystem code logic across the project.
 /// Simply import this module and use it to perform the basic functions.
 /// 
+extern crate scroll;
+/// 
 use std::io::prelude::*;
 use std::io::{ self, BufReader };
+use std::fmt::Write;
 use std::path::{ Path };
 use std::fs::{ self, File, Metadata };
 
 use crate::utils::errors::custom_errors::exit_process;
+use crate::structs::pe_structs::*;
 
+use scroll::{Pread, Pwrite, Cread, LE};
+
+/// 
 /// # File Handler
 /// A custom struct that keeps track of the file_handle, metadata, and object.
 /// ```
@@ -68,14 +75,37 @@ impl FileHandler {
             successful: true
         }
     }
-    pub fn read_stream(&self, marker: &mut [u8]) -> Result<(), Box<dyn std::error::Error>>
+    /*pub fn read_stream(&self, marker: &mut [u8]) -> Result<(), Box<dyn std::error::Error>>
     {
         let mut _bufr = BufReader::new(&self.handle);
         _bufr.read_exact(marker)?;
-        println!("{:#?}", _bufr);
-        println!("\n\nContent:\n{:#?}", marker);
-        let _magic: &[u8] = &marker[0..4];
-        println!("\n\nMagic Bytes: \n\n{:#?}", _magic); 
+
+        let mut _hex = String::with_capacity(255);
+        let mut _cnt = 0u8;
+        for _x in marker.iter() {
+            _cnt += 1;
+            write!(&mut _hex, "0x{:<3x}", _x).unwrap();
+            if _cnt == 16u8 {
+                println!("{}", _hex);
+                _hex.clear();
+                _cnt = 0
+            }
+        }
+        Ok(())
+    }*/
+    pub fn read_stream(&self, _bytes: &mut [u8]) -> Result<(), Box<dyn std::error::Error>>
+    {
+        let mut _bufr = BufReader::new(&self.handle);
+                _bufr.read_exact(_bytes)?;
+        
+        let _doshdr: IMAGE_DOS_HEADER = _bytes.pread_with(0usize, LE).unwrap();
+
+        println!("DOS HEADER:\n{:#?}", _doshdr);
+        println!("\n\n");
+
+        println!("PE Magic Header      : 0x{:x}", _doshdr.e_magic);
+        println!("PE Pointer Offset    : 0x{:x}", _doshdr.e_lfanew);
+        println!("PE Relocation Offset : 0x{:x}", _doshdr.e_lfarlc);
         Ok(())
     }
 }

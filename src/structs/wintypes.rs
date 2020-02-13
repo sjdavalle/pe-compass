@@ -21,15 +21,15 @@
 /// focused on the items or required definitions that allow you
 /// to parse a PE file.
 /// 
-type BYTE       = u8;
-type UCHAR      = u8;
-type WORD       = u16;
-type DWORD      = u32;
-type QWORD      = u64;
+pub type BYTE       = u8;
+pub type UCHAR      = u8;
+pub type WORD       = u16;
+pub type DWORD      = u32;
+pub type QWORD      = u64;
 
-type USHORT     = u16;
-type ULONG      = u32;
-type ULONGLONG  = u64;
+pub type USHORT     = u16;
+pub type ULONG      = u32;
+pub type ULONGLONG  = u64;
 
-type LONG       = i32;
-type BOOLEAN    = BYTE;
+pub type LONG       = i32;
+pub type BOOLEAN    = BYTE;
