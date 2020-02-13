@@ -15,11 +15,14 @@
 /// 
 /// Lastly, reference the `wintypes,rs` file where the translated
 /// windows types to rust are kept to keep things clean,
-/// 
+///
+///
 use crate::structs::pe::wintypes::*,
-
-/// # PE Constants
-/// 
+///
+/// # PE Image Constants
+///
+///
+///
 pub const IMAGE_DIRECTORY_ENTRY_EXPORT:         WORD   = 0;
 pub const IMAGE_DIRECTORY_ENTRY_IMPORT:         WORD   = 1;
 pub const IMAGE_DIRECTORY_ENTRY_RESOURCE:       WORD   = 2;
@@ -36,13 +39,15 @@ pub const IMAGE_ENCLAVE_SHORT_ID_LENGTH:        WORD   = ENCLAVE_SHORT_ID_LENGTH
 pub const IMAGE_ENCLAVE_LONG_ID_LENGTH:         WORD   = ENCLAVE_LONG_ID_LENGTH;
 ///
 /// # Additional Constants used in PE Structures
-/// 
+///
+///
 pub const ENCLAVE_SHORT_ID_LENGTH:              WORD   = 16;
 pub const ENCLAVE_LONG_ID_LENGTH:               WORD   = 32;
 ///
 /// # PE PATTERNS
-/// 
-pub const PE_MAGIC_HEADER: DWORD = 0x4d5a9000;
+///
+///
+pub const PE_MAGIC_HEADER: DWORD = 0x4d5a;
 /// 
 /// # IMAGE_DOS_HEADER
 /// 
@@ -69,8 +74,9 @@ pub struct IMAGE_DOS_HEADER {
     pub e_res:       [USHORT; 10],   // Reserved Words
     pub e_lfanew:    LONG            // File Address of new exe header
 }
-
-
+///
+/// # IMAGE_FILE_HEADER
+///
 #[derive(Debug)]
 pub struct IMAGE_FILE_HEADER {
     pub Machine:                WORD,
@@ -81,8 +87,10 @@ pub struct IMAGE_FILE_HEADER {
     pub SizeOfOptionalHeader:   WORD,
     pub Characteristics:        WORD,
 }
-
-
+///
+/// # IMAGE_OPTIONAL_HEADER32
+///
+///
 #[derive(Debug)]
 pub struct IMAGE_OPTIONAL_HEADER32 {
     pub Magic:                          WORD,
@@ -117,8 +125,10 @@ pub struct IMAGE_OPTIONAL_HEADER32 {
     pub NumberOfRvaAndSizes:            DWORD,
     pub DataDirectory:                  [IMAGE_DATA_DIRECTORY; IMAGE_NUMBEROF_DIRECTORY_ENTRIES],
 }
-
-
+///
+///
+///
+///
 pub struct IMAGE_OPTIONAL_HEADER64 {
     pub Magic:                          WORD,
     pub MajorLinkerVersion:             BYTE,
@@ -151,31 +161,39 @@ pub struct IMAGE_OPTIONAL_HEADER64 {
     pub NumberOfRvaAndSizes:            DWORD,
     pub DataDirectory:                  [IMAGE_DATA_DIRECTORY; IMAGE_NUMBEROF_DIRECTORY_ENTRIES],
 }
-
-
+///
+///
+///
+///
 #[derive(Debug)]
 pub struct IMAGE_DATA_DIRECTORY {
     pub VirtualAddress:  ULONG,
     pub Size:            ULONG
 }
-
-
+///
+///
+///
+///
 #[derive(Debug)]
 pub struct IMAGE_NT_HEADERS32 {
     pub Signature:      DWORD,
     pub FileHeader:     IMAGE_FILE_HEADER,
     pub OptionalHeader: IMAGE_OPTIONAL_HEADER32
 }
-
-
+///
+///
+///
+///
 #[derive(Debug)]
 pub struct IMAGE_NT_HEADERS64 {
     pub Signature:      DWORD,
     pub FileHeader:     IMAGE_FILE_HEADER,
     pub OptionalHeader: IMAGE_OPTIONAL_HEADER64
 }
-
-
+///
+///
+///
+///
 [derive(Debug)]
 pub struct IMAGE_COFF_SYMBOLS_HEADER {
     pub NumberOfSymbols:        DWORD,
@@ -187,8 +205,10 @@ pub struct IMAGE_COFF_SYMBOLS_HEADER {
     pub RvaToFirstByteOfData:   DWORD,
     pub RvaToLastByteOfData:    DWORD,
 }
-
-
+///
+///
+///
+///
 #[derive(Debug)]
 pub struct IMAGE_DEBUG_DIRECTORY {
     pub Characteristics:    DWORD,
@@ -200,8 +220,9 @@ pub struct IMAGE_DEBUG_DIRECTORY {
     pub AddressOfRawData:   DWORD,
     pub PointerToRawData:   DWORD,
 }
-
-
+///
+///
+///
 #[derive(Debug)]
 pub struct IMAGE_DEBUG_MISC {
     pub DataType:   DWORD,
@@ -210,31 +231,38 @@ pub struct IMAGE_DEBUG_MISC {
     pub Reserved:   [BYTE; 3],
     pub Data:       [BYTE; 0],
 }
-
-
+///
+///
+///
+///
 #[derive(Debug)]
 pub struct IMAGE_FUNCTION_ENTRY {
     pub StartingAddress:    DWORD,
     pub EndingAddress:      DWORD,
     pub EndOfPrologue:      DWORD,
 }
-
-
+///
+///
+///
 #[derive(Debug)]
 pub struct IMAGE_FUNCTION_ENTRY64 {
     pub StartingAddress:                    ULONGLONG,
     pub EndingAddress:                      ULONGLONG,
     pub EndOfPrologueOrUnwindInfoAddress:   ULONGLONG,
 }
-
-
+///
+///
+///
+///
 #[derive(Debug)]
 pub struct IMAGE_ROM_HEADERS {
     pub FileHeader:     IMAGE_FILE_HEADER,
     pub OptionalHeader: IMAGE_ROM_OPTIONAL_HEADER,
 }
-
-
+///
+///
+///
+///
 #[derive(Debug)]
 pub struct IMAGE_ROM_OPTIONAL_HEADER {
     pub Magic:                      WORD,
@@ -251,16 +279,20 @@ pub struct IMAGE_ROM_OPTIONAL_HEADER {
     pub CprMask:                    [DWORD; 4],
     pub GpValue:                    DWORD,
 }
-
-
+///
+///
+///
+///
 #[derive(Debug)]
 pub struct IMAGE_RUNTIME_FUNCTION_ENTRY {
     pub BeginAddress:       DWORD,
     pub EndAddress:         DWORD,
     pub UnwindInfoAddress:  DWORD,
 }
-
-
+///
+///
+///
+///
 #[derive(Debug)]
 pub struct IMAGE_SECTION_HEADER {
     pub Name:                           [BYTE; 8],
@@ -274,8 +306,10 @@ pub struct IMAGE_SECTION_HEADER {
     pub NumberOfLinenumbers:            WORD,
     pub Characteristics:                DWORD,
 }
-
-
+///
+///
+///
+///
 #[derive(Debug)]
 pub struct IMAGE_RESOURCE_DIRECTORY {
     pub Characteristics:        DWORD,
@@ -285,9 +319,10 @@ pub struct IMAGE_RESOURCE_DIRECTORY {
     pub NumberOfNamedEntries:   WORD,
     pub NumberOfIdEntries:      WORD
 }
-
-
-
+///
+///
+///
+///
 #[derive(Debug)]
 pub struct IMAGE_ENCLAVE_CONFIG32 {
     pub Size:                        DWORD,
@@ -304,8 +339,10 @@ pub struct IMAGE_ENCLAVE_CONFIG32 {
     pub NumberOfThreads:             DWORD,
     pub EnclaveFlags:                DWORD,
 }
-
-
+///
+///
+///
+///
 #[derive(Debug)]
 struct IMAGE_ENCLAVE_CONFIG64 {
     pub Size:                        DWORD,
