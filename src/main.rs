@@ -21,7 +21,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>>
     //let _args = ArgumentsParser::new();
     //println!("{:#?}", _args);
     let _fh = FileHandler::open("/home/archir/Documents/my_code/rust/pe-compass/pe-samples/sqlite3x86.dll", "r");
-    let mut _cnt: [u8; 64] = [0u8; 64];
+    let mut _cnt: [u8; 925_000] = [0u8; 925_000];
     _fh.read_stream(&mut _cnt)?;
     Ok(())
 }

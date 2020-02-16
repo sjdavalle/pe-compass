@@ -1,7 +1,4 @@
-#![allow(non_snake_case)]
-#![allow(non_camel_case_types)]
-#[allow(unused_imports)]
-#[allow(dead_code)]
+
 ///
 /// # Portable Executable Structures
 /// 
@@ -247,14 +244,15 @@ pub struct IMAGE_DOS_HEADER {
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_FILE_HEADER {
-    pub Machine:                WORD,
-    pub NumberOfSections:       WORD,
-    pub TimeDateStamp:          DWORD,
-    pub PointerToSymbolTable:   DWORD,
-    pub NumberOfSymbols:        DWORD,
-    pub SizeOfOptionalHeader:   WORD,
-    pub Characteristics:        WORD,
+    pub Machine:                WORD,   // 16
+    pub NumberOfSections:       WORD,   // 16
+    pub TimeDateStamp:          DWORD,  // 32
+    pub PointerToSymbolTable:   DWORD,  // 32
+    pub NumberOfSymbols:        DWORD,  // 32
+    pub SizeOfOptionalHeader:   WORD,   // 16
+    pub Characteristics:        WORD,   // 16
 }
+
 impl ::std::clone::Clone for IMAGE_FILE_HEADER {
     fn clone(&self) -> Self {
         *self

@@ -99,7 +99,9 @@ impl FileHandler {
     {
         let mut _bufr = BufReader::new(&self.handle);
                 _bufr.read_exact(_bytes)?;
-        
+
+        println!("Buffer State: \n{:#?}", _bufr);
+
         let _doshdr: IMAGE_DOS_HEADER = _bytes.pread_with(0usize, LE).unwrap();
 
         println!("DOS HEADER:\n{:#?}", _doshdr);
@@ -108,6 +110,11 @@ impl FileHandler {
         println!("PE Magic Header      : 0x{:x}", _doshdr.e_magic);
         println!("PE Pointer Offset    : 0x{:x}", _doshdr.e_lfanew);
         println!("PE Relocation Offset : 0x{:x}", _doshdr.e_lfarlc);
+
+        let _pe_offset = *&_doshdr.e_lfanew as usize;
+        let _pehdr: IMAGE_FILE_HEADER = _bytes.pread_with(_pe_offset, LE).unwrap();
+
+        println!("\n\nPE IMAGE FILE HEADER: \n{:#?}", _pehdr);
         Ok(())
     }
 }
