@@ -4,7 +4,7 @@
 /// having to spread filesystem code logic across the project.
 /// Simply import this module and use it to perform the basic functions.
 /// 
-extern crate scroll;
+
 /// 
 use std::io::prelude::*;
 use std::io::{ self, BufReader };
@@ -12,10 +12,12 @@ use std::fmt::Write;
 use std::path::{ Path };
 use std::fs::{ self, File, Metadata };
 
+use scroll::{Pread, LE};
+
 use crate::utils::errors::custom_errors::exit_process;
 use crate::structs::pe_structs::*;
 
-use scroll::{Pread, Pwrite, Cread, LE};
+
 
 /// 
 /// # File Handler

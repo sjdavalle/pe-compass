@@ -1,18 +1,18 @@
-#[allow(non_camel_case_types)]
-#[allow(unused_imports)]
-#[allow(dead_code)]
+#![allow(non_snake_case)]
+#![allow(non_camel_case_types)]
+#![allow(unused_imports)]
+#![allow(dead_code)]
+
 #[macro_use]
 extern crate scroll_derive;
 /// Imports: Rust STD Lib
 
 /// Imports: 3rd Party Crates
 extern crate scroll;
-use scroll::{ Pread, LE };
 /// Imports: My Modules & Utils
 mod utils;
-use utils::args::argument_parser::{ ArgumentsParser };
+//use utils::args::argument_parser::{ ArgumentsParser };
 use utils::filesystem::file_handler::{ FileHandler };
-
 mod structs;
 use structs::pe_structs::*;
 

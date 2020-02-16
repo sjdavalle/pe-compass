@@ -1,4 +1,7 @@
-
+#![allow(non_snake_case)]
+#![allow(non_camel_case_types)]
+#[allow(unused_imports)]
+#[allow(dead_code)]
 ///
 /// # Portable Executable Structures
 /// 
@@ -17,9 +20,6 @@
 /// Lastly, reference the `wintypes,rs` file where the translated
 /// windows types to rust are kept to keep things clean,
 /// 
-extern crate scroll;
-use scroll::{ ctx, Pread };
-use crate::utils::errors::custom_errors::{ ExternalError };
 use crate::structs::wintypes::*;
 ///
 /// # PE Constants
@@ -244,7 +244,7 @@ pub struct IMAGE_DOS_HEADER {
 /// 
 /// 
 /// 
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_FILE_HEADER {
     pub Machine:                WORD,
@@ -255,11 +255,16 @@ pub struct IMAGE_FILE_HEADER {
     pub SizeOfOptionalHeader:   WORD,
     pub Characteristics:        WORD,
 }
+impl ::std::clone::Clone for IMAGE_FILE_HEADER {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
 ///
 /// 
 /// 
-/// 
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+///
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_OPTIONAL_HEADER32 {
     pub Magic:                          WORD,
@@ -292,7 +297,23 @@ pub struct IMAGE_OPTIONAL_HEADER32 {
     pub SizeOfHeapCommit:               DWORD,
     pub LoaderFlags:                    DWORD,
     pub NumberOfRvaAndSizes:            DWORD,
-    pub DataDirectory:                  [IMAGE_DATA_DIRECTORY; 16 as usize],
+    pub DataDirectory:                  [u128; 16usize]
+}
+
+impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER32 {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+///
+/// 
+/// 
+/// 
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
+pub struct IMAGE_DATA_DIRECTORY {
+    pub VirtualAddress:  ULONG,
+    pub Size:            ULONG
 }
 ///
 /// 
@@ -330,17 +351,7 @@ pub struct IMAGE_OPTIONAL_HEADER64 {
     pub SizeOfHeapCommit:               ULONGLONG,
     pub LoaderFlags:                    DWORD,
     pub NumberOfRvaAndSizes:            DWORD,
-    pub DataDirectory:                  [IMAGE_DATA_DIRECTORY; 16 as usize],
-}
-///
-/// 
-/// 
-/// 
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C)]
-pub struct IMAGE_DATA_DIRECTORY {
-    pub VirtualAddress:  ULONG,
-    pub Size:            ULONG
+    pub DataDirectory:                  [u128; 16usize]
 }
 ///
 /// 
@@ -444,7 +455,7 @@ pub struct IMAGE_ROM_HEADERS {
 /// 
 /// 
 /// 
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_ROM_OPTIONAL_HEADER {
     pub Magic:                      WORD,
@@ -460,6 +471,11 @@ pub struct IMAGE_ROM_OPTIONAL_HEADER {
     pub GprMask:                    DWORD,
     pub CprMask:                    [DWORD; 4],
     pub GpValue:                    DWORD,
+}
+impl ::std::clone::Clone for IMAGE_ROM_OPTIONAL_HEADER {
+    fn clone(&self) -> Self {
+        *self
+    }
 }
 ///
 /// 
@@ -517,8 +533,8 @@ pub struct IMAGE_ENCLAVE_CONFIG32 {
     pub NumberOfImports:             DWORD,
     pub ImportList:                  DWORD,
     pub ImportEntrySize:             DWORD,
-    pub FamilyID:                    [BYTE; IMAGE_ENCLAVE_SHORT_ID_LENGTH as usize],
-    pub ImageID:                     [BYTE; IMAGE_ENCLAVE_SHORT_ID_LENGTH as usize],
+    pub FamilyID:                    [BYTE; 16],
+    pub ImageID:                     [BYTE; 16],
     pub ImageVersion:                BYTE,
     pub SecurityVersion:             DWORD,
     pub EnclaveSize:                 DWORD,
@@ -538,8 +554,8 @@ struct IMAGE_ENCLAVE_CONFIG64 {
     pub NumberOfImports:             DWORD,
     pub ImportList:                  DWORD,
     pub ImportEntrySize:             DWORD,
-    pub FamilyID:                    [BYTE; IMAGE_ENCLAVE_SHORT_ID_LENGTH as usize],
-    pub ImageID:                     [BYTE; IMAGE_ENCLAVE_SHORT_ID_LENGTH as usize],
+    pub FamilyID:                    [BYTE; 16],
+    pub ImageID:                     [BYTE; 16],
     pub ImageVersion:                BYTE,
     pub SecurityVersion:             DWORD,
     pub EnclaveSize:                 DWORD,
