@@ -127,7 +127,7 @@ pub struct IMAGE_OPTIONAL_HEADER32 {
     pub SizeOfHeapCommit:               DWORD,
     pub LoaderFlags:                    DWORD,
     pub NumberOfRvaAndSizes:            DWORD,
-    pub DataDirectory:                  [u128; 16usize]
+    pub DataDirectory:                  [u64; 16usize]
 }
 
 impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER32 {
@@ -171,7 +171,7 @@ pub struct IMAGE_OPTIONAL_HEADER64 {
     pub SizeOfHeapCommit:               ULONGLONG,
     pub LoaderFlags:                    DWORD,
     pub NumberOfRvaAndSizes:            DWORD,
-    pub DataDirectory:                  [u128; 16usize]
+    pub DataDirectory:                  [u64; 16usize]
 }
 ///
 /// #IMAGE_DATA_DIRECTORY
