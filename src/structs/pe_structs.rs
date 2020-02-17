@@ -72,7 +72,6 @@ pub struct IMAGE_NT_HEADERS32 {
 /// 
 /// 
 /// 
-<<<<<<< HEAD
 /// Struct Size
 ///     
 #[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
@@ -97,13 +96,6 @@ pub struct IMAGE_DOS_HEADER {
     pub e_oeminfo:   WORD,         // OEM Information, e_oemid specific
     pub e_res2:      [WORD; 10],   // Reserved Words
     pub e_lfanew:    LONG            // File Address of new exe header
-=======
-#[derive(Debug)]
-pub struct IMAGE_NT_HEADERS64 {
-    pub Signature:      DWORD,
-    pub FileHeader:     IMAGE_FILE_HEADER,
-    pub OptionalHeader: IMAGE_OPTIONAL_HEADER64
->>>>>>> 40513bf65a0af90078e5f27a6fd2d9f27f3d80da
 }
 ///
 /// # IMAGE_FILE_HEADER
