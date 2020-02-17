@@ -18,7 +18,7 @@
 /// windows types to rust are kept to keep things clean,
 /// 
 use crate::structs::wintypes::*;
-
+///
 ///
 /// # IMAGE_DOS_HEADER
 /// 
@@ -179,8 +179,8 @@ pub struct IMAGE_OPTIONAL_HEADER64 {
 #[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_DATA_DIRECTORY {
-    pub VirtualAddress:  ULONG,
-    pub Size:            ULONG
+    pub VirtualAddress:  DWORD,
+    pub Size:            DWORD
 }
 ///
 /// 
