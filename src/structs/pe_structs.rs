@@ -69,35 +69,6 @@ pub struct IMAGE_NT_HEADERS32 {
     pub OptionalHeader: IMAGE_OPTIONAL_HEADER32
 }
 ///
-/// 
-/// 
-/// 
-/// Struct Size
-///     
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C)]
-pub struct IMAGE_DOS_HEADER {
-    pub e_magic:     WORD,         // Magic Number
-    pub e_cblp:      WORD,         // Bytes on last page of file
-    pub e_cp:        WORD,         // Pages in file
-    pub e_crlc:      WORD,         // Relocations
-    pub e_cparhdr:   WORD,         // Size of Header in pargraphs
-    pub e_minalloc:  WORD,         // Minimum extra paragraphs needed
-    pub e_maxalloc:  WORD,         // Maximum extra paragraphs needed
-    pub e_ss:        WORD,         // Initial (relative) SS value
-    pub e_sp:        WORD,         // Initial SP value
-    pub e_csum:      WORD,         // Checksum
-    pub e_ip:        WORD,         // Initial IP value
-    pub e_cs:        WORD,         // Initial (relative) CS value
-    pub e_lfarlc:    WORD,         // File Address Relocation Table
-    pub e_ovno:      WORD,         // Overlay Number
-    pub e_res:       [WORD; 4],    // Reserved Words
-    pub e_oemid:     WORD,         // OEM Identifier
-    pub e_oeminfo:   WORD,         // OEM Information, e_oemid specific
-    pub e_res2:      [WORD; 10],   // Reserved Words
-    pub e_lfanew:    LONG            // File Address of new exe header
-}
-///
 /// # IMAGE_FILE_HEADER
 /// 
 /// 
