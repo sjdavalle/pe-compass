@@ -244,13 +244,13 @@ pub struct IMAGE_DOS_HEADER {
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_FILE_HEADER {
-    pub Machine:                WORD,   // 16
-    pub NumberOfSections:       WORD,   // 16
-    pub TimeDateStamp:          DWORD,  // 32
-    pub PointerToSymbolTable:   DWORD,  // 32
-    pub NumberOfSymbols:        DWORD,  // 32
-    pub SizeOfOptionalHeader:   WORD,   // 16
-    pub Characteristics:        WORD,   // 16
+    pub Machine:                WORD,   // 2
+    pub NumberOfSections:       WORD,   // 2
+    pub TimeDateStamp:          DWORD,  // 4
+    pub PointerToSymbolTable:   DWORD,  // 4
+    pub NumberOfSymbols:        DWORD,  // 4
+    pub SizeOfOptionalHeader:   WORD,   // 2
+    pub Characteristics:        WORD,   // 2
 }
 
 impl ::std::clone::Clone for IMAGE_FILE_HEADER {
