@@ -1,120 +1,89 @@
-///
-/// # File Handler Utility & Helper
-/// This module allows you to perform common tasks on the filesystem without
-/// having to spread filesystem code logic across the project.
-/// Simply import this module and use it to perform the basic functions.
-/// 
 
-/// 
+use scroll::{ Pread, LE };
+
+#[path = "../errors/custom_errors.rs"] mod custom_errors;
+
+use custom_errors::*;
+
 use std::io::prelude::*;
-use std::io::{ self, BufReader };
-use std::fmt::Write;
-use std::path::{ Path };
+use std::io::{ self, BufRead, BufReader, BufWriter, Read, Write };
 use std::fs::{ self, File, Metadata };
+use std::path::Path;
 
-use scroll::{Pread, LE};
-
-use crate::utils::errors::custom_errors::exit_process;
-use crate::structs::pe_structs::*;
-
-
-
-/// 
-/// # File Handler
-/// A custom struct that keeps track of the file_handle, metadata, and object.
-/// ```
-///     let _file = FileHandler::open("foo.txt", "r");
-/// ```
-/// 
 #[derive(Debug)]
 pub struct FileHandler {
-    pub handle: File,
-    pub meta:   Metadata,
-    pub successful: bool
+    pub success:    bool,
+    pub handle:     File, 
+    pub meta:       Metadata,
+    pub size:       u64
 }
+ impl FileHandler {
+     pub fn open(fp: &str, mode: &str) -> Self
+     {
+        let _filepath = Path::new(fp);
 
-impl FileHandler {
-    pub fn open(p: &str, mode: &str) -> Self
-    {
+        /*
+        {
+            Add Checks Here: ToDo
+        }
+        */
+
         let mut _read       = false;
         let mut _write      = false;
-        let mut _create_new = false;
+        let mut _create     = false;
+        let mut _append     = false;
+        let mut _truncate   = false;
 
         match mode {
-            "r"   => { _read = true; },
-            "w"   => { _write = true; },
-            "rw"  => { _read = true; _write = true; },
-            "crw" => { _create_new = true; },
-            _     => exit_process("Desired File Mode Not Supported")
-        };
-
-        let _filepath = Path::new(p);
-
-        if !_filepath.exists() {
-            exit_process("Provided Path Does Not Exists.  Require an existing File Path");
-        }
-
-        if _filepath.is_dir() {
-            exit_process("Provided Path is a Directory.  Require a target File to inspect");
+            "r"     =>  { _read = true; },
+            "rw"    =>  { _read = true; _write = true; },
+            "crw"   =>  { _write = true; _create = true; },
+            "cra"   =>  { _write = true; _append = true; },
+            "crt"   =>  { _write = true; _truncate = true; }, 
+            _       =>  exit_process("Desired File Mode Not Suppported, Process Exiting...")
         }
 
         let _file = fs::OpenOptions::new()
                                     .read(_read)
                                     .write(_write)
-                                    .create(_create_new)
+                                    .create(_create)
+                                    .append(_append)
+                                    .write(_write)
                                     .open(_filepath)
                                     .unwrap();
-        
-        let _meta = _file.metadata().unwrap();
-
-        if _meta.len() == 0 {
-            exit_process("Provided File is Zero Size '0', Refusing to continue.  Ensure Target File has content");
-        }
+        let _meta = _filepath.metadata().unwrap();
+        let _size = _meta.len();
 
         FileHandler {
             handle: _file,
-            meta: _meta,
-            successful: true
+            meta:   _meta,
+            size:   _size,
+            success: true
         }
-    }
-    /*pub fn read_stream(&self, marker: &mut [u8]) -> Result<(), Box<dyn std::error::Error>>
-    {
-        let mut _bufr = BufReader::new(&self.handle);
-        _bufr.read_exact(marker)?;
+     }
+     pub fn delete(fp: &str) -> Result<(), Box<dyn std::error::Error>>
+     {
+        let _filepath = Path::new(fp);
 
-        let mut _hex = String::with_capacity(255);
-        let mut _cnt = 0u8;
-        for _x in marker.iter() {
-            _cnt += 1;
-            write!(&mut _hex, "0x{:<3x}", _x).unwrap();
-            if _cnt == 16u8 {
-                println!("{}", _hex);
-                _hex.clear();
-                _cnt = 0
-            }
+        if _filepath.exists() {
+            fs::remove_file(_filepath)?;
+        } else {
+            exit_process("Desired File For Deletion Does Not Exist, Process Exiting");
         }
         Ok(())
-    }*/
-    pub fn read_stream(&self, _bytes: &mut [u8]) -> Result<(), Box<dyn std::error::Error>>
-    {
+     }
+     pub fn read_as_bytes(&self, n_bytes: u64) -> Result<Vec<u8>, Box<dyn std::error::Error>>
+     {
+        let mut _bytes: Vec<u8> = Vec::with_capacity(n_bytes as usize);
+        let mut _stream: [u8; 512] = [0u8; 512];
+
         let mut _bufr = BufReader::new(&self.handle);
-                _bufr.read_exact(_bytes)?;
+                _bufr.read_exact(&mut _stream[0..])?;
 
-        println!("Buffer State: \n{:#?}", _bufr);
+        for _byte in _stream.iter() {
+            _bytes.push(*_byte);
+        }
 
-        let _doshdr: IMAGE_DOS_HEADER = _bytes.pread_with(0usize, LE).unwrap();
-
-        println!("DOS HEADER:\n{:#?}", _doshdr);
-        println!("\n\n");
-
-        println!("PE Magic Header      : 0x{:x}", _doshdr.e_magic);
-        println!("PE Pointer Offset    : 0x{:x}", _doshdr.e_lfanew);
-        println!("PE Relocation Offset : 0x{:x}", _doshdr.e_lfarlc);
-
-        let _pe_offset = *&_doshdr.e_lfanew as usize;
-        let _pehdr: IMAGE_FILE_HEADER = _bytes.pread_with(_pe_offset, LE).unwrap();
-
-        println!("\n\nPE IMAGE FILE HEADER: \n{:#?}", _pehdr);
-        Ok(())
-    }
-}
+        Ok(_bytes)
+     }
+ }
