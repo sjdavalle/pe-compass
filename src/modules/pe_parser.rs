@@ -20,12 +20,13 @@ pub struct PE32 {
 /// relevant logic to parser the in scope object.
 ///
 #[derive(Debug)]
-pub struct PEParser {
+pub struct PeParser {
     handler: FileHandler,
     content: Vec<u8>,
     success: bool,
 }
-impl PEParser {
+
+impl PeParser {
     /// # Pe Parser New Method
     /// Creates a new instance of the PE Parser Object
     /// and it loads a PE file for parsing.
@@ -34,7 +35,7 @@ impl PEParser {
     ///         we are focused on correctly parsing the PE format
     /// 
     /// ```
-    /// let _pe = PEParser::new("foo.txt");
+    /// let _pe = PeParser::new("foo.exe");
     /// ```
     pub fn new(fp: &str) -> Self
     {
@@ -47,7 +48,7 @@ impl PEParser {
             let _fsize = _file.size;
             let _bytes = _file.read_as_bytes(_fsize).unwrap();
 
-            PEParser {
+            PeParser {
                 handler:    _file,
                 content:    _bytes,
                 success:    true,
@@ -57,8 +58,9 @@ impl PEParser {
     /// # PE Parser GetDosHeader Method
     /// This parses the initial IMAGE_DOS_HEADER struct from
     /// a byte stream.
+    /// 
     /// ```
-    /// let _pe = PEParser::new("foo.txt");
+    /// let _pe = PeParser::new("foo.exe");
     /// 
     /// let _dh: IMAGE_DOS_HEADER = _pe.content.pread(0usize, LE).unwrap();
     /// ```
@@ -79,8 +81,9 @@ impl PEParser {
     /// # PE Parser GetImageNTHeaders32 Method
     /// This parses the initial IMAGE_NT_HEADERS32 struct from
     /// a byte stream.
+    /// 
     /// ```
-    /// let _pe = PEParser::new("foo.txt");
+    /// let _pe = PeParser::new("foo.exe");
     /// 
     /// let _dh: IMAGE_DOS_HEADER = _pe.content.pread(0usize, LE).unwrap();
     /// ```    
@@ -91,8 +94,13 @@ impl PEParser {
         let _peheader: IMAGE_NT_HEADERS32 = self.content.pread_with(_offset, LE).unwrap();
         _peheader
     }
-    /// Data Directories
-    ///
+    /// # PE Parser GetDataDirectories Method
+    /// This parses the 16 data directories from the OPTIONAL_HEADER to return
+    /// a Vector of IMAGE_DATA_DIRECTORY entries.
+    /// 
+    /// ```
+    /// let _pe = PeParser::new("foo.exe")
+    /// ```
     pub fn get_data_directories(&self, data_dir: &[u64; 16usize]) -> Vec<IMAGE_DATA_DIRECTORY>
     {
         let mut _data_directories: Vec<IMAGE_DATA_DIRECTORY> = Vec::with_capacity(16usize);
@@ -103,4 +111,8 @@ impl PEParser {
         }
         _data_directories
     }  
+}
+#[cfg(test)]
+mod tests_pe_parser {
+
 }
