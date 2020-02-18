@@ -5,23 +5,31 @@
 
 #[macro_use]
 extern crate scroll_derive;
+extern crate scroll;
+
 /// Imports: Rust STD Lib
 
 /// Imports: 3rd Party Crates
-extern crate scroll;
+
 /// Imports: My Modules & Utils
-mod utils;
-//use utils::args::argument_parser::{ ArgumentsParser };
-use utils::filesystem::file_handler::{ FileHandler };
-mod structs;
-use structs::pe_structs::*;
+
+mod modules;
+use modules::pe_parser::PeParser;
 
 fn main() -> Result<(), Box<dyn std::error::Error>>
 {
-    //let _args = ArgumentsParser::new();
-    //println!("{:#?}", _args);
-    let _fh = FileHandler::open("/home/archir/Documents/my_code/rust/pe-compass/pe-samples/sqlite3x86.dll", "r");
-    let mut _cnt: [u8; 925_000] = [0u8; 925_000];
-    _fh.read_stream(&mut _cnt)?;
+    let _sample = "/home/archir/Documents/my_code/rust/pe-compass/pe-samples/sqlite3x86.dll";
+
+    let _pe = PeParser::new(_sample);
+    let _dosheader      = _pe.get_dosheader();
+    let _fileheader     = _pe.get_peheader(_dosheader.e_lfanew); 
+    let _nt_headers     = _pe.get_image_nt_headers32(_dosheader.e_lfanew);
+    let _pe_data_dirs   = _pe.get_data_directories(&_nt_headers.OptionalHeader.DataDirectory);
+
+    println!("\n\nDOS   HEADER: \n\n{:#?}", _dosheader);
+    println!("\n\nFILE  HEADER: \n\n{:#?}", _fileheader);
+    println!("\n\nOPT   HEADER: \n\n{:#?}", _nt_headers.OptionalHeader);
+    println!("\n\nPE DATA DIRS: \n\n{:#?}", _pe_data_dirs);
+
     Ok(())
 }

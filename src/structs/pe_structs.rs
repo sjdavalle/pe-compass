@@ -17,7 +17,18 @@
 /// Lastly, reference the `wintypes,rs` file where the translated
 /// windows types to rust are kept to keep things clean,
 /// 
-use crate::structs::wintypes::*;
+pub type BYTE       = u8;
+pub type UCHAR      = u8;
+pub type WORD       = u16;
+pub type DWORD      = u32;
+pub type QWORD      = u64;
+
+pub type ULONG      = u32;
+pub type ULONGLONG  = u64;
+
+pub type LONG       = i32;
+pub type BOOLEAN    = BYTE;
+
 ///
 ///
 /// # IMAGE_DOS_HEADER
@@ -75,13 +86,13 @@ pub struct IMAGE_NT_HEADERS64 {
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_FILE_HEADER {
-    pub Machine:                WORD,   // 16
-    pub NumberOfSections:       WORD,   // 16
-    pub TimeDateStamp:          DWORD,  // 32
-    pub PointerToSymbolTable:   DWORD,  // 32
-    pub NumberOfSymbols:        DWORD,  // 32
-    pub SizeOfOptionalHeader:   WORD,   // 16
-    pub Characteristics:        WORD,   // 16
+    pub Machine:                WORD,   // 2
+    pub NumberOfSections:       WORD,   // 2
+    pub TimeDateStamp:          DWORD,  // 4
+    pub PointerToSymbolTable:   DWORD,  // 4
+    pub NumberOfSymbols:        DWORD,  // 4
+    pub SizeOfOptionalHeader:   WORD,   // 2
+    pub Characteristics:        WORD,   // 2
 }
 
 impl ::std::clone::Clone for IMAGE_FILE_HEADER {
@@ -126,7 +137,7 @@ pub struct IMAGE_OPTIONAL_HEADER32 {
     pub SizeOfHeapCommit:               DWORD,
     pub LoaderFlags:                    DWORD,
     pub NumberOfRvaAndSizes:            DWORD,
-    pub DataDirectory:                  [u128; 16usize]
+    pub DataDirectory:                  [u64; 16usize]
 }
 
 impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER32 {
@@ -170,7 +181,7 @@ pub struct IMAGE_OPTIONAL_HEADER64 {
     pub SizeOfHeapCommit:               ULONGLONG,
     pub LoaderFlags:                    DWORD,
     pub NumberOfRvaAndSizes:            DWORD,
-    pub DataDirectory:                  [u128; 16usize]
+    pub DataDirectory:                  [u64; 16usize]
 }
 ///
 /// #IMAGE_DATA_DIRECTORY
