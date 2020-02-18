@@ -11,7 +11,7 @@ use pe_structs::*;
 /// 
 pub struct PE32 {
     ImageDosHeader: IMAGE_DOS_HEADER,
-    IamgeNtHeaders: IMAGE_NT_HEADERS32
+    ImageNtHeaders: IMAGE_NT_HEADERS32
 }
 /// # PE Parser
 /// This module is used to parse the structures of the PE Format
@@ -67,6 +67,15 @@ impl PEParser {
         let _doshdr: IMAGE_DOS_HEADER = self.content.pread_with(0usize, LE).unwrap();
         _doshdr
     }
+    ///
+    /// 
+    /// 
+    pub fn get_peheader(&self, e_lfanew: i32) -> IMAGE_FILE_HEADER
+    {
+        let _offset = e_lfanew as usize;
+        let _peheader: IMAGE_FILE_HEADER = self.content.pread_with(_offset, LE).unwrap();
+        _peheader
+    }
     /// # PE Parser GetImageNTHeaders32 Method
     /// This parses the initial IMAGE_NT_HEADERS32 struct from
     /// a byte stream.
@@ -81,5 +90,17 @@ impl PEParser {
 
         let _peheader: IMAGE_NT_HEADERS32 = self.content.pread_with(_offset, LE).unwrap();
         _peheader
-    } 
+    }
+    /// Data Directories
+    ///
+    pub fn get_data_directories(&self, data_dir: &[u64; 16usize]) -> Vec<IMAGE_DATA_DIRECTORY>
+    {
+        let mut _data_directories: Vec<IMAGE_DATA_DIRECTORY> = Vec::with_capacity(16usize);
+        for _d in data_dir.iter() {
+            let _bytes = _d.to_le_bytes();
+            let _data_dir: IMAGE_DATA_DIRECTORY = _bytes.pread_with(0usize, LE).unwrap();
+            _data_directories.push(_data_dir);
+        }
+        _data_directories
+    }  
 }

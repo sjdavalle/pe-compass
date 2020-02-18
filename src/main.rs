@@ -17,17 +17,17 @@ use modules::pe_parser::*;
 fn main() -> Result<(), Box<dyn std::error::Error>>
 {
     let _sample = "/home/archir/Documents/my_code/rust/pe-compass/pe-samples/sqlite3x86.dll";
+
     let _pe = PEParser::new(_sample);
-    let _dosheader = _pe.get_dosheader();
-    let _peheader  = _pe.get_image_nt_headers32(_dosheader.e_lfanew);
-    println!("\n\nDOS HEADER: \n\n{:#?}", _dosheader);
-    println!("\n\nPE  HEADER: \n\n{:#?}", _peheader);
-    println!("\n\nOPT HEADER: \n\n{:#?}", _peheader.OptionalHeader);
+    let _dosheader      = _pe.get_dosheader();
+    let _fileheader     = _pe.get_peheader(_dosheader.e_lfanew); 
+    let _nt_headers     = _pe.get_image_nt_headers32(_dosheader.e_lfanew);
+    let _pe_data_dirs   = _pe.get_data_directories(&_nt_headers.OptionalHeader.DataDirectory);
+
+    println!("\n\nDOS   HEADER: \n\n{:#?}", _dosheader);
+    println!("\n\nFILE  HEADER: \n\n{:#?}", _fileheader);
+    println!("\n\nOPT   HEADER: \n\n{:#?}", _nt_headers.OptionalHeader);
+    println!("\n\nPE DATA DIRS: \n\n{:#?}", _pe_data_dirs);
 
     Ok(())
 }
-    /*let _args = ArgumentsParser::new();
-    //println!("{:#?}", _args);
-    let _fh = FileHandler::open("/home/archir/Documents/my_code/rust/pe-compass/pe-samples/sqlite3x86.dll", "r");
-    let mut _cnt: [u8; 925_000] = [0u8; 925_000];
-    _fh.read_stream(&mut _cnt)?;*/
