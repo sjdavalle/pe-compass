@@ -18,7 +18,7 @@ use modules::pe_parser::PeParser;
 
 fn main() -> Result<(), Box<dyn std::error::Error>>
 {
-    let _sample = "/home/archir/Documents/my_code/rust/pe-compass/pe-samples/sqlite3x86.dll";
+    let _sample = "pe-samples/sqlite3x86.dll";
 
     let _pe = PeParser::new(_sample);
     let _dosheader      = _pe.get_dosheader(); 
