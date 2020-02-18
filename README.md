@@ -1,6 +1,9 @@
 # pe-compass
 A Study of PE Format through the RUST programming language.
 
+# Documentation Articles
+* PE Rich Data Structure: Undocumented: http://bytepointer.com/articles/the_microsoft_rich_header.htm
+* PE Things They Did not tell you...: http://bytepointer.com/articles/rich_header_lifewire_vxmags_29A-8.009.htm
 
 # To Do
 * Finish 32Bit PE Parsing
@@ -11,6 +14,9 @@ A Study of PE Format through the RUST programming language.
 Current Code Base is parsing the following structs, validation in progress.
 
 ```rust
+/// The numbers of each field in a struct are in decimal format
+/// as translated by rust::scroll::LE.
+/// Continue validating via CFF Explorer.
 DOS   HEADER: 
 
 IMAGE_DOS_HEADER {
@@ -63,7 +69,7 @@ IMAGE_NT_HEADERS32 {
         PointerToSymbolTable: 816128,
         NumberOfSymbols: 4172,
         SizeOfOptionalHeader: 224,
-        Characteristics: 8454,
+        Characteristics: 8454,          // This number is the sume of Characteristics
     },
     OptionalHeader: IMAGE_OPTIONAL_HEADER32 {
         Magic: 267,

@@ -1,4 +1,4 @@
-use scroll::{ Pread, LE, BE };
+use scroll::{ Pread, LE };
 
 #[path = "../utils/filesystem/file_handler.rs"] mod file_handler;
 use file_handler::FileHandler;
@@ -6,13 +6,9 @@ use file_handler::FileHandler;
 #[path = "../structs/pe_structs.rs"] mod pe_structs;
 use pe_structs::*;
 
-/// # PE32 
-/// This object represents a 32bit Portable Executable
-/// 
-pub struct PE32 {
-    ImageDosHeader: IMAGE_DOS_HEADER,
-    ImageNtHeaders: IMAGE_NT_HEADERS32
-}
+#[path = "../structs/co_structs.rs"] mod co_structs;
+use co_structs::*;
+
 /// # PE Parser
 /// This module is used to parse the structures of the PE Format
 /// The parser should accomodate the identification of either a
@@ -40,19 +36,13 @@ impl PeParser {
     pub fn new(fp: &str) -> Self
     {
         let _file = FileHandler::open(fp, "r");
+        let _fsize = _file.size;
+        let _bytes = _file.read_as_bytes(_fsize).unwrap();
 
-        if !_file.success {
-            std::process::exit(0x0100);
-
-        } else {
-            let _fsize = _file.size;
-            let _bytes = _file.read_as_bytes(_fsize).unwrap();
-
-            PeParser {
-                handler:    _file,
-                content:    _bytes,
-                success:    true,
-            }
+        PeParser {
+            handler: _file,
+            content: _bytes,
+            success: true,
         }
     }
     /// # PE Parser GetDosHeader Method
@@ -72,11 +62,11 @@ impl PeParser {
     ///
     /// 
     /// 
-    pub fn get_peheader(&self, e_lfanew: i32) -> IMAGE_FILE_HEADER
+    pub fn inspect_nt_headers(&self, e_lfanew: i32) -> INSPECT_NT_HEADERS
     {
         let _offset = e_lfanew as usize;
-        let _peheader: IMAGE_FILE_HEADER = self.content.pread_with(_offset, LE).unwrap();
-        _peheader
+        let _nt_headers: INSPECT_NT_HEADERS = self.content.pread_with(_offset, LE).unwrap();
+        _nt_headers
     }
     /// # PE Parser GetImageNTHeaders32 Method
     /// This parses the initial IMAGE_NT_HEADERS32 struct from

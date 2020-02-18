@@ -100,44 +100,47 @@ impl ::std::clone::Clone for IMAGE_FILE_HEADER {
         *self
     }
 }
-///
-/// # IMAGE_OPTIONAL HEADER32
-/// 
-///
+/// # IMAGE OPTIONAL HEADERS32
+/// Used for 32 Bit files
+/// Size: 224 Bytes
+///     Standard Fields: 24 Bytes
+///     Windows  Fields: 196 Bytes `includes Data Directories Array`
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_OPTIONAL_HEADER32 {
-    pub Magic:                          WORD,
-    pub MajorLinkerVersion:             BYTE,
-    pub MinorLinkerVersion:             BYTE,
-    pub SizeOfCode:                     DWORD,
-    pub SizeOfInitializedData:          DWORD,
-    pub SizeOfUninitializedData:        DWORD,
-    pub AddressOfEntryPoint:            DWORD,
-    pub BaseOfCode:                     DWORD,
-    pub BaseOfData:                     DWORD,
-    pub ImageBase:                      DWORD,
-    pub SectionAlignment:               DWORD,
-    pub FileAlignment:                  DWORD,
-    pub MajorOperatingSystemVersion:    WORD,
-    pub MinorOperatingSystemVersion:    WORD,
-    pub MajorImageVersion:              WORD,
-    pub MinorImageVersion:              WORD,
-    pub MajorSubsystemVersion:          WORD,
-    pub MinorSubsystemVersion:          WORD,
-    pub Win32VersionValue:              DWORD,
-    pub SizeOfImage:                    DWORD,
-    pub SizeOfHeaders:                  DWORD,
-    pub CheckSum:                       DWORD,
-    pub Subsystem:                      WORD,
-    pub DllCharacteristics:             WORD,
-    pub SizeOfStackReserve:             DWORD,
-    pub SizeOfStackCommit:              DWORD,
-    pub SizeOfHeapReserve:              DWORD,
-    pub SizeOfHeapCommit:               DWORD,
-    pub LoaderFlags:                    DWORD,
-    pub NumberOfRvaAndSizes:            DWORD,
-    pub DataDirectory:                  [u64; 16usize]
+    // Standard Fields
+    pub Magic:                          WORD,   // 2    Describes PE Type: 32 or 64 Bit
+    pub MajorLinkerVersion:             BYTE,   // 1
+    pub MinorLinkerVersion:             BYTE,   // 1
+    pub SizeOfCode:                     DWORD,  // 4
+    pub SizeOfInitializedData:          DWORD,  // 4
+    pub SizeOfUninitializedData:        DWORD,  // 4
+    pub AddressOfEntryPoint:            DWORD,  // 4
+    pub BaseOfCode:                     DWORD,  // 4
+    pub BaseOfData:                     DWORD,  // 4
+    // Windows Fields
+    pub ImageBase:                      DWORD,  // 4
+    pub SectionAlignment:               DWORD,  // 4
+    pub FileAlignment:                  DWORD,  // 4
+    pub MajorOperatingSystemVersion:    WORD,   // 2
+    pub MinorOperatingSystemVersion:    WORD,   // 2
+    pub MajorImageVersion:              WORD,   // 2
+    pub MinorImageVersion:              WORD,   // 2    
+    pub MajorSubsystemVersion:          WORD,   // 2
+    pub MinorSubsystemVersion:          WORD,   // 2
+    pub Win32VersionValue:              DWORD,  // 4
+    pub SizeOfImage:                    DWORD,  // 4
+    pub SizeOfHeaders:                  DWORD,  // 4
+    pub CheckSum:                       DWORD,  // 4
+    pub Subsystem:                      WORD,   // 2
+    pub DllCharacteristics:             WORD,   // 2
+    pub SizeOfStackReserve:             DWORD,  // 4
+    pub SizeOfStackCommit:              DWORD,  // 4
+    pub SizeOfHeapReserve:              DWORD,  // 4
+    pub SizeOfHeapCommit:               DWORD,  // 4
+    pub LoaderFlags:                    DWORD,  // 4 
+    pub NumberOfRvaAndSizes:            DWORD,  // 4
+    pub DataDirectory:                  [u64; 16usize]  // 8 * 16
 }
 
 impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER32 {
@@ -145,43 +148,46 @@ impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER32 {
         *self
     }
 }
-///
-/// 
-/// 
-/// 
+/// # IMAGE OPTIONAL HEADERS64
+/// Used for PE64 Bit files.
+/// Size = 
+///     Standard Fields: 24 Bytes
+///     Windows  Fields: 216 Bytes `includes Data_Directory Array`
 #[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_OPTIONAL_HEADER64 {
-    pub Magic:                          WORD,
-    pub MajorLinkerVersion:             BYTE,
-    pub MinorLinkerVersion:             BYTE,
-    pub SizeOfCode:                     DWORD,
-    pub SizeOfInitializedData:          DWORD,
-    pub SizeOfUninitializedData:        DWORD,
-    pub AddressOfEntryPoint:            DWORD,
-    pub BaseOfCode:                     DWORD,
-    pub ImageBase:                      ULONGLONG,
-    pub SectionAlignment:               DWORD,
-    pub FileAlignment:                  DWORD,
-    pub MajorOperatingSystemVersion:    WORD,
-    pub MinorOperatingSystemVersion:    WORD,
-    pub MajorImageVersion:              WORD,
-    pub MinorImageVersion:              WORD,
-    pub MajorSubsystemVersion:          WORD,
-    pub MinorSubsystemVersion:          WORD,
-    pub Win32VersionValue:              DWORD,
-    pub SizeOfImage:                    DWORD,
-    pub SizeOfHeaders:                  DWORD,
-    pub CheckSum:                       DWORD,
-    pub Subsystem:                      WORD,
-    pub DllCharacteristics:             WORD,
-    pub SizeOfStackReserve:             ULONGLONG,
-    pub SizeOfStackCommit:              ULONGLONG,
-    pub SizeOfHeapReserve:              ULONGLONG,
-    pub SizeOfHeapCommit:               ULONGLONG,
-    pub LoaderFlags:                    DWORD,
-    pub NumberOfRvaAndSizes:            DWORD,
-    pub DataDirectory:                  [u64; 16usize]
+    // Standard Fields
+    pub Magic:                          WORD,       // 2
+    pub MajorLinkerVersion:             BYTE,       // 1
+    pub MinorLinkerVersion:             BYTE,       // 1
+    pub SizeOfCode:                     DWORD,      // 4
+    pub SizeOfInitializedData:          DWORD,      // 4
+    pub SizeOfUninitializedData:        DWORD,      // 4
+    pub AddressOfEntryPoint:            DWORD,      // 4
+    pub BaseOfCode:                     DWORD,      // 4
+    // Windows Fields
+    pub ImageBase:                      ULONGLONG,  // 8
+    pub SectionAlignment:               DWORD,      // 4
+    pub FileAlignment:                  DWORD,      // 4
+    pub MajorOperatingSystemVersion:    WORD,       // 2
+    pub MinorOperatingSystemVersion:    WORD,       // 2
+    pub MajorImageVersion:              WORD,       // 2
+    pub MinorImageVersion:              WORD,       // 2
+    pub MajorSubsystemVersion:          WORD,       // 2
+    pub MinorSubsystemVersion:          WORD,       // 2
+    pub Win32VersionValue:              DWORD,      // 4
+    pub SizeOfImage:                    DWORD,      // 4
+    pub SizeOfHeaders:                  DWORD,      // 4
+    pub CheckSum:                       DWORD,      // 4
+    pub Subsystem:                      WORD,       // 2
+    pub DllCharacteristics:             WORD,       // 2
+    pub SizeOfStackReserve:             ULONGLONG,  // 8
+    pub SizeOfStackCommit:              ULONGLONG,  // 8
+    pub SizeOfHeapReserve:              ULONGLONG,  // 8
+    pub SizeOfHeapCommit:               ULONGLONG,  // 8
+    pub LoaderFlags:                    DWORD,      // 4
+    pub NumberOfRvaAndSizes:            DWORD,      // 4
+    pub DataDirectory:                  [u64; 16usize] // 8 * 16
 }
 ///
 /// #IMAGE_DATA_DIRECTORY
