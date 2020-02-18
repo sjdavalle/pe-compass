@@ -44,7 +44,7 @@ pub struct IMAGE_DOS_HEADER {
     pub e_oemid:     WORD,         // OEM Identifier
     pub e_oeminfo:   WORD,         // OEM Information, e_oemid specific
     pub e_res2:      [WORD; 10],   // Reserved Words
-    pub e_lfanew:    LONG            // File Address of new exe header
+    pub e_lfanew:    LONG          // File Address of new exe header
 }
 ///
 /// 
@@ -63,9 +63,9 @@ pub struct IMAGE_NT_HEADERS32 {
 /// 
 #[derive(Debug)]
 pub struct IMAGE_NT_HEADERS64 {
-    pub Signature:      DWORD,
-    pub FileHeader:     IMAGE_FILE_HEADER,
-    pub OptionalHeader: IMAGE_OPTIONAL_HEADER64
+    pub Signature:      DWORD,                  // 2  bytes
+    pub FileHeader:     IMAGE_FILE_HEADER,      // 20 bytes
+    pub OptionalHeader: IMAGE_OPTIONAL_HEADER64 //
 }
 ///
 /// # IMAGE_FILE_HEADER
@@ -559,6 +559,6 @@ pub const IMAGE_SCN_MEM_DISCARDABLE:            DWORD = 0x02000000;  // Section 
 pub const IMAGE_SCN_MEM_NOT_CACHED:             DWORD = 0x04000000;  // Section is not cachable.
 pub const IMAGE_SCN_MEM_NOT_PAGED:              DWORD = 0x08000000;  // Section is not pageable.
 pub const IMAGE_SCN_MEM_SHARED:                 DWORD = 0x10000000;  // Section is shareable.
-pub const IMAGE_SCN_MEM_EXECUTE:                DWORD = 0x20000000;  // Section is executable.
+pub const IMAGE_SCN_MEM_EXECUTE:                DWORD = 0x20000000;  // Section is executable. 
 pub const IMAGE_SCN_MEM_READ:                   DWORD = 0x40000000;  // Section is readable.
 pub const IMAGE_SCN_MEM_WRITE:                  DWORD = 0x80000000;  // Section is writeable.
