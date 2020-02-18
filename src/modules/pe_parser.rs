@@ -59,9 +59,12 @@ impl PeParser {
         let _doshdr: IMAGE_DOS_HEADER = self.content.pread_with(0usize, LE).unwrap();
         _doshdr
     }
-    ///
+    /// # PE Parser InspectNTHeader Method
+    /// This parses a custom object struct (co_struct) of a selected subset of the
+    /// IMAGE_OPTIONAL_HEADER to be used in the validation stage which allows you
+    /// to easily determine the type of PE 32 or 64 bit in-scope.
     /// 
-    /// 
+    /// We are avoiding any inspection of the `RICH` data structure for now.
     pub fn inspect_nt_headers(&self, e_lfanew: i32) -> INSPECT_NT_HEADERS
     {
         let _offset = e_lfanew as usize;
