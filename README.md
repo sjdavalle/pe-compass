@@ -14,6 +14,37 @@ A Study of PE Format through the RUST programming language.
 Current Code Base is parsing the following structs, validation in progress.
 
 ```rust
+/// Inspection Code to determine between PE 32 or 64 Bit initially.
+/// Use a custom struct called INSPECT_NT_HEADERS
+/// 
+INSPECTED NT HEADERS:
+
+INSPECT_NT_HEADERS {
+    Signature: 17744,
+    FileHeader: INSPECT_IMAGE_FILE_HEADER {
+        Machine: 34404,
+        NumberOfSections: 9,
+        TimeDateStamp: 1580157867,
+        PointerToSymbolTable: 0,
+        NumberOfSymbols: 0,
+        SizeOfOptionalHeader: 240,
+        Characteristics: 8226,
+    },
+    OptionalHeader: INSPECT_IMAGE_OPTIONAL_HEADER {
+        Magic: 523,
+        MajorLinkerVersion: 9,
+        MinorLinkerVersion: 0,
+        SizeOfCode: 1552896,
+        SizeOfInitializedData: 370688,
+        SizeOfUninitializedData: 0,
+        AddressOfEntryPoint: 1425768,
+        BaseOfCode: 4096,
+        BaseOfData: 2147483648,
+    },
+}
+```
+
+```rust
 /// The numbers of each field in a struct are in decimal format
 /// as translated by rust::scroll::LE.
 /// Continue validating via CFF Explorer.
