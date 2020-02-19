@@ -247,17 +247,20 @@ impl ::std::clone::Clone for IMAGE_EXPORT_DIRECTORY {
 }
 /// # DATA DIRECTORY ENTRY IMPORT
 ///
-/// 
+///
+/* 
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_DIRECTORY_ENTRY_IMPORT {
 
 }
+
 impl ::std::clone::Clone for IMAGE_DIRECTORY_ENTRY_IMPORT {
     fn clone(&self) -> Self {
         *self
     }
 }
+*/
 /// # DATA DIRECTORY IMPORT - IMPORT DESCRIPTOR
 /// 
 /// 
@@ -265,7 +268,7 @@ impl ::std::clone::Clone for IMAGE_DIRECTORY_ENTRY_IMPORT {
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_IMPORT_DESCRIPTOR {
-    pub union:              DUMMY_UNION_NAME,
+    pub _union:             DUMMY_UNION_NAME,
     pub ForwarderCahain:    DWORD,
     pub Name:               DWORD,
     pub FirstThunk:         DWORD
@@ -281,7 +284,7 @@ impl ::std::clone::Clone for IMAGE_IMPORT_DESCRIPTOR {
 /// 
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
-pub union DUMMY_UNION_NAME {
+pub struct DUMMY_UNION_NAME {
     pub Characteristics:    DWORD,
     pub OriginalFirstThunk: DWORD,
 }
@@ -297,7 +300,7 @@ impl ::std::clone::Clone for DUMMY_UNION_NAME {
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_THUNK_DATA32 {
-    pub union:  u1_32
+    pub _union:  u1_32
 }
 
 impl ::std::clone::Clone for IMAGE_THUNK_DATA32 {
@@ -310,7 +313,7 @@ impl ::std::clone::Clone for IMAGE_THUNK_DATA32 {
 /// 
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
-pub union u1_32 {
+pub struct u1_32 {
     pub ForwarderString:    DWORD,  // PBYTE
     pub Function:           DWORD,  // PDWORD
     pub Ordinal:            DWORD,
@@ -328,7 +331,7 @@ impl ::std::clone::Clone for u1_32 {
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_THUNK_DATA64 {
-    pub union: u1_64
+    pub _union: u1_64
 }
 
 impl ::std::clone::Clone for IMAGE_THUNK_DATA64 {
@@ -341,7 +344,7 @@ impl ::std::clone::Clone for IMAGE_THUNK_DATA64 {
 /// 
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
-pub union u1_64 {
+pub struct u1_64 {
     pub ForwarderString:    ULONGLONG,  // PBYTE
     pub Function:           ULONGLONG,  // PDWORD
     pub Ordinal:            ULONGLONG,
