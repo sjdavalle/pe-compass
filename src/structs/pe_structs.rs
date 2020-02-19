@@ -61,22 +61,34 @@ pub struct IMAGE_DOS_HEADER {
 /// 
 /// 
 /// 
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_NT_HEADERS32 {
     pub Signature:      DWORD,
     pub FileHeader:     IMAGE_FILE_HEADER,
     pub OptionalHeader: IMAGE_OPTIONAL_HEADER32
 }
+impl ::std::clone::Clone for IMAGE_NT_HEADERS32 {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
 ///
 /// 
 /// 
 /// 
-#[derive(Debug)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
 pub struct IMAGE_NT_HEADERS64 {
     pub Signature:      DWORD,                  // 2  bytes
     pub FileHeader:     IMAGE_FILE_HEADER,      // 20 bytes
     pub OptionalHeader: IMAGE_OPTIONAL_HEADER64 //
+}
+
+impl ::std::clone::Clone for IMAGE_NT_HEADERS64 {
+    fn clone(&self) -> Self {
+        *self
+    }
 }
 ///
 /// # IMAGE_FILE_HEADER
@@ -153,7 +165,7 @@ impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER32 {
 /// Size = 
 ///     Standard Fields: 24 Bytes
 ///     Windows  Fields: 216 Bytes `includes Data_Directory Array`
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_OPTIONAL_HEADER64 {
     // Standard Fields
@@ -188,6 +200,12 @@ pub struct IMAGE_OPTIONAL_HEADER64 {
     pub LoaderFlags:                    DWORD,      // 4
     pub NumberOfRvaAndSizes:            DWORD,      // 4
     pub DataDirectory:                  [u64; 16usize] // 8 * 16
+}
+
+impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER64 {
+    fn clone(&self) -> Self {
+        *self
+    }
 }
 ///
 /// #IMAGE_DATA_DIRECTORY
@@ -579,3 +597,94 @@ pub const IMAGE_SCN_MEM_SHARED:                 DWORD = 0x10000000;  // Section 
 pub const IMAGE_SCN_MEM_EXECUTE:                DWORD = 0x20000000;  // Section is executable. 
 pub const IMAGE_SCN_MEM_READ:                   DWORD = 0x40000000;  // Section is readable.
 pub const IMAGE_SCN_MEM_WRITE:                  DWORD = 0x80000000;  // Section is writeable.
+
+/// # PE Custom Object Structs - CO_STRUCTS
+/// The structs in this file are derived from the specification
+/// structs located in the `pe_structs` file.
+/// These structs are made for convenience of parsing and validating
+/// the inspected file.
+/// 
+/// For example, to determine what type of PE is involved we need to
+/// determine if it is a 32 or 64 bit by inspecting the `Magic` member
+/// of the IMAGE_OPTIONAL_HEADER struct and its subsection group called
+/// the `Standard Fields` struct members group.
+/// 
+/// We create a custom struct that we can read to access that field before
+/// we load the relevant PE32 or PE64 struct.
+/// 
+/// All custom instructs have a label that starts with `INSPECT_` when a subsection
+/// of the PE Format specification is being validated.
+///
+/// In contrast, the `PE_32` or `PE_64` structs are a custom object that represent
+/// the full values of a file being parsed.
+/// 
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
+pub struct INSPECT_NT_HEADERS {
+    pub Signature:      DWORD,
+    pub FileHeader:     INSPECT_IMAGE_FILE_HEADER,
+    pub OptionalHeader: INSPECT_IMAGE_OPTIONAL_HEADER
+}
+
+impl ::std::clone::Clone for INSPECT_NT_HEADERS {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
+pub struct INSPECT_IMAGE_FILE_HEADER {
+    pub Machine:                WORD,   // 2
+    pub NumberOfSections:       WORD,   // 2
+    pub TimeDateStamp:          DWORD,  // 4
+    pub PointerToSymbolTable:   DWORD,  // 4
+    pub NumberOfSymbols:        DWORD,  // 4
+    pub SizeOfOptionalHeader:   WORD,   // 2
+    pub Characteristics:        WORD,   // 2
+}
+impl ::std::clone::Clone for INSPECT_IMAGE_FILE_HEADER {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
+pub struct INSPECT_IMAGE_OPTIONAL_HEADER {
+    pub Magic:                          WORD,   // 2    Describes PE Type: 32 or 64 Bit
+    pub MajorLinkerVersion:             BYTE,   // 1
+    pub MinorLinkerVersion:             BYTE,   // 1
+    pub SizeOfCode:                     DWORD,  // 4
+    pub SizeOfInitializedData:          DWORD,  // 4
+    pub SizeOfUninitializedData:        DWORD,  // 4
+    pub AddressOfEntryPoint:            DWORD,  // 4
+    pub BaseOfCode:                     DWORD,  // 4
+    pub BaseOfData:                     DWORD,  // 4
+}
+
+impl ::std::clone::Clone for INSPECT_IMAGE_OPTIONAL_HEADER {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+
+/// # PE_OBJECTS
+/// These are the final objects used by the application to work with a PE file.
+/// After the initial INSPECTION, based on the `Magic` field in the IMAGE_OPTIONAL_HEADER
+/// the application will load the relevant 32 or 64 bit object to work with.
+/// 
+/// It is this PE_OBJECT that is processed throughout the program to achieve its working
+/// objective
+///
+#[derive(Debug)]
+pub struct PE_32_FILE {
+    pub ImageDosHeader: IMAGE_DOS_HEADER,
+    pub ImageNtHeaders: IMAGE_NT_HEADERS32
+}
+
+#[derive(Debug)]
+pub struct PE_64_FILE {
+    pub ImageDosHeader: IMAGE_DOS_HEADER,
+    pub ImageNtHeaders: IMAGE_NT_HEADERS64
+}

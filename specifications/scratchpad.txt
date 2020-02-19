@@ -1,0 +1,22 @@
+n main() -> Result<(), Box<dyn std::error::Error>>
+{
+    //let _sample = "pe-samples/sqlite3x64.dll";
+    let _sample = "pe-samples/sqlite3x86.dll";
+    //let _sample = "pe-samples/7z1900.exe";
+    let _pe = PeParser::new(_sample);
+        _pe.inspect_file();
+    //let _dosheader      = _pe.get_dosheader(); 
+    /*
+    let _nt_headers     = _pe.get_image_nt_headers32(_dosheader.e_lfanew);
+    let _pe_data_dirs   = _pe.get_data_directories(&_nt_headers.OptionalHeader.DataDirectory);
+
+    println!("\n\nDOS   HEADER: \n\n{:#?}", _dosheader);
+    println!("\n\nNT    HEADER: \n\n{:#?}", _nt_headers);
+    println!("\n\nPE DATA DIRS: \n\n{:#?}", _pe_data_dirs);
+    */
+    //let _inspected = _pe.inspect_nt_headers(_dosheader.e_lfanew);
+    //println!("\n\nINSPECTED NT HEADERS:\n\n{:#?}", _inspected);
+
+    Ok(())
+}
+Runs

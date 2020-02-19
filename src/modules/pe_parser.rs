@@ -6,9 +6,6 @@ use file_handler::FileHandler;
 #[path = "../structs/pe_structs.rs"] mod pe_structs;
 use pe_structs::*;
 
-#[path = "../structs/co_structs.rs"] mod co_structs;
-use co_structs::*;
-
 /// # PE Parser
 /// This module is used to parse the structures of the PE Format
 /// The parser should accomodate the identification of either a
@@ -37,12 +34,60 @@ impl PeParser {
     {
         let _file = FileHandler::open(fp, "r");
         let _fsize = _file.size;
+        if _fsize < 60 {
+            std::process::exit(0x0100); // If file size less than 60 bytes exit
+        }
         let _bytes = _file.read_as_bytes(_fsize).unwrap();
 
         PeParser {
             handler: _file,
             content: _bytes,
             success: true,
+        }
+    }
+    /// # PE Parser InspectFile Method
+    /// This method initially inspect the consistent headers of the file
+    /// to determine if it is a 32 or 64 bit PE.
+    /// If the inspection fails, the file is likely not legit.
+    /// **Note:**   At this moment Packers are not in scope, so if a UPX0 header
+    ///             is in place, the program will crash or not work.
+    pub fn inspect_file(&self)
+    {
+        let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
+        let _nt_test: INSPECT_NT_HEADERS = self.inspect_nt_headers(_doshdr.e_lfanew);
+        let _petype: u16 = _nt_test.OptionalHeader.Magic as u16;
+        
+        if _petype == 267 {
+            let _pefile: PE_32_FILE = self.get_pe32(_doshdr);
+            println!("PE FILE:\n\n{:#?}", _pefile);
+
+        } else if _petype == 523 {
+            let _pefile: PE_64_FILE = self.get_pe64(_doshdr);
+            println!("PE FILE:\n\n{:#?}", _pefile);
+        }
+    }
+    ///
+    /// 
+    /// 
+    fn get_pe32(&self, _doshdr: IMAGE_DOS_HEADER)  -> PE_32_FILE
+    {
+        let _nt_headers: IMAGE_NT_HEADERS32 = self.get_image_nt_headers32(_doshdr.e_lfanew);
+
+        PE_32_FILE {
+            ImageDosHeader: _doshdr,
+            ImageNtHeaders: _nt_headers
+        }
+    }
+    ///
+    /// 
+    /// 
+    fn get_pe64(&self, _doshdr: IMAGE_DOS_HEADER)  -> PE_64_FILE
+    {
+        let _nt_headers: IMAGE_NT_HEADERS64 = self.get_image_nt_headers64(_doshdr.e_lfanew);
+
+        PE_64_FILE {
+            ImageDosHeader: _doshdr,
+            ImageNtHeaders: _nt_headers
         }
     }
     /// # PE Parser GetDosHeader Method
@@ -82,11 +127,25 @@ impl PeParser {
     /// ```    
     pub fn get_image_nt_headers32(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS32
     {
-        let _offset = e_lfanew as usize;
-
+        let _offset = e_lfanew as usize;       
         let _peheader: IMAGE_NT_HEADERS32 = self.content.pread_with(_offset, LE).unwrap();
         _peheader
     }
+    /// # PE Parser GetImageNTHeaders64 Method
+    /// This parses the initial IMAGE_NT_HEADERS32 struct from
+    /// a byte stream.
+    /// 
+    /// ```
+    /// let _pe = PeParser::new("foo.exe");
+    /// 
+    /// let _dh: IMAGE_DOS_HEADER = _pe.content.pread(0usize, LE).unwrap();
+    /// ```    
+    pub fn get_image_nt_headers64(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS64
+    {
+        let _offset = e_lfanew as usize;       
+        let _peheader: IMAGE_NT_HEADERS64 = self.content.pread_with(_offset, LE).unwrap();
+        _peheader
+    }    
     /// # PE Parser GetDataDirectories Method
     /// This parses the 16 data directories from the OPTIONAL_HEADER to return
     /// a Vector of IMAGE_DATA_DIRECTORY entries.
