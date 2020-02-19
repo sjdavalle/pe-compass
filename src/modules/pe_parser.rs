@@ -16,7 +16,6 @@ use pe_structs::*;
 pub struct PeParser {
     handler: FileHandler,
     content: Vec<u8>,
-    success: bool,
 }
 
 impl PeParser {
@@ -42,7 +41,6 @@ impl PeParser {
         PeParser {
             handler: _file,
             content: _bytes,
-            success: true,
         }
     }
     /// # PE Parser InspectFile Method
@@ -67,25 +65,25 @@ impl PeParser {
     ///
     /// 
     /// 
-    fn get_pe32(&self, _doshdr: IMAGE_DOS_HEADER)  -> PE_32
+    fn get_pe32(&self, _doshdr: IMAGE_DOS_HEADER) -> PE_32
     {
         let mut _nt_headers: IMAGE_NT_HEADERS32 = self.get_image_nt_headers32(_doshdr.e_lfanew);
 
         PE_32 {
             ImageDosHeader: _doshdr,
-            ImageNtHeaders: _nt_headers
+            ImageNtHeaders: _nt_headers,
         }
     }
     ///
     /// 
     /// 
-    fn get_pe64(&self, _doshdr: IMAGE_DOS_HEADER)  -> PE_64
+    fn get_pe64(&self, _doshdr: IMAGE_DOS_HEADER) -> PE_64
     {
         let _nt_headers: IMAGE_NT_HEADERS64 = self.get_image_nt_headers64(_doshdr.e_lfanew);
 
         PE_64 {
             ImageDosHeader: _doshdr,
-            ImageNtHeaders: _nt_headers
+            ImageNtHeaders: _nt_headers,
         }
     }
     /// # PE Parser GetDosHeader Method
@@ -99,7 +97,8 @@ impl PeParser {
     /// ```
     pub fn get_dosheader(&self) -> IMAGE_DOS_HEADER
     {
-        let _doshdr: IMAGE_DOS_HEADER = self.content.pread_with(0usize, LE).unwrap();
+        let _offset = 0 as usize;
+        let _doshdr: IMAGE_DOS_HEADER = self.content.pread_with(_offset, LE).unwrap();
         _doshdr
     }
     /// # PE Parser InspectNTHeader Method
@@ -154,9 +153,10 @@ impl PeParser {
     pub fn get_data_directories(&self, data_dir: &[u64; 16usize]) -> Vec<IMAGE_DATA_DIRECTORY>
     {
         let mut _data_directories: Vec<IMAGE_DATA_DIRECTORY> = Vec::with_capacity(16usize);
+        let _offset = 0 as usize;
         for _d in data_dir.iter() {
             let _bytes = _d.to_le_bytes();
-            let _data_dir: IMAGE_DATA_DIRECTORY = _bytes.pread_with(0usize, LE).unwrap();
+            let _data_dir: IMAGE_DATA_DIRECTORY = _bytes.pread_with(_offset, LE).unwrap();
             _data_directories.push(_data_dir);
         }
         _data_directories
