@@ -1,4 +1,5 @@
 
+use std::collections::HashMap;
 ///
 /// # Portable Executable Structures
 /// 
@@ -647,13 +648,15 @@ pub enum PE_FILE {
 }
 
 #[derive(Debug)]
-pub struct PE_32 {
+pub struct PE_32{
     pub ImageDosHeader: IMAGE_DOS_HEADER,
-    pub ImageNtHeaders: IMAGE_NT_HEADERS32
+    pub ImageNtHeaders: IMAGE_NT_HEADERS32,
+    pub ImageDataDirectory: HashMap<String, IMAGE_DATA_DIRECTORY>
 }
 
 #[derive(Debug)]
 pub struct PE_64 {
     pub ImageDosHeader: IMAGE_DOS_HEADER,
-    pub ImageNtHeaders: IMAGE_NT_HEADERS64
+    pub ImageNtHeaders: IMAGE_NT_HEADERS64,
+    pub ImageDataDirectory: HashMap<String, IMAGE_DATA_DIRECTORY>
 }
