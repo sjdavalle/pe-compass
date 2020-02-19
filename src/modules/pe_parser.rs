@@ -51,29 +51,27 @@ impl PeParser {
     /// If the inspection fails, the file is likely not legit.
     /// **Note:**   At this moment Packers are not in scope, so if a UPX0 header
     ///             is in place, the program will crash or not work.
-    pub fn inspect_file(&self)
+    /// 
+    pub fn inspect_file(&self) -> PE_FILE
     {
         let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
         let _nt_test: INSPECT_NT_HEADERS = self.inspect_nt_headers(_doshdr.e_lfanew);
-        let _petype: u16 = _nt_test.OptionalHeader.Magic as u16;
-        
-        if _petype == 267 {
-            let _pefile: PE_32_FILE = self.get_pe32(_doshdr);
-            println!("PE FILE:\n\n{:#?}", _pefile);
+        let _petype: u16 = _nt_test.OptionalHeader.Magic;
 
-        } else if _petype == 523 {
-            let _pefile: PE_64_FILE = self.get_pe64(_doshdr);
-            println!("PE FILE:\n\n{:#?}", _pefile);
+        match _petype {
+            267 => { PE_FILE::x86(self.get_pe32(_doshdr)) },
+            523 => { PE_FILE::x64(self.get_pe64(_doshdr)) },
+            _   => std::process::exit(0x0100)
         }
     }
     ///
     /// 
     /// 
-    fn get_pe32(&self, _doshdr: IMAGE_DOS_HEADER)  -> PE_32_FILE
+    fn get_pe32(&self, _doshdr: IMAGE_DOS_HEADER)  -> PE_32
     {
-        let _nt_headers: IMAGE_NT_HEADERS32 = self.get_image_nt_headers32(_doshdr.e_lfanew);
+        let mut _nt_headers: IMAGE_NT_HEADERS32 = self.get_image_nt_headers32(_doshdr.e_lfanew);
 
-        PE_32_FILE {
+        PE_32 {
             ImageDosHeader: _doshdr,
             ImageNtHeaders: _nt_headers
         }
@@ -81,11 +79,11 @@ impl PeParser {
     ///
     /// 
     /// 
-    fn get_pe64(&self, _doshdr: IMAGE_DOS_HEADER)  -> PE_64_FILE
+    fn get_pe64(&self, _doshdr: IMAGE_DOS_HEADER)  -> PE_64
     {
         let _nt_headers: IMAGE_NT_HEADERS64 = self.get_image_nt_headers64(_doshdr.e_lfanew);
 
-        PE_64_FILE {
+        PE_64 {
             ImageDosHeader: _doshdr,
             ImageNtHeaders: _nt_headers
         }

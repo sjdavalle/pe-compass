@@ -22,7 +22,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>>
     let _sample = "pe-samples/sqlite3x86.dll";
     //let _sample = "pe-samples/7z1900.exe";
     let _pe = PeParser::new(_sample);
-        _pe.inspect_file();
-        
+    let _file = _pe.inspect_file();
+    println!("{:#?}", _file);
     Ok(())
 }

@@ -678,13 +678,19 @@ impl ::std::clone::Clone for INSPECT_IMAGE_OPTIONAL_HEADER {
 /// objective
 ///
 #[derive(Debug)]
-pub struct PE_32_FILE {
+pub enum PE_FILE {
+    x86(PE_32),
+    x64(PE_64),
+}
+
+#[derive(Debug)]
+pub struct PE_32 {
     pub ImageDosHeader: IMAGE_DOS_HEADER,
     pub ImageNtHeaders: IMAGE_NT_HEADERS32
 }
 
 #[derive(Debug)]
-pub struct PE_64_FILE {
+pub struct PE_64 {
     pub ImageDosHeader: IMAGE_DOS_HEADER,
     pub ImageNtHeaders: IMAGE_NT_HEADERS64
 }
