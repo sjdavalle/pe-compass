@@ -1,6 +1,9 @@
 # pe-compass
 A Study of PE Format through the RUST programming language.
 
+# PROJECT STATUS
+** IN DEV-MODE** Do not download or use this for your environment yet.
+
 # Documentation Articles
 * PE Rich Data Structure: Undocumented: http://bytepointer.com/articles/the_microsoft_rich_header.htm
 * PE Things They Did not tell you...: http://bytepointer.com/articles/rich_header_lifewire_vxmags_29A-8.009.htm
@@ -14,7 +17,7 @@ A Study of PE Format through the RUST programming language.
 Current Code Base is parsing the following structs, validation in progress.
 
 ```rust
-/// Inspection Code Now returns an enum "PE_FILE" that holder either of
+/// Inspection Code Now returns an enum "PE_FILE" that holds either of
 /// a 32 or 64 Bit pe object
 x86(
     PE_32 {
@@ -118,6 +121,8 @@ x86(
             },
         },
         // Returns the Data Directories that have Data - i.e. != 0 Size
+		// Notice only 6 have data from above structure labeled as `DataDirectory`
+		// and we parse those 6 structs below as the member `ImageDataDirectory`
         ImageDataDirectory: {
             "IMAGE_DIRECTORY_ENTRY_EXPORT": IMAGE_DATA_DIRECTORY {
                 VirtualAddress: 733184,
