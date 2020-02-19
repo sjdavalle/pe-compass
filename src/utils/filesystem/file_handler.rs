@@ -3,7 +3,7 @@ use scroll::{ Pread, LE };
 
 #[path = "../errors/custom_errors.rs"] mod custom_errors;
 
-use custom_errors::*;
+use custom_errors::exit_process;
 
 use std::io::prelude::*;
 use std::io::{ self, BufRead, BufReader, BufWriter, Read, Write };

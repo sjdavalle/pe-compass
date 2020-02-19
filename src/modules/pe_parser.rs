@@ -3,6 +3,9 @@ use scroll::{ Pread, LE };
 #[path = "../utils/filesystem/file_handler.rs"] mod file_handler;
 use file_handler::FileHandler;
 
+#[path = "../utils/errors/custom_errors.rs"] mod custom_errors;
+use custom_errors::exit_process;
+
 #[path = "../structs/pe_structs.rs"] mod pe_structs;
 use pe_structs::*;
 
