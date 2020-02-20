@@ -53,15 +53,26 @@ impl PeParser {
     pub fn inspect_file(&self) -> PE_FILE
     {
         let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
-        let _nt_test: INSPECT_NT_HEADERS = self.inspect_nt_headers(_doshdr.e_lfanew);
-        let _petype: u16 = _nt_test.OptionalHeader.Magic;
+        let mut _nt_headers: IMAGE_NT_HEADERS;
 
-        match _petype {
-            267 => { PE_FILE::x86(self.get_pe32(_doshdr)) },
-            523 => { PE_FILE::x64(self.get_pe64(_doshdr)) },
-            _   => std::process::exit(0x0100)
+        let mut _petype: u16 = 0;
+        {
+            let _nt_test: INSPECT_NT_HEADERS = self.inspect_nt_headers(_doshdr.e_lfanew);
+            _petype = _nt_test.OptionalHeader.Magic;
+
+            _nt_headers = match _petype {
+                267 => IMAGE_NT_HEADERS::x86(self.get_image_nt_headers32(_doshdr.e_lfanew)),
+                523 => IMAGE_NT_HEADERS::x64(self.get_image_nt_headers64(_doshdr.e_lfanew)),
+                _   => std::process::exit(0x0100)
+            };
+        }
+
+        PE_FILE {
+            ImageDosHeader: _doshdr,
+            ImageNtHeaders: _nt_headers
         }
     }
+    /**
     ///
     /// 
     /// 
@@ -86,6 +97,7 @@ impl PeParser {
             ImageNtHeaders: _nt_headers,
         }
     }
+    **/
     /// # PE Parser GetDosHeader Method
     /// This parses the initial IMAGE_DOS_HEADER struct from
     /// a byte stream.

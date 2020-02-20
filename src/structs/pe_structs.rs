@@ -211,11 +211,16 @@ impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER64 {
 /// #IMAGE_DATA_DIRECTORY
 /// 
 /// 
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_DATA_DIRECTORY {
     pub VirtualAddress:  DWORD,
     pub Size:            DWORD
+}
+impl ::std::clone::Clone for IMAGE_DATA_DIRECTORY {
+    fn clone(&self) -> Self {
+        *self
+    }
 }
 ///
 /// 
@@ -677,8 +682,22 @@ impl ::std::clone::Clone for INSPECT_IMAGE_OPTIONAL_HEADER {
 /// It is this PE_OBJECT that is processed throughout the program to achieve its working
 /// objective
 ///
+///
 #[derive(Debug)]
-pub enum PE_FILE {
+pub struct PE_FILE {
+    pub ImageDosHeader:     IMAGE_DOS_HEADER,
+    pub ImageNtHeaders:     IMAGE_NT_HEADERS,
+    //ImageDataDirectory: HashMap<String, IMAGE_DATA_DIRECTORY>
+}
+
+#[derive(Debug)]
+pub enum IMAGE_NT_HEADERS {
+    x86(IMAGE_NT_HEADERS32),
+    x64(IMAGE_NT_HEADERS64)
+}
+
+#[derive(Debug)]
+pub enum PE_FILE_OBJECT {
     x86(PE_32),
     x64(PE_64),
 }
