@@ -34,6 +34,7 @@ pub type BOOLEAN    = BYTE;
 ///
 /// # IMAGE_DOS_HEADER
 /// 
+/// Size: 64 Bytes
 ///
 #[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
@@ -58,10 +59,12 @@ pub struct IMAGE_DOS_HEADER {
     pub e_res2:      [WORD; 10],   // Reserved Words
     pub e_lfanew:    LONG          // File Address of new exe header
 }
-///
+/// # IMAGE_NT_HEADERS32
 /// 
-/// 
-/// 
+/// Size: 246 Bytes
+///         Signature:          2 Bytes
+///         FileHeader:         20 Bytes
+///         OptionalHeader32    224 Bytes
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_NT_HEADERS32 {
@@ -74,10 +77,11 @@ impl ::std::clone::Clone for IMAGE_NT_HEADERS32 {
         *self
     }
 }
-///
-/// 
-/// 
-/// 
+/// # IMAGE_NT_HEADERS64
+/// Size: 266 Bytes
+///         Signature:          2 Bytes
+///         FileHeader:         20  Bytes
+///         OptionalHeader64:   244 Bytes
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_NT_HEADERS64 {
@@ -94,7 +98,7 @@ impl ::std::clone::Clone for IMAGE_NT_HEADERS64 {
 ///
 /// # IMAGE_FILE_HEADER
 /// 
-/// 
+/// Size: 20 Bytes
 /// 
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
@@ -116,7 +120,7 @@ impl ::std::clone::Clone for IMAGE_FILE_HEADER {
 /// # IMAGE OPTIONAL HEADERS32
 /// Used for 32 Bit files
 /// Size: 224 Bytes
-///     Standard Fields: 24 Bytes
+///     Standard Fields: 28 Bytes
 ///     Windows  Fields: 196 Bytes `includes Data Directories Array`
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
@@ -163,8 +167,8 @@ impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER32 {
 }
 /// # IMAGE OPTIONAL HEADERS64
 /// Used for PE64 Bit files.
-/// Size = 
-///     Standard Fields: 24 Bytes
+/// Size = 244 Bytes
+///     Standard Fields: 28 Bytes
 ///     Windows  Fields: 216 Bytes `includes Data_Directory Array`
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
@@ -185,6 +189,7 @@ pub struct IMAGE_OPTIONAL_HEADER64 {
     pub MajorOperatingSystemVersion:    WORD,       // 2
     pub MinorOperatingSystemVersion:    WORD,       // 2
     pub MajorImageVersion:              WORD,       // 2
+    
     pub MinorImageVersion:              WORD,       // 2
     pub MajorSubsystemVersion:          WORD,       // 2
     pub MinorSubsystemVersion:          WORD,       // 2
