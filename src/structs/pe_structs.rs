@@ -1,5 +1,5 @@
-
 use std::collections::HashMap;
+
 ///
 /// # Portable Executable Structures
 /// 
@@ -217,43 +217,11 @@ pub struct IMAGE_DATA_DIRECTORY {
     pub VirtualAddress:  DWORD,
     pub Size:            DWORD
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> refs/remotes/origin/master
 impl ::std::clone::Clone for IMAGE_DATA_DIRECTORY {
     fn clone(&self) -> Self {
         *self
     }
 }
-<<<<<<< HEAD
-=======
-/// # DATA DIRECTORY ENTRY EXPORT
-///
-///
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C)]
-pub struct IMAGE_EXPORT_DIRECTORY {
-    pub Characteristics:        DWORD,
-    pub TimeDateStamp:          DWORD,
-    pub MajorVersion:           WORD,
-    pub MinorVersion:           WORD,
-    pub Name:                   DWORD,
-    pub Base:                   DWORD,
-    pub NumberOfFunctions:      DWORD,
-    pub NumberOfNames:          DWORD,
-    pub AddressOfFunctions:     DWORD,
-    pub AddressOfNames:         DWORD,
-    pub AddressOfNameOrdinals:  DWORD,
-}
-impl ::std::clone::Clone for IMAGE_EXPORT_DIRECTORY {
-    fn clone(&self) -> Self {
-        *self
-    }
-}
-/// # DATA DIRECTORY ENTRY IMPORT
-///
->>>>>>> refs/remotes/origin/master
 ///
 /* 
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
@@ -677,11 +645,5 @@ pub struct PE_32{
 #[derive(Debug)]
 pub struct PE_64 {
     pub ImageDosHeader: IMAGE_DOS_HEADER,
-<<<<<<< HEAD
     pub ImageNtHeaders: IMAGE_NT_HEADERS64
 }
-=======
-    pub ImageNtHeaders: IMAGE_NT_HEADERS64,
-    pub ImageDataDirectory: HashMap<String, IMAGE_DATA_DIRECTORY>
-}
->>>>>>> refs/remotes/origin/master

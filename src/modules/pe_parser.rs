@@ -5,9 +5,6 @@ use scroll::{ Pread, LE };
 #[path = "../utils/filesystem/file_handler.rs"] mod file_handler;
 use file_handler::FileHandler;
 
-#[path = "../utils/errors/custom_errors.rs"] mod custom_errors;
-use custom_errors::exit_process;
-
 #[path = "../structs/pe_structs.rs"] mod pe_structs;
 use pe_structs::*;
 
@@ -59,8 +56,8 @@ impl PeParser {
     {
         let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
         let mut _nt_headers: IMAGE_NT_HEADERS;
-
         let mut _petype: u16 = 0;
+
         {
             let _nt_test: INSPECT_NT_HEADERS = self.inspect_nt_headers(_doshdr.e_lfanew);
             _petype = _nt_test.OptionalHeader.Magic;
@@ -84,12 +81,10 @@ impl PeParser {
     fn get_pe32(&self, _doshdr: IMAGE_DOS_HEADER) -> PE_32
     {
         let mut _nt_headers: IMAGE_NT_HEADERS32 = self.get_image_nt_headers32(_doshdr.e_lfanew);
-        let _data_dir_offset = &_nt_headers.OptionalHeader.DataDirectory;
-        let _data_directories: HashMap<String, IMAGE_DATA_DIRECTORY> = self.get_data_directories(_data_dir_offset);
+
         PE_32 {
             ImageDosHeader: _doshdr,
             ImageNtHeaders: _nt_headers,
-            ImageDataDirectory: _data_directories
         }
     }
     ///
@@ -98,12 +93,10 @@ impl PeParser {
     fn get_pe64(&self, _doshdr: IMAGE_DOS_HEADER) -> PE_64
     {
         let _nt_headers: IMAGE_NT_HEADERS64 = self.get_image_nt_headers64(_doshdr.e_lfanew);
-        let _data_dir_offset = &_nt_headers.OptionalHeader.DataDirectory;
-        let _data_directories: HashMap<String, IMAGE_DATA_DIRECTORY> = self.get_data_directories(_data_dir_offset);
+
         PE_64 {
             ImageDosHeader: _doshdr,
             ImageNtHeaders: _nt_headers,
-            ImageDataDirectory: _data_directories
         }
     }
     **/
@@ -143,7 +136,7 @@ impl PeParser {
     /// 
     /// let _dh: IMAGE_DOS_HEADER = _pe.content.pread(0usize, LE).unwrap();
     /// ```    
-    fn get_image_nt_headers32(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS32
+    pub fn get_image_nt_headers32(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS32
     {
         let _offset = e_lfanew as usize;       
         let _peheader: IMAGE_NT_HEADERS32 = self.content.pread_with(_offset, LE).unwrap();
@@ -158,7 +151,7 @@ impl PeParser {
     /// 
     /// let _dh: IMAGE_DOS_HEADER = _pe.content.pread(0usize, LE).unwrap();
     /// ```    
-    fn get_image_nt_headers64(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS64
+    pub fn get_image_nt_headers64(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS64
     {
         let _offset = e_lfanew as usize;       
         let _peheader: IMAGE_NT_HEADERS64 = self.content.pread_with(_offset, LE).unwrap();
@@ -182,6 +175,7 @@ impl PeParser {
             let _data_dir: IMAGE_DATA_DIRECTORY = _bytes.pread_with(_offset, LE).unwrap();
             _data_directories.push(_data_dir);
         }
+
         // Now Build the dataMap
         let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY> = HashMap::new();
         let mut _type: String = String::with_capacity(32usize);
@@ -209,7 +203,7 @@ impl PeParser {
             }
         }
         _data_map
-    }  
+    } 
 }
 #[cfg(test)]
 mod tests_pe_parser {
