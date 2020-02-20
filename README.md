@@ -8,6 +8,8 @@ A Study of PE Format through the RUST programming language.
 * PE Rich Data Structure: Undocumented: http://bytepointer.com/articles/the_microsoft_rich_header.htm
 * PE Things They Did not tell you...: http://bytepointer.com/articles/rich_header_lifewire_vxmags_29A-8.009.htm
 * PE MindMap By Ero Carrera: http://www.openrce.org/reference_library/files/reference/PE%20Format.pdf
+* PE MSDN Arcticle:  https://docs.microsoft.com/en-us/windows/win32/debug/pe-format
+
 # To Do
 * Finish 32Bit PE Parsing
 * Finish 64Bit PE Parsing
@@ -18,47 +20,47 @@ Current Code Base is parsing the following structs, validation in progress.
 
 ```rust
 /// Inspection Code Now returns an enum "PE_FILE" that holds either of
-/// a 32 or 64 Bit pe object
-x86(
-    PE_32 {
-        ImageDosHeader: IMAGE_DOS_HEADER {
-            e_magic: 23117,
-            e_cblp: 144,
-            e_cp: 3,
-            e_crlc: 0,
-            e_cparhdr: 4,
-            e_minalloc: 0,
-            e_maxalloc: 65535,
-            e_ss: 0,
-            e_sp: 184,
-            e_csum: 0,
-            e_ip: 0,
-            e_cs: 0,
-            e_lfarlc: 64,
-            e_ovno: 0,
-            e_res: [
-                0,
-                0,
-                0,
-                0,
-            ],
-            e_oemid: 0,
-            e_oeminfo: 0,
-            e_res2: [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-            ],
-            e_lfanew: 128,
-        },
-        ImageNtHeaders: IMAGE_NT_HEADERS32 {
+/// a 32 or 64 Bit pe optional headers object
+PE_FILE {
+    ImageDosHeader: IMAGE_DOS_HEADER {
+        e_magic: 23117,
+        e_cblp: 144,
+        e_cp: 3,
+        e_crlc: 0,
+        e_cparhdr: 4,
+        e_minalloc: 0,
+        e_maxalloc: 65535,
+        e_ss: 0,
+        e_sp: 184,
+        e_csum: 0,
+        e_ip: 0,
+        e_cs: 0,
+        e_lfarlc: 64,
+        e_ovno: 0,
+        e_res: [
+            0,
+            0,
+            0,
+            0,
+        ],
+        e_oemid: 0,
+        e_oeminfo: 0,
+        e_res2: [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+        ],
+        e_lfanew: 128,
+    },
+    ImageNtHeaders: x86(
+        IMAGE_NT_HEADERS32 {
             Signature: 17744,
             FileHeader: IMAGE_FILE_HEADER {
                 Machine: 332,
@@ -120,35 +122,32 @@ x86(
                 ],
             },
         },
-        // Returns the Data Directories that have Data - i.e. != 0 Size
-		// Notice only 6 have data from above structure labeled as `DataDirectory`
-		// and we parse those 6 structs below as the member `ImageDataDirectory`
-        ImageDataDirectory: {
-            "IMAGE_DIRECTORY_ENTRY_EXPORT": IMAGE_DATA_DIRECTORY {
-                VirtualAddress: 733184,
-                Size: 8610,
-            },
-            "IMAGE_DIRECTORY_ENTRY_BASERELOC": IMAGE_DATA_DIRECTORY {
-                VirtualAddress: 761856,
-                Size: 13560,
-            },
-            "IMAGE_DIRECTORY_ENTRY_IAT": IMAGE_DATA_DIRECTORY {
-                VirtualAddress: 745968,
-                Size: 436,
-            },
-            "IMAGE_DIRECTORY_ENTRY_IMPORT": IMAGE_DATA_DIRECTORY {
-                VirtualAddress: 745472,
-                Size: 3144,
-            },
-            "IMAGE_DIRECTORY_ENTRY_RESOURCE": IMAGE_DATA_DIRECTORY {
-                VirtualAddress: 757760,
-                Size: 1192,
-            },
-            "IMAGE_DIRECTORY_ENTRY_TLS": IMAGE_DATA_DIRECTORY {
-                VirtualAddress: 753668,
-                Size: 24,
-            },
+    ),
+    ImageDataDirectory: {
+        "IMAGE_DIRECTORY_ENTRY_BASERELOC": IMAGE_DATA_DIRECTORY {
+            VirtualAddress: 761856,
+            Size: 13560,
+        },
+        "IMAGE_DIRECTORY_ENTRY_RESOURCE": IMAGE_DATA_DIRECTORY {
+            VirtualAddress: 757760,
+            Size: 1192,
+        },
+        "IMAGE_DIRECTORY_ENTRY_EXPORT": IMAGE_DATA_DIRECTORY {
+            VirtualAddress: 733184,
+            Size: 8610,
+        },
+        "IMAGE_DIRECTORY_ENTRY_TLS": IMAGE_DATA_DIRECTORY {
+            VirtualAddress: 753668,
+            Size: 24,
+        },
+        "IMAGE_DIRECTORY_ENTRY_IMPORT": IMAGE_DATA_DIRECTORY {
+            VirtualAddress: 745472,
+            Size: 3144,
+        },
+        "IMAGE_DIRECTORY_ENTRY_IAT": IMAGE_DATA_DIRECTORY {
+            VirtualAddress: 745968,
+            Size: 436,
         },
     },
-)
+}
 ```

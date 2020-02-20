@@ -69,9 +69,17 @@ impl PeParser {
             };
         }
 
+        let _data_dir = match &_nt_headers {
+            IMAGE_NT_HEADERS::x86(value) => value.OptionalHeader.DataDirectory,
+            IMAGE_NT_HEADERS::x64(value) => value.OptionalHeader.DataDirectory
+        };
+
+        let _data_map: HashMap<String, IMAGE_DATA_DIRECTORY> = self.get_data_directories(&_data_dir);
+
         PE_FILE {
             ImageDosHeader: _doshdr,
-            ImageNtHeaders: _nt_headers
+            ImageNtHeaders: _nt_headers,
+            ImageDataDirectory: _data_map
         }
     }
     /**

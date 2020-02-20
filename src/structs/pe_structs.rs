@@ -620,7 +620,7 @@ impl ::std::clone::Clone for INSPECT_IMAGE_OPTIONAL_HEADER {
 pub struct PE_FILE {
     pub ImageDosHeader:     IMAGE_DOS_HEADER,
     pub ImageNtHeaders:     IMAGE_NT_HEADERS,
-    //ImageDataDirectory: HashMap<String, IMAGE_DATA_DIRECTORY>
+    pub ImageDataDirectory: HashMap<String, IMAGE_DATA_DIRECTORY>
 }
 
 #[derive(Debug)]
@@ -628,6 +628,11 @@ pub enum IMAGE_NT_HEADERS {
     x86(IMAGE_NT_HEADERS32),
     x64(IMAGE_NT_HEADERS64)
 }
+/*impl ::std::clone::Clone for IMAGE_NT_HEADERS {
+    fn clone(&self) -> Self {
+        *self
+    }
+}*/
 
 #[derive(Debug)]
 pub enum PE_FILE_OBJECT {
