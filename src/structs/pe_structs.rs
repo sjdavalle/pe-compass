@@ -416,6 +416,7 @@ pub struct IMAGE_FUNCTION_ENTRY64 {
 /// 
 /// 
 /// 
+/*
 #[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_ROM_HEADERS {
@@ -448,6 +449,7 @@ impl ::std::clone::Clone for IMAGE_ROM_OPTIONAL_HEADER {
         *self
     }
 }
+*/
 ///
 /// 
 /// 
@@ -463,11 +465,11 @@ pub struct IMAGE_RUNTIME_FUNCTION_ENTRY {
 /// 
 /// 
 /// 
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_SECTION_HEADER {
     pub Name:                           [BYTE; 8],
-    pub PhysicalAddressOrVirtualSize:   DWORD,
+    pub _union:                         Misc,
     pub VirtualAddress:                 DWORD,
     pub SizeOfRawData:                  DWORD,
     pub PointerToRawData:               DWORD,
@@ -476,6 +478,25 @@ pub struct IMAGE_SECTION_HEADER {
     pub NumberOfRelocations:            WORD,
     pub NumberOfLinenumbers:            WORD,
     pub Characteristics:                DWORD,
+}
+
+impl ::std::clone::Clone for IMAGE_SECTION_HEADER {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
+pub struct Misc {
+    PhysicalAddress:    DWORD,
+    VirtualSize:        DWORD
+}
+
+impl ::std::clone::Clone for Misc {
+    fn clone(&self) -> Self {
+        *self
+    }
 }
 ///
 /// 
@@ -618,6 +639,7 @@ impl ::std::clone::Clone for INSPECT_IMAGE_OPTIONAL_HEADER {
 ///
 #[derive(Debug)]
 pub struct PE_FILE {
+    pub petype:             u16,
     pub ImageDosHeader:     IMAGE_DOS_HEADER,
     pub ImageNtHeaders:     IMAGE_NT_HEADERS,
     pub ImageDataDirectory: HashMap<String, IMAGE_DATA_DIRECTORY>

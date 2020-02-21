@@ -55,11 +55,14 @@ impl PeParser {
     pub fn inspect_file(&self) -> PE_FILE
     {
         let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
+
         let mut _nt_headers: IMAGE_NT_HEADERS;
         let mut _petype: u16 = 0;
+        let mut _image_data_dir: [u64; 16] = [0u64; 16];
+        let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY>;
 
         {
-            let _nt_test: INSPECT_NT_HEADERS = self.inspect_nt_headers(_doshdr.e_lfanew);
+            let _nt_test: INSPECT_NT_HEADERS = self.inspect_nt_headers(_doshdr.e_lfanew);   // Drop these headers after block
             _petype = _nt_test.OptionalHeader.Magic;
 
             _nt_headers = match _petype {
@@ -67,18 +70,19 @@ impl PeParser {
                 523 => IMAGE_NT_HEADERS::x64(self.get_image_nt_headers64(_doshdr.e_lfanew)),
                 _   => std::process::exit(0x0100)
             };
+            
+            _image_data_dir = match &_nt_headers {
+                IMAGE_NT_HEADERS::x86(value) => value.OptionalHeader.DataDirectory,
+                IMAGE_NT_HEADERS::x64(value) => value.OptionalHeader.DataDirectory
+            };
+
+            _data_map = self.get_data_directories(&_image_data_dir);
         }
 
-        let _data_dir = match &_nt_headers {
-            IMAGE_NT_HEADERS::x86(value) => value.OptionalHeader.DataDirectory,
-            IMAGE_NT_HEADERS::x64(value) => value.OptionalHeader.DataDirectory
-        };
-
-        let _data_map: HashMap<String, IMAGE_DATA_DIRECTORY> = self.get_data_directories(&_data_dir);
-
         PE_FILE {
-            ImageDosHeader: _doshdr,
-            ImageNtHeaders: _nt_headers,
+            petype:             _petype,
+            ImageDosHeader:     _doshdr,
+            ImageNtHeaders:     _nt_headers,
             ImageDataDirectory: _data_map
         }
     }
@@ -211,6 +215,16 @@ impl PeParser {
             }
         }
         _data_map
+    }
+    fn get_data_entry_import_table<T, U>(&self, _entry_type: &String, _entry_rva: T, _image_base: U)
+    {
+        // PIMAGE_IMPORT_DESCRIPTOR
+        //offset=imageBase+text.RawOffset+(importDirectory.RVA − text.VA) 
+        //      ImageBase           => OptionalHeader.ImageBase
+        //      Text.RawOffset      => Text.RawAddress
+        //      ImportDirectory.RVA => Optional.Header.DataDirectory[0].VirtualAddress
+        //      Text.VA             => Text.VirtualAddress
+        let _image_base = 0;
     } 
 }
 #[cfg(test)]
