@@ -167,8 +167,8 @@ impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER32 {
 }
 /// # IMAGE OPTIONAL HEADERS64
 /// Used for PE64 Bit files.
-/// Size = 244 Bytes
-///     Standard Fields: 28 Bytes
+/// Size = 240 Bytes
+///     Standard Fields: 24 Bytes
 ///     Windows  Fields: 216 Bytes `includes Data_Directory Array`
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
