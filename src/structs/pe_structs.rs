@@ -61,8 +61,8 @@ pub struct IMAGE_DOS_HEADER {
 }
 /// # IMAGE_NT_HEADERS32
 /// 
-/// Size: 246 Bytes
-///         Signature:          2 Bytes
+/// Size: 248 Bytes
+///         Signature:          4  Bytes
 ///         FileHeader:         20 Bytes
 ///         OptionalHeader32    224 Bytes
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
@@ -78,16 +78,16 @@ impl ::std::clone::Clone for IMAGE_NT_HEADERS32 {
     }
 }
 /// # IMAGE_NT_HEADERS64
-/// Size: 266 Bytes
-///         Signature:          2 Bytes
+/// Size: 268 Bytes
+///         Signature:          4   Bytes
 ///         FileHeader:         20  Bytes
 ///         OptionalHeader64:   244 Bytes
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_NT_HEADERS64 {
-    pub Signature:      DWORD,                  // 2  bytes
+    pub Signature:      DWORD,                  // 4 bytes
     pub FileHeader:     IMAGE_FILE_HEADER,      // 20 bytes
-    pub OptionalHeader: IMAGE_OPTIONAL_HEADER64 //
+    pub OptionalHeader: IMAGE_OPTIONAL_HEADER64 // 244 bytes
 }
 
 impl ::std::clone::Clone for IMAGE_NT_HEADERS64 {
@@ -189,7 +189,6 @@ pub struct IMAGE_OPTIONAL_HEADER64 {
     pub MajorOperatingSystemVersion:    WORD,       // 2
     pub MinorOperatingSystemVersion:    WORD,       // 2
     pub MajorImageVersion:              WORD,       // 2
-    
     pub MinorImageVersion:              WORD,       // 2
     pub MajorSubsystemVersion:          WORD,       // 2
     pub MinorSubsystemVersion:          WORD,       // 2
