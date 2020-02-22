@@ -35,11 +35,12 @@ impl PeParser {
     {
         let _file = FileHandler::open(fp, "r");
         let _fsize = _file.size;
+        println!("File Size: {:>10}", _fsize);
         if _fsize < 60 {
             std::process::exit(0x0100); // If file size less than 60 bytes exit
         }
         let _bytes = _file.read_as_bytes(_fsize).unwrap();
-
+        println!("Bytes Content Len: {:>10}", _bytes.len());
         PeParser {
             handler: _file,
             content: _bytes,
@@ -54,8 +55,10 @@ impl PeParser {
     /// 
     pub fn inspect_file(&self) -> PE_FILE
     {
-        let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
+        println!("Vec Content: {:>10}",self.content.len());
 
+        let _dos_stub = self.get_dos_stub_string();
+        let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
         let mut _nt_headers: IMAGE_NT_HEADERS;
         let mut _petype: u16 = 0;
         let mut _image_data_dir: [u64; 16] = [0u64; 16];
@@ -64,6 +67,7 @@ impl PeParser {
         {
             let _nt_test: INSPECT_NT_HEADERS = self.inspect_nt_headers(_doshdr.e_lfanew);   // Drop these headers after block
             _petype = _nt_test.OptionalHeader.Magic;
+            self.get_section_headers(&_doshdr.e_lfanew, &_nt_test);
 
             _nt_headers = match _petype {
                 267 => IMAGE_NT_HEADERS::x86(self.get_image_nt_headers32(_doshdr.e_lfanew)),
@@ -82,6 +86,7 @@ impl PeParser {
         PE_FILE {
             petype:             _petype,
             ImageDosHeader:     _doshdr,
+            ImageDosStub:       _dos_stub,
             ImageNtHeaders:     _nt_headers,
             ImageDataDirectory: _data_map
         }
@@ -216,6 +221,49 @@ impl PeParser {
         }
         _data_map
     }
+    ///
+    fn get_section_headers(&self, e_lfanew: &i32, _nt_headers: &INSPECT_NT_HEADERS)
+    {
+        const SIZE_OF_SECTION_HEADER: usize  = 40; // 40 Bytes Long
+
+        // Steps:
+            //  . Get Number of Sections in Scope for the PE File
+        let _numof_pe_sections: usize = _nt_headers.FileHeader.NumberOfSections as usize;
+        let mut _section_table_headers: Vec<IMAGE_SECTION_HEADER> = Vec::with_capacity(_numof_pe_sections);
+
+            //  . Calculate Total Bytes to Read for All Sections
+        let mut _total_bytes_sections = SIZE_OF_SECTION_HEADER * _numof_pe_sections;
+
+            //  . Get Size of Optional Header from FileHeader
+        let _sizeof_pe_opthdrs: usize = _nt_headers.FileHeader.SizeOfOptionalHeader as usize;
+
+            //  . Calculate The Starting Offset of the OptionalHeader from NtHeaders
+        let _offset_start_opthdr = (e_lfanew + 24) as usize;
+        
+            //  . Calculate The Starting Offset of the Section Headers
+        let mut _offset_start_sechdr = _offset_start_opthdr + _sizeof_pe_opthdrs;
+        
+        let _scope = &self.content.len();
+        println!("Scope Content: {:#?}", _scope);
+
+            //  . Read Bytes for all Sections
+
+        let mut _section: IMAGE_SECTION_HEADER;
+
+        while _total_bytes_sections != 0 {
+            //println!("Total  Is: {:<4}  | Offset Is: {}", _total_bytes_sections, _offset_start_sechdr);
+            _section = self.content.pread_with(_offset_start_sechdr, LE).unwrap();
+            let _section_name = std::str::from_utf8(&_section.Name[..]);
+            println!("Section Name: {}\n", _section_name.unwrap());
+            _section_table_headers.push(_section);
+            _total_bytes_sections -= 40 as usize;
+            _offset_start_sechdr  += 40 as usize;
+
+        }
+        println!("{:#?}", _section_table_headers);
+        
+    }
+    ///
     fn get_data_entry_import_table<T, U>(&self, _entry_type: &String, _entry_rva: T, _image_base: U)
     {
         // PIMAGE_IMPORT_DESCRIPTOR
@@ -225,9 +273,33 @@ impl PeParser {
         //      ImportDirectory.RVA => Optional.Header.DataDirectory[0].VirtualAddress
         //      Text.VA             => Text.VirtualAddress
         let _image_base = 0;
-    } 
+    }
+    ///
+    fn get_dos_stub_string(&self) -> String
+    {
+        let _offset = 0x4D as usize;
+        let mut _dos_string = String::with_capacity(40usize);
+        let _dos_stub: PE_DOS_STUB = self.content.pread_with(_offset, LE).unwrap();
+        _dos_string.push_str(std::str::from_utf8(&_dos_stub.upper[0..]).unwrap());
+        _dos_string.push_str(std::str::from_utf8(&_dos_stub.lower[0..]).unwrap());
+        _dos_string
+    }
+    ///
+    fn load_essential_offsets(&self)
+    {
+        let _offset_pe_sig = 0x3c as usize;         // 60 Bytes After Dos Header
+        let _offset_opt_header = 0x98 as usize;     // 24 Bytes After PE Signature
+    }
 }
 #[cfg(test)]
 mod tests_pe_parser {
+    use super::*;
 
+    fn load_byte_patterns()
+    {
+        let _dos_header = [ 0x4D,0x5A,0x90,0x00,0x03,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0xFF,0xFF,0x00,0x00,
+                            0xB8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+                            0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+                            0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x00,0x00,0x00 ];
+    }
 }

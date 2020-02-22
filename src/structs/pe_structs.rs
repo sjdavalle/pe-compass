@@ -465,23 +465,25 @@ pub struct IMAGE_RUNTIME_FUNCTION_ENTRY {
     pub EndAddress:         DWORD,
     pub UnwindInfoAddress:  DWORD,
 }
-///
-/// 
+/// # IMAGE_SECTION_HEADER
+/// Size: 40 Bytes
 /// 
 /// 
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_SECTION_HEADER {
-    pub Name:                           [BYTE; 8],
-    pub _union:                         Misc,
-    pub VirtualAddress:                 DWORD,
-    pub SizeOfRawData:                  DWORD,
-    pub PointerToRawData:               DWORD,
-    pub PointerToRelocations:           DWORD,
-    pub PointerToLinenumbers:           DWORD,
-    pub NumberOfRelocations:            WORD,
-    pub NumberOfLinenumbers:            WORD,
-    pub Characteristics:                DWORD,
+    pub Name:                           [BYTE; 8], // 8
+    pub _union:                         Misc,   // 8
+    //pub PhysicalAddress:                DWORD,  // 4
+    //pub VirtualSize:                    DWORD,  // 4
+    pub VirtualAddress:                 DWORD,  // 4
+    pub SizeOfRawData:                  DWORD,  // 4
+    pub PointerToRawData:               DWORD,  // 4
+    pub PointerToRelocations:           DWORD,  // 4
+    pub PointerToLinenumbers:           DWORD,  // 4
+    pub NumberOfRelocations:            WORD,   // 2
+    pub NumberOfLinenumbers:            WORD,   // 2
+    pub Characteristics:                DWORD,  // 4
 }
 
 impl ::std::clone::Clone for IMAGE_SECTION_HEADER {
@@ -645,6 +647,7 @@ impl ::std::clone::Clone for INSPECT_IMAGE_OPTIONAL_HEADER {
 pub struct PE_FILE {
     pub petype:             u16,
     pub ImageDosHeader:     IMAGE_DOS_HEADER,
+    pub ImageDosStub:       String,
     pub ImageNtHeaders:     IMAGE_NT_HEADERS,
     pub ImageDataDirectory: HashMap<String, IMAGE_DATA_DIRECTORY>
 }
@@ -677,4 +680,16 @@ pub struct PE_32{
 pub struct PE_64 {
     pub ImageDosHeader: IMAGE_DOS_HEADER,
     pub ImageNtHeaders: IMAGE_NT_HEADERS64
+}
+
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
+pub struct PE_DOS_STUB {
+    pub upper: [u8; 30],
+    pub lower: [u8; 9]
+}
+impl ::std::clone::Clone for PE_DOS_STUB {
+    fn clone(&self) -> Self {
+        *self
+    }
 }

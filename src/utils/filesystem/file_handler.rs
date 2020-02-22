@@ -75,15 +75,12 @@ pub struct FileHandler {
      pub fn read_as_bytes(&self, n_bytes: u64) -> Result<Vec<u8>, Box<dyn std::error::Error>>
      {
         let mut _bytes: Vec<u8> = Vec::with_capacity(n_bytes as usize);
-        let mut _stream: [u8; 512] = [0u8; 512];
-
         let mut _bufr = BufReader::new(&self.handle);
-                _bufr.read_exact(&mut _stream[0..])?;
+                //_bufr.read_until(_b, &mut _bytes)?;
+        //let mut _bufr = BufReader::with_capacity(n_bytes as usize, &self.handle);
 
-        for _byte in _stream.iter() {
-            _bytes.push(*_byte);
-        }
-
+        _bufr.read_to_end(&mut _bytes)?;
+        
         Ok(_bytes)
      }
  }
