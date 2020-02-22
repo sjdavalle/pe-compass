@@ -256,10 +256,13 @@ impl PeParser {
     fn get_dos_stub_string(&self) -> String
     {
         let _offset = 0x4D as usize;
-        let mut _dos_string = String::with_capacity(40usize);
+    
         let _dos_stub: PE_DOS_STUB = self.content.pread_with(_offset, LE).unwrap();
-        _dos_string.push_str(std::str::from_utf8(&_dos_stub.upper[0..]).unwrap());
-        _dos_string.push_str(std::str::from_utf8(&_dos_stub.lower[0..]).unwrap());
+        
+        let mut _dos_string = String::with_capacity(40usize);
+        _dos_string.push_str(std::str::from_utf8(&_dos_stub.upper[..]).unwrap());
+        _dos_string.push_str(std::str::from_utf8(&_dos_stub.lower[..]).unwrap());
+                
         _dos_string
     }
     ///
