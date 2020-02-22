@@ -23,13 +23,10 @@ pub type UCHAR      = u8;
 pub type WORD       = u16;
 pub type DWORD      = u32;
 pub type QWORD      = u64;
-
 pub type ULONG      = u32;
 pub type ULONGLONG  = u64;
-
 pub type LONG       = i32;
 pub type BOOLEAN    = BYTE;
-
 ///
 ///
 /// # IMAGE_DOS_HEADER
@@ -89,7 +86,6 @@ pub struct IMAGE_NT_HEADERS64 {
     pub FileHeader:     IMAGE_FILE_HEADER,      // 20 bytes
     pub OptionalHeader: IMAGE_OPTIONAL_HEADER64 // 244 bytes
 }
-
 impl ::std::clone::Clone for IMAGE_NT_HEADERS64 {
     fn clone(&self) -> Self {
         *self
@@ -111,7 +107,6 @@ pub struct IMAGE_FILE_HEADER {
     pub SizeOfOptionalHeader:   WORD,   // 2
     pub Characteristics:        WORD,   // 2
 }
-
 impl ::std::clone::Clone for IMAGE_FILE_HEADER {
     fn clone(&self) -> Self {
         *self
@@ -159,7 +154,6 @@ pub struct IMAGE_OPTIONAL_HEADER32 {
     pub NumberOfRvaAndSizes:            DWORD,  // 4
     pub DataDirectory:                  [u64; 16usize]  // 8 * 16
 }
-
 impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER32 {
     fn clone(&self) -> Self {
         *self
@@ -206,8 +200,42 @@ pub struct IMAGE_OPTIONAL_HEADER64 {
     pub NumberOfRvaAndSizes:            DWORD,      // 4
     pub DataDirectory:                  [u64; 16usize] // 8 * 16
 }
-
 impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER64 {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+/// # IMAGE_SECTION_HEADER
+/// Size: 40 Bytes
+/// 
+/// 
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
+pub struct IMAGE_SECTION_HEADER {
+    pub Name:                           [BYTE; 8], // 8
+    pub _union:                         Misc,   // 8
+    pub VirtualAddress:                 DWORD,  // 4
+    pub SizeOfRawData:                  DWORD,  // 4
+    pub PointerToRawData:               DWORD,  // 4
+    pub PointerToRelocations:           DWORD,  // 4
+    pub PointerToLinenumbers:           DWORD,  // 4
+    pub NumberOfRelocations:            WORD,   // 2
+    pub NumberOfLinenumbers:            WORD,   // 2
+    pub Characteristics:                DWORD,  // 4
+}
+impl ::std::clone::Clone for IMAGE_SECTION_HEADER {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
+pub struct Misc {
+    PhysicalAddress:    DWORD,
+    VirtualSize:        DWORD
+}
+impl ::std::clone::Clone for Misc {
     fn clone(&self) -> Self {
         *self
     }
@@ -252,7 +280,6 @@ pub struct IMAGE_IMPORT_DESCRIPTOR {
     pub Name:               DWORD,
     pub FirstThunk:         DWORD
 }
-
 impl ::std::clone::Clone for IMAGE_IMPORT_DESCRIPTOR {
     fn clone(&self) -> Self {
         *self
@@ -267,7 +294,6 @@ pub struct DUMMY_UNION_NAME {
     pub Characteristics:    DWORD,
     pub OriginalFirstThunk: DWORD,
 }
-
 impl ::std::clone::Clone for DUMMY_UNION_NAME {
     fn clone(&self) -> Self {
         *self
@@ -281,7 +307,6 @@ impl ::std::clone::Clone for DUMMY_UNION_NAME {
 pub struct IMAGE_THUNK_DATA32 {
     pub _union:  u1_32
 }
-
 impl ::std::clone::Clone for IMAGE_THUNK_DATA32 {
     fn clone(&self) -> Self {
         *self
@@ -298,7 +323,6 @@ pub struct u1_32 {
     pub Ordinal:            DWORD,
     pub AddressOfData:      DWORD   // PIMAGE_IMPORT_BY_NAME
 }
-
 impl ::std::clone::Clone for u1_32 {
     fn clone(&self) -> Self {
         *self
@@ -312,7 +336,6 @@ impl ::std::clone::Clone for u1_32 {
 pub struct IMAGE_THUNK_DATA64 {
     pub _union: u1_64
 }
-
 impl ::std::clone::Clone for IMAGE_THUNK_DATA64 {
     fn clone(&self) -> Self {
         *self
@@ -344,7 +367,6 @@ pub struct IMAGE_IMPORT_BY_NAME {
     pub Hint:   WORD,
     pub Name:   BYTE
 }
-
 impl ::std::clone::Clone for IMAGE_IMPORT_BY_NAME {
     fn clone(&self) -> Self {
         *self
@@ -465,45 +487,6 @@ pub struct IMAGE_RUNTIME_FUNCTION_ENTRY {
     pub EndAddress:         DWORD,
     pub UnwindInfoAddress:  DWORD,
 }
-/// # IMAGE_SECTION_HEADER
-/// Size: 40 Bytes
-/// 
-/// 
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C)]
-pub struct IMAGE_SECTION_HEADER {
-    pub Name:                           [BYTE; 8], // 8
-    pub _union:                         Misc,   // 8
-    //pub PhysicalAddress:                DWORD,  // 4
-    //pub VirtualSize:                    DWORD,  // 4
-    pub VirtualAddress:                 DWORD,  // 4
-    pub SizeOfRawData:                  DWORD,  // 4
-    pub PointerToRawData:               DWORD,  // 4
-    pub PointerToRelocations:           DWORD,  // 4
-    pub PointerToLinenumbers:           DWORD,  // 4
-    pub NumberOfRelocations:            WORD,   // 2
-    pub NumberOfLinenumbers:            WORD,   // 2
-    pub Characteristics:                DWORD,  // 4
-}
-
-impl ::std::clone::Clone for IMAGE_SECTION_HEADER {
-    fn clone(&self) -> Self {
-        *self
-    }
-}
-
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C)]
-pub struct Misc {
-    PhysicalAddress:    DWORD,
-    VirtualSize:        DWORD
-}
-
-impl ::std::clone::Clone for Misc {
-    fn clone(&self) -> Self {
-        *self
-    }
-}
 ///
 /// 
 /// 
@@ -588,7 +571,6 @@ pub struct INSPECT_NT_HEADERS {
     pub FileHeader:     INSPECT_IMAGE_FILE_HEADER,
     pub OptionalHeader: INSPECT_IMAGE_OPTIONAL_HEADER
 }
-
 impl ::std::clone::Clone for INSPECT_NT_HEADERS {
     fn clone(&self) -> Self {
         *self
@@ -613,7 +595,9 @@ impl ::std::clone::Clone for INSPECT_IMAGE_FILE_HEADER {
         *self
     }
 }
-
+///
+///
+///
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct INSPECT_IMAGE_OPTIONAL_HEADER {
@@ -627,7 +611,6 @@ pub struct INSPECT_IMAGE_OPTIONAL_HEADER {
     pub BaseOfCode:                     DWORD,  // 4
     pub BaseOfData:                     DWORD,  // 4
 }
-
 impl ::std::clone::Clone for INSPECT_IMAGE_OPTIONAL_HEADER {
     fn clone(&self) -> Self {
         *self
@@ -645,13 +628,16 @@ impl ::std::clone::Clone for INSPECT_IMAGE_OPTIONAL_HEADER {
 ///
 #[derive(Debug)]
 pub struct PE_FILE {
-    pub petype:             u16,
-    pub ImageDosHeader:     IMAGE_DOS_HEADER,
-    pub ImageDosStub:       String,
-    pub ImageNtHeaders:     IMAGE_NT_HEADERS,
-    pub ImageDataDirectory: HashMap<String, IMAGE_DATA_DIRECTORY>
+    pub petype:                 u16,
+    pub ImageDosHeader:         IMAGE_DOS_HEADER,
+    pub ImageDosStub:           String,
+    pub ImageNtHeaders:         IMAGE_NT_HEADERS,
+    pub ImageDataDirectory:     HashMap<String, IMAGE_DATA_DIRECTORY>,
+    pub ImageSectionHeaders:    HashMap<String, IMAGE_SECTION_HEADER>
 }
-
+///
+///
+///
 #[derive(Debug)]
 pub enum IMAGE_NT_HEADERS {
     x86(IMAGE_NT_HEADERS32),
@@ -662,30 +648,13 @@ pub enum IMAGE_NT_HEADERS {
         *self
     }
 }*/
-
-#[derive(Debug)]
-pub enum PE_FILE_OBJECT {
-    x86(PE_32),
-    x64(PE_64),
-}
-
-#[derive(Debug)]
-pub struct PE_32{
-    pub ImageDosHeader: IMAGE_DOS_HEADER,
-    pub ImageNtHeaders: IMAGE_NT_HEADERS32,
-    pub ImageDataDirectory: HashMap<String, IMAGE_DATA_DIRECTORY>
-}
-
-#[derive(Debug)]
-pub struct PE_64 {
-    pub ImageDosHeader: IMAGE_DOS_HEADER,
-    pub ImageNtHeaders: IMAGE_NT_HEADERS64
-}
-
+///
+///
+///
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct PE_DOS_STUB {
-    pub upper: [u8; 30],
+    pub upper: [u8; 30],    // Avoid Rust Array 32 Length Error
     pub lower: [u8; 9]
 }
 impl ::std::clone::Clone for PE_DOS_STUB {
