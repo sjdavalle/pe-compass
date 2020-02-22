@@ -172,7 +172,7 @@ impl PeParser {
 
         // Now Build the dataMap
         let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY> = HashMap::new();
-        let mut _type: String = String::with_capacity(32usize);
+        let mut _type: String;
 
         for (_idx, _entry) in _data_directories.iter().enumerate() {
             if _entry.Size != 0 {
@@ -192,7 +192,7 @@ impl PeParser {
                    12   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_IAT")             ; _data_map.insert(_type, *_entry) },
                    13   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT")    ; _data_map.insert(_type, *_entry) },
                    14   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR")  ; _data_map.insert(_type, *_entry) },
-                   _    => continue
+                   _    => continue // reserved, undocumented
                 };
             }
         }
@@ -209,7 +209,6 @@ impl PeParser {
         // Steps:
             //  . Get Number of Sections in Scope for the PE File
         let _numof_pe_sections: usize = _nt_headers.FileHeader.NumberOfSections as usize;
-        //let mut _section_table_headers: Vec<IMAGE_SECTION_HEADER> = Vec::with_capacity(_numof_pe_sections);
         
             //  . Calculate Total Bytes to Read for All Sections
         let mut _total_bytes_sections = SIZE_OF_SECTION_HEADER * _numof_pe_sections;
@@ -223,8 +222,6 @@ impl PeParser {
             //  . Calculate The Starting Offset of the Section Headers
         let mut _offset_starts_sechdr = _offset_starts_opthdr + _sizeof_pe_opthdr;
         
-        //let _scope = &self.content.len();
-        //println!("Scope Content: {:#?}", _scope);
         let mut _section_table_headers = HashMap::new();
         let mut _section_header: IMAGE_SECTION_HEADER;
         let mut _section_name: &str;
@@ -232,15 +229,13 @@ impl PeParser {
         while _total_bytes_sections != 0 {
             _section_header = self.content.pread_with(_offset_starts_sechdr, LE).unwrap();
             _section_name   = std::str::from_utf8(&_section.Name[..]).unwrap();
+            
             _section_table_headers.insert(String::from(_section_name), _section_header);
-            //println!("Total  Is: {:<4}  | Offset Is: {}", _total_bytes_sections, _offset_start_sechdr);
-            //println!("Section Name: {}\n", _section_name.unwrap());
-            //_section_table_headers.push(_section);
+
             _total_bytes_sections -= SIZE_OF_SECTION_HEADER;
             _offset_starts_sechdr += SIZE_OF_SECTION_HEADER;
 
         }
-        println!("{:#?}", _section_table_headers);
         _section_table_headers
         
     }
@@ -272,6 +267,9 @@ impl PeParser {
         let _offset_opt_header = 0x98 as usize;     // 24 Bytes After PE Signature
     }
 }
+/// # Unit Tests
+///
+///
 #[cfg(test)]
 mod tests_pe_parser {
     use super::*;
