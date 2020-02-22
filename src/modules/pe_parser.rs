@@ -8,6 +8,7 @@ use file_handler::FileHandler;
 #[path = "../structs/pe_structs.rs"] mod pe_structs;
 use pe_structs::*;
 
+
 /// # PE Parser
 /// This module is used to parse the structures of the PE Format
 /// The parser should accomodate the identification of either a
@@ -63,11 +64,11 @@ impl PeParser {
         let mut _petype: u16 = 0;
         let mut _image_data_dir: [u64; 16] = [0u64; 16];
         let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY>;
+        let mut _section_table_headers: HasMap<String, IMAGE_SECTION_HEADER>;
 
         {
             let _nt_test: INSPECT_NT_HEADERS = self.inspect_nt_headers(_doshdr.e_lfanew);   // Drop these headers after block
             _petype = _nt_test.OptionalHeader.Magic;
-            self.get_section_headers(&_doshdr.e_lfanew, &_nt_test);
 
             _nt_headers = match _petype {
                 267 => IMAGE_NT_HEADERS::x86(self.get_image_nt_headers32(_doshdr.e_lfanew)),
@@ -81,42 +82,18 @@ impl PeParser {
             };
 
             _data_map = self.get_data_directories(&_image_data_dir);
+            _section_table_headers = self.get_section_headers(&_doshdr.e_lfanew, &_nt_test);
         }
 
         PE_FILE {
-            petype:             _petype,
-            ImageDosHeader:     _doshdr,
-            ImageDosStub:       _dos_stub,
-            ImageNtHeaders:     _nt_headers,
-            ImageDataDirectory: _data_map
+            petype:                 _petype,
+            ImageDosHeader:         _doshdr,
+            ImageDosStub:           _dos_stub,
+            ImageNtHeaders:         _nt_headers,
+            ImageDataDirectory:     _data_map,
+            ImageSectionHeaders:    _section_table_headers
         }
     }
-    /**
-    ///
-    /// 
-    /// 
-    fn get_pe32(&self, _doshdr: IMAGE_DOS_HEADER) -> PE_32
-    {
-        let mut _nt_headers: IMAGE_NT_HEADERS32 = self.get_image_nt_headers32(_doshdr.e_lfanew);
-
-        PE_32 {
-            ImageDosHeader: _doshdr,
-            ImageNtHeaders: _nt_headers,
-        }
-    }
-    ///
-    /// 
-    /// 
-    fn get_pe64(&self, _doshdr: IMAGE_DOS_HEADER) -> PE_64
-    {
-        let _nt_headers: IMAGE_NT_HEADERS64 = self.get_image_nt_headers64(_doshdr.e_lfanew);
-
-        PE_64 {
-            ImageDosHeader: _doshdr,
-            ImageNtHeaders: _nt_headers,
-        }
-    }
-    **/
     /// # PE Parser GetDosHeader Method
     /// This parses the initial IMAGE_DOS_HEADER struct from
     /// a byte stream.
@@ -221,46 +198,50 @@ impl PeParser {
         }
         _data_map
     }
+    /// # Pe Parser GetSectionHeaders Method
     ///
-    fn get_section_headers(&self, e_lfanew: &i32, _nt_headers: &INSPECT_NT_HEADERS)
+    ///
+    ///
+    fn get_section_headers(&self, e_lfanew: &i32, _nt_headers: &INSPECT_NT_HEADERS) -> HashMap<String, IMAGE_SECTION_HEADER>
     {
         const SIZE_OF_SECTION_HEADER: usize  = 40; // 40 Bytes Long
 
         // Steps:
             //  . Get Number of Sections in Scope for the PE File
         let _numof_pe_sections: usize = _nt_headers.FileHeader.NumberOfSections as usize;
-        let mut _section_table_headers: Vec<IMAGE_SECTION_HEADER> = Vec::with_capacity(_numof_pe_sections);
-
+        //let mut _section_table_headers: Vec<IMAGE_SECTION_HEADER> = Vec::with_capacity(_numof_pe_sections);
+        
             //  . Calculate Total Bytes to Read for All Sections
         let mut _total_bytes_sections = SIZE_OF_SECTION_HEADER * _numof_pe_sections;
 
             //  . Get Size of Optional Header from FileHeader
-        let _sizeof_pe_opthdrs: usize = _nt_headers.FileHeader.SizeOfOptionalHeader as usize;
+        let _sizeof_pe_opthdr: usize = _nt_headers.FileHeader.SizeOfOptionalHeader as usize;
 
             //  . Calculate The Starting Offset of the OptionalHeader from NtHeaders
-        let _offset_start_opthdr = (e_lfanew + 24) as usize;
+        let _offset_starts_opthdr = (e_lfanew + 24) as usize;
         
             //  . Calculate The Starting Offset of the Section Headers
-        let mut _offset_start_sechdr = _offset_start_opthdr + _sizeof_pe_opthdrs;
+        let mut _offset_starts_sechdr = _offset_starts_opthdr + _sizeof_pe_opthdr;
         
-        let _scope = &self.content.len();
-        println!("Scope Content: {:#?}", _scope);
-
-            //  . Read Bytes for all Sections
-
-        let mut _section: IMAGE_SECTION_HEADER;
-
+        //let _scope = &self.content.len();
+        //println!("Scope Content: {:#?}", _scope);
+        let mut _section_table_headers = HashMap::new();
+        let mut _section_header: IMAGE_SECTION_HEADER;
+        let mut _section_name: &str;
+        
         while _total_bytes_sections != 0 {
+            _section_header = self.content.pread_with(_offset_starts_sechdr, LE).unwrap();
+            _section_name   = std::str::from_utf8(&_section.Name[..]).unwrap();
+            _section_table_headers.insert(String::from(_section_name), _section_header);
             //println!("Total  Is: {:<4}  | Offset Is: {}", _total_bytes_sections, _offset_start_sechdr);
-            _section = self.content.pread_with(_offset_start_sechdr, LE).unwrap();
-            let _section_name = std::str::from_utf8(&_section.Name[..]);
-            println!("Section Name: {}\n", _section_name.unwrap());
-            _section_table_headers.push(_section);
-            _total_bytes_sections -= 40 as usize;
-            _offset_start_sechdr  += 40 as usize;
+            //println!("Section Name: {}\n", _section_name.unwrap());
+            //_section_table_headers.push(_section);
+            _total_bytes_sections -= SIZE_OF_SECTION_HEADER;
+            _offset_starts_sechdr += SIZE_OF_SECTION_HEADER;
 
         }
         println!("{:#?}", _section_table_headers);
+        _section_table_headers
         
     }
     ///
