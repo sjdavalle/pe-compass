@@ -60,8 +60,10 @@ impl PeParser {
 
         let _dos_stub = self.get_dos_stub_string();
         let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
+    
+        let mut _petype: u16;
         let mut _nt_headers: IMAGE_NT_HEADERS;
-        let mut _petype: u16 = 0;
+        
         let mut _image_data_dir: [u64; 16] = [0u64; 16];
         let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY>;
         let mut _section_table_headers: HasMap<String, IMAGE_SECTION_HEADER>;
