@@ -213,7 +213,9 @@ impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER64 {
 #[repr(C)]
 pub struct IMAGE_SECTION_HEADER {
     pub Name:                           [BYTE; 8], // 8
-    pub _union:                         Misc,   // 8
+    //pub _union:                         Misc,   // 8
+    //pub PhysicalAddress:                DWORD,
+    pub VirtualSize:                    DWORD,
     pub VirtualAddress:                 DWORD,  // 4
     pub SizeOfRawData:                  DWORD,  // 4
     pub PointerToRawData:               DWORD,  // 4
@@ -224,18 +226,6 @@ pub struct IMAGE_SECTION_HEADER {
     pub Characteristics:                DWORD,  // 4
 }
 impl ::std::clone::Clone for IMAGE_SECTION_HEADER {
-    fn clone(&self) -> Self {
-        *self
-    }
-}
-
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C)]
-pub struct Misc {
-    PhysicalAddress:    DWORD,
-    VirtualSize:        DWORD
-}
-impl ::std::clone::Clone for Misc {
     fn clone(&self) -> Self {
         *self
     }

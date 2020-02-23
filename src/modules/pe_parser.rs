@@ -66,7 +66,7 @@ impl PeParser {
         
         let mut _image_data_dir: [u64; 16] = [0u64; 16];
         let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY>;
-        let mut _section_table_headers: HasMap<String, IMAGE_SECTION_HEADER>;
+        let mut _section_table_headers: HashMap<String, IMAGE_SECTION_HEADER>;
 
         {
             let _nt_test: INSPECT_NT_HEADERS = self.inspect_nt_headers(_doshdr.e_lfanew);   // Drop these headers after block
@@ -230,7 +230,7 @@ impl PeParser {
         
         while _total_bytes_sections != 0 {
             _section_header = self.content.pread_with(_offset_starts_sechdr, LE).unwrap();
-            _section_name   = std::str::from_utf8(&_section.Name[..]).unwrap();
+            _section_name   = std::str::from_utf8(&_section_header.Name[..]).unwrap();
             
             _section_table_headers.insert(String::from(_section_name), _section_header);
 
