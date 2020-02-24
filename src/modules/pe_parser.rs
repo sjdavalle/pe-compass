@@ -300,9 +300,6 @@ impl PeParser {
     /// Virtual Address (VA) of the section.
     /// 
     fn get_dll_imports(&self, _dir_entries: &BTreeMap<String, IMAGE_DATA_DIRECTORY>, _section_table: &HashMap<String, IMAGE_SECTION_HEADER>)
-                       //_nt_opthdrs: &IMAGE_NT_HEADERS,
-
-                       //_section_table: &HashMap<String, IMAGE_SECTION_HEADER>)
     {
         let _target_address = _dir_entries.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
         let _entry_iat      = _dir_entries.get("IMAGE_DIRECTORY_ENTRY_IAT").unwrap();
@@ -310,7 +307,7 @@ impl PeParser {
         let mut _vsizes_x: Vec<&DWORD> = vec![];
         let mut _vsizes_y: Vec<&DWORD> = vec![];
         {
-            println!("DLL IMPORTS: \n{:#?}\nDLL IAT:\n{:#?}", _target_address, _entry_iat);
+            //println!("DLL IMPORTS: \n{:#?}\nDLL IAT:\n{:#?}", _target_address, _entry_iat);
             for _vsize in _section_table.values() {
                 _vsizes_x.push(&_vsize.VirtualAddress);
             }
@@ -329,11 +326,13 @@ impl PeParser {
                 if _range.contains(&&&_target_address.VirtualAddress) {
                     
                     if &&&_target_address.VirtualAddress >= &_start && &&&_target_address.VirtualAddress <= &&_end {
-                        println!("\nTarget Section is Located at: 0x{:<6X}", _start);
-                        println!("Match Found: \nIndex: {:>4} => Start: {:<6} | End: {:<4}\n\n", count, _start, _end);
+                        
+                        for (_key, _value) in _section_table.iter() {
+                            if &&_value.VirtualAddress == _start {
+                                println!("\n\nMatch Found: SectionName: {}\nIndex: {:>4} => Start: {:<6} | End: {:<4}\n\n", _key, count, _start, _end);
+                            }
+                        }
                     }
-                    
-
                 }
                 count += 1;
             }
