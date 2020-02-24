@@ -21,9 +21,13 @@ Current Code Base is parsing the following structs, validation in progress.
 ```rust
 /// Inspection Code Now returns an enum "PE_FILE" that holds either of
 /// a 32 or 64 Bit pe optional headers object
-File Size:     944840
-Bytes Content Len:     944840
-Vec Content:     944840
+
+
+File Size:          944840
+Bytes Content Len:  944840
+Vec Content:        944840
+
+
 PE_FILE {
     petype: 267,
     ImageDosHeader: IMAGE_DOS_HEADER {

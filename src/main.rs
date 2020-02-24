@@ -7,6 +7,8 @@
 extern crate scroll_derive;
 extern crate scroll;
 
+extern crate clap;
+
 /// Imports: Rust STD Lib
 
 /// Imports: 3rd Party Crates

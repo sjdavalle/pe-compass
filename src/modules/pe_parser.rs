@@ -37,9 +37,12 @@ impl PeParser {
         let _file = FileHandler::open(fp, "r");
         let _fsize = _file.size;
         println!("File Size: {:>10}", _fsize);
-        if _fsize < 60 {
-            std::process::exit(0x0100); // If file size less than 60 bytes exit
+        
+        if _fsize < 64 {
+            std::process::exit(0x0100); // If file size less than 64 bytes exit
         }
+        // ToDo: Add Validator Code Here for Sigs before reading File
+        
         let _bytes = _file.read_as_bytes(_fsize).unwrap();
         println!("Bytes Content Len: {:>10}", _bytes.len());
         PeParser {
@@ -132,7 +135,7 @@ impl PeParser {
     /// 
     /// let _dh: IMAGE_DOS_HEADER = _pe.content.pread(0usize, LE).unwrap();
     /// ```    
-    pub fn get_image_nt_headers32(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS32
+    fn get_image_nt_headers32(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS32
     {
         let _offset = e_lfanew as usize;       
         let _peheader: IMAGE_NT_HEADERS32 = self.content.pread_with(_offset, LE).unwrap();
@@ -147,7 +150,7 @@ impl PeParser {
     /// 
     /// let _dh: IMAGE_DOS_HEADER = _pe.content.pread(0usize, LE).unwrap();
     /// ```    
-    pub fn get_image_nt_headers64(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS64
+    fn get_image_nt_headers64(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS64
     {
         let _offset = e_lfanew as usize;       
         let _peheader: IMAGE_NT_HEADERS64 = self.content.pread_with(_offset, LE).unwrap();
@@ -239,7 +242,6 @@ impl PeParser {
 
         }
         _section_table_headers
-        
     }
     ///
     fn get_data_entry_import_table<T, U>(&self, _entry_type: &String, _entry_rva: T, _image_base: U)
@@ -264,12 +266,6 @@ impl PeParser {
         _dos_string.push_str(std::str::from_utf8(&_dos_stub.lower[..]).unwrap());
                 
         _dos_string
-    }
-    ///
-    fn load_essential_offsets(&self)
-    {
-        let _offset_pe_sig = 0x3c as usize;         // 60 Bytes After Dos Header
-        let _offset_opt_header = 0x98 as usize;     // 24 Bytes After PE Signature
     }
 }
 /// # Unit Tests

@@ -213,8 +213,6 @@ impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER64 {
 #[repr(C)]
 pub struct IMAGE_SECTION_HEADER {
     pub Name:                           [BYTE; 8], // 8
-    //pub _union:                         Misc,   // 8
-    //pub PhysicalAddress:                DWORD,
     pub VirtualSize:                    DWORD,
     pub VirtualAddress:                 DWORD,  // 4
     pub SizeOfRawData:                  DWORD,  // 4
@@ -428,48 +426,7 @@ pub struct IMAGE_FUNCTION_ENTRY64 {
     pub EndingAddress:                      ULONGLONG,
     pub EndOfPrologueOrUnwindInfoAddress:   ULONGLONG,
 }
-///
-/// 
-/// 
-/// 
-/*
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C)]
-pub struct IMAGE_ROM_HEADERS {
-    pub FileHeader:     IMAGE_FILE_HEADER,
-    pub OptionalHeader: IMAGE_ROM_OPTIONAL_HEADER,
-}
-///
-/// 
-/// 
-/// 
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C)]
-pub struct IMAGE_ROM_OPTIONAL_HEADER {
-    pub Magic:                      WORD,
-    pub MajorLinkerVersion:         BYTE,
-    pub MinorLinkerVersion:         BYTE,
-    pub SizeOfCode:                 DWORD,
-    pub SizeOfInitializedData:      DWORD,
-    pub SizeOfUninitializedData:    DWORD,
-    pub AddressOfEntryPoint:        DWORD,
-    pub BaseOfCode:                 DWORD,
-    pub BaseOfData:                 DWORD,
-    pub BaseOfBss:                  DWORD,
-    pub GprMask:                    DWORD,
-    pub CprMask:                    [DWORD; 4],
-    pub GpValue:                    DWORD,
-}
-impl ::std::clone::Clone for IMAGE_ROM_OPTIONAL_HEADER {
-    fn clone(&self) -> Self {
-        *self
-    }
-}
-*/
-///
-/// 
-/// 
-/// 
+
 #[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_RUNTIME_FUNCTION_ENTRY {
@@ -491,49 +448,6 @@ pub struct IMAGE_RESOURCE_DIRECTORY {
     pub NumberOfNamedEntries:   WORD,
     pub NumberOfIdEntries:      WORD
 }
-///
-/// 
-/// 
-/// 
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C)]
-pub struct IMAGE_ENCLAVE_CONFIG32 {
-    pub Size:                        DWORD,
-    pub MinimumRequiredConfigSize:   DWORD,
-    pub PolicyFlags:                 DWORD,
-    pub NumberOfImports:             DWORD,
-    pub ImportList:                  DWORD,
-    pub ImportEntrySize:             DWORD,
-    pub FamilyID:                    [BYTE; 16],
-    pub ImageID:                     [BYTE; 16],
-    pub ImageVersion:                BYTE,
-    pub SecurityVersion:             DWORD,
-    pub EnclaveSize:                 DWORD,
-    pub NumberOfThreads:             DWORD,
-    pub EnclaveFlags:                DWORD,
-}
-///
-/// 
-/// 
-/// 
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C)]
-struct IMAGE_ENCLAVE_CONFIG64 {
-    pub Size:                        DWORD,
-    pub MinimumRequiredConfigSize:   DWORD,
-    pub PolicyFlags:                 DWORD,
-    pub NumberOfImports:             DWORD,
-    pub ImportList:                  DWORD,
-    pub ImportEntrySize:             DWORD,
-    pub FamilyID:                    [BYTE; 16],
-    pub ImageID:                     [BYTE; 16],
-    pub ImageVersion:                BYTE,
-    pub SecurityVersion:             DWORD,
-    pub EnclaveSize:                 DWORD,
-    pub NumberOfThreads:             DWORD,
-    pub EnclaveFlags:                DWORD,
-}
-
 /// # PE Custom Object Structs - CO_STRUCTS
 /// The structs in this file are derived from the specification
 /// structs located in the `pe_structs` file.
@@ -543,12 +457,12 @@ struct IMAGE_ENCLAVE_CONFIG64 {
 /// For example, to determine what type of PE is involved we need to
 /// determine if it is a 32 or 64 bit by inspecting the `Magic` member
 /// of the IMAGE_OPTIONAL_HEADER struct and its subsection group called
-/// the `Standard Fields` struct members group.
+/// the `Standard Fields` members group.
 /// 
 /// We create a custom struct that we can read to access that field before
 /// we load the relevant PE32 or PE64 struct.
 /// 
-/// All custom instructs have a label that starts with `INSPECT_` when a subsection
+/// All custom structs have a label that starts with `INSPECT_` when a subsection
 /// of the PE Format specification is being validated.
 ///
 /// In contrast, the `PE_32` or `PE_64` structs are a custom object that represent
