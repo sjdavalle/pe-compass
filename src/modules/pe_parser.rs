@@ -304,26 +304,26 @@ impl PeParser {
             for _v in _section_table.values() {
                 _rvas_x.push(&_v.VirtualAddress);
             }
-            _rvas_x.sort();
+            _rvas_x.sort();             // Sort All VAs from smallest to largest
             
-            _rvas_y = _rvas_x.clone();  // Clone Original Vec List
+            _rvas_y = _rvas_x.clone();  // Build Second List of VAs
             _rvas_y.push(&0);           // Push Zero Padding to the end 
-            _rvas_y.remove(0);          // Remove first element
+            _rvas_y.remove(0);          // Remove first element; aligned for zip iter
 
             let list_virtual_addresses = _rvas_x.iter().zip(_rvas_y);
             let mut count = 0;
 
-            for (_va_x, _va_y) in list_virtual_addresses {
-                let _range = Range { start: _va_x, end: &_va_y };
+            for (_x, _y) in list_virtual_addresses {
+                let _range = Range { start: _x, end: &_y };
                 let _ta = &&&_target_address.VirtualAddress;
                 
                 if _range.contains(_ta) {    
-                    if _ta >= &_va_x && _ta <= &&_va_y {
+                    if _ta >= &_x && _ta <= &&_y {
                         
                         for (_key, _value) in _section_table.iter() {
-                            if &&_value.VirtualAddress == _va_x {
+                            if &&_value.VirtualAddress == _x {
                                 println!("\n\nMatch Found: SectionName: {}\nIndex: {:>4} => Start: {:<6} | End: {:<4}\n\n",
-                                        _key, count, _va_x, _va_y);
+                                        _key, count, _x, _y);
                             }
                         }
                     }
