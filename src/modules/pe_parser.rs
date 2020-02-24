@@ -37,7 +37,6 @@ impl PeParser {
     {
         let _file = FileHandler::open(fp, "r");
         let _fsize = _file.size;
-        println!("File Size: {:>10}", _fsize);
         
         if _fsize < 64 {
             std::process::exit(0x0100); // If file size less than 64 bytes exit
@@ -45,7 +44,6 @@ impl PeParser {
         // ToDo: Add Validator Code Here for Sigs before reading File
         
         let _bytes = _file.read_as_bytes(_fsize).unwrap();
-        println!("Bytes Content Len: {:>10}", _bytes.len());
         PeParser {
             handler: _file,
             content: _bytes,
@@ -60,8 +58,6 @@ impl PeParser {
     /// 
     pub fn inspect_file(&self) -> PE_FILE
     {
-        println!("Vec Content: {:>10}",self.content.len());
-
         let _dos_stub = self.get_dos_stub_string();
         let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
     
@@ -250,7 +246,6 @@ impl PeParser {
             //  . Calculate The Starting Offset of the Section Headers
         let mut _offset_starts_sechdr = _offset_starts_opthdr + _sizeof_pe_opthdr;
         
-        //let mut _section_table_headers: HashMap<String, IMAGE_SECTION_HEADER> = HashMap::new();
         let mut _section_table_headers: HashMap<String, IMAGE_SECTION_HEADER> = HashMap::new();
 
         let mut _section_header: IMAGE_SECTION_HEADER;
@@ -267,7 +262,6 @@ impl PeParser {
                                                 .collect();
 
             // Build Custom HashMap with section names and section header
-
             _section_table_headers.insert(String::from_utf8(_section_name).unwrap(), _section_header);
 
             // Increment Offset By 40 Bytes each iteratio
@@ -278,7 +272,7 @@ impl PeParser {
         _section_table_headers
     }
     /// # Parse the Import Address Table and Functions
-    /// Read the Function Signature Craefully, we are passing things by reference.
+    /// Read the Function Signature Cafefully, we are passing things by reference.
     /// 
     /// The following notes show which struct members of the section header are relevant
     /// ```
@@ -304,32 +298,32 @@ impl PeParser {
         let _target_address = _dir_entries.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
         let _entry_iat      = _dir_entries.get("IMAGE_DIRECTORY_ENTRY_IAT").unwrap();
         
-        let mut _vsizes_x: Vec<&DWORD> = vec![];
-        let mut _vsizes_y: Vec<&DWORD> = vec![];
+        let mut _rvas_x: Vec<&DWORD> = vec![];
+        let mut _rvas_y: Vec<&DWORD> = vec![];
         {
-            //println!("DLL IMPORTS: \n{:#?}\nDLL IAT:\n{:#?}", _target_address, _entry_iat);
-            for _vsize in _section_table.values() {
-                _vsizes_x.push(&_vsize.VirtualAddress);
+            for _v in _section_table.values() {
+                _rvas_x.push(&_v.VirtualAddress);
             }
-            _vsizes_x.sort();
+            _rvas_x.sort();
             
-            _vsizes_y = _vsizes_x.clone();  // Clone Original Vec List
-            _vsizes_y.push(&0);             // Push Zero Padding to the end 
-            _vsizes_y.remove(0);            // Remove first element
+            _rvas_y = _rvas_x.clone();  // Clone Original Vec List
+            _rvas_y.push(&0);           // Push Zero Padding to the end 
+            _rvas_y.remove(0);          // Remove first element
 
-            let list_virtual_addresses = _vsizes_x.iter().zip(_vsizes_y);
+            let list_virtual_addresses = _rvas_x.iter().zip(_rvas_y);
             let mut count = 0;
 
-            for (_start, _end) in list_virtual_addresses {
-                let _range = Range { start: _start, end: &_end };
-
-                if _range.contains(&&&_target_address.VirtualAddress) {
-                    
-                    if &&&_target_address.VirtualAddress >= &_start && &&&_target_address.VirtualAddress <= &&_end {
+            for (_va_x, _va_y) in list_virtual_addresses {
+                let _range = Range { start: _va_x, end: &_va_y };
+                let _ta = &&&_target_address.VirtualAddress;
+                
+                if _range.contains(_ta) {    
+                    if _ta >= &_va_x && _ta <= &&_va_y {
                         
                         for (_key, _value) in _section_table.iter() {
-                            if &&_value.VirtualAddress == _start {
-                                println!("\n\nMatch Found: SectionName: {}\nIndex: {:>4} => Start: {:<6} | End: {:<4}\n\n", _key, count, _start, _end);
+                            if &&_value.VirtualAddress == _va_x {
+                                println!("\n\nMatch Found: SectionName: {}\nIndex: {:>4} => Start: {:<6} | End: {:<4}\n\n",
+                                        _key, count, _va_x, _va_y);
                             }
                         }
                     }
