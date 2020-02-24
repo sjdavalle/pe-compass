@@ -1,4 +1,5 @@
-use std::collections::HashMap;
+use std::collections::{ HashMap, BTreeMap };
+use std::ops::Range;
 
 use scroll::{ Pread, LE };
 
@@ -68,7 +69,7 @@ impl PeParser {
         let mut _nt_headers: IMAGE_NT_HEADERS;
         
         let mut _image_data_dir: [u64; 16] = [0u64; 16];
-        let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY>;
+        let mut _data_map: BTreeMap<String, IMAGE_DATA_DIRECTORY>;
         let mut _section_table_headers: HashMap<String, IMAGE_SECTION_HEADER>;
 
         {
@@ -88,6 +89,8 @@ impl PeParser {
 
             _data_map = self.get_data_directories(&_image_data_dir);
             _section_table_headers = self.get_section_headers(&_doshdr.e_lfanew, &_nt_test);
+
+            self.get_dll_imports(&_data_map, &_section_table_headers);
         }
 
         PE_FILE {
@@ -183,7 +186,7 @@ impl PeParser {
     /// ```
     /// let _pe = PeParser::new("foo.exe")
     /// ```
-    fn get_data_directories(&self, data_dir: &[u64; 16usize]) -> HashMap<String, IMAGE_DATA_DIRECTORY>
+    fn get_data_directories(&self, data_dir: &[u64; 16usize]) -> BTreeMap<String, IMAGE_DATA_DIRECTORY>
     {
         let mut _data_directories: Vec<IMAGE_DATA_DIRECTORY> = Vec::with_capacity(16usize);
         let _offset = 0 as usize;
@@ -196,7 +199,7 @@ impl PeParser {
         }
 
         // Now Build the dataMap
-        let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY> = HashMap::new();
+        let mut _data_map: BTreeMap<String, IMAGE_DATA_DIRECTORY> = BTreeMap::new();
         let mut _type: String;
 
         for (_idx, _entry) in _data_directories.iter().enumerate() {
@@ -247,35 +250,96 @@ impl PeParser {
             //  . Calculate The Starting Offset of the Section Headers
         let mut _offset_starts_sechdr = _offset_starts_opthdr + _sizeof_pe_opthdr;
         
-        let mut _section_table_headers = HashMap::new();
+        //let mut _section_table_headers: HashMap<String, IMAGE_SECTION_HEADER> = HashMap::new();
+        let mut _section_table_headers: HashMap<String, IMAGE_SECTION_HEADER> = HashMap::new();
+
         let mut _section_header: IMAGE_SECTION_HEADER;
-        let mut _section_name: &str;
+        let mut _section_name: Vec<u8>;
         
         while _total_bytes_sections != 0 {
-            // Increment Offset By 40 Bytes each iteration
-            // Build Custom HashMap with section names and section header
-            //
-            _section_header = self.content.pread_with(_offset_starts_sechdr, LE).unwrap();
-            _section_name   = std::str::from_utf8(&_section_header.Name[..]).unwrap();
-            
-            _section_table_headers.insert(String::from(_section_name), _section_header);
 
+            _section_header = self.content.pread_with(_offset_starts_sechdr, LE).unwrap();
+            
+            // Remove Null Bytes from Section Name
+            _section_name = _section_header.Name.iter() 
+                                                .filter(|x| *x > &0)
+                                                .map(|x| *x as u8)
+                                                .collect();
+
+            // Build Custom HashMap with section names and section header
+
+            _section_table_headers.insert(String::from_utf8(_section_name).unwrap(), _section_header);
+
+            // Increment Offset By 40 Bytes each iteratio
             _total_bytes_sections -= SIZE_OF_SECTION_HEADER;
             _offset_starts_sechdr += SIZE_OF_SECTION_HEADER;
 
         }
         _section_table_headers
     }
-    ///
-    fn get_data_entry_import_table<T, U>(&self, _entry_type: &String, _entry_rva: T, _image_base: U)
+    /// # Parse the Import Address Table and Functions
+    /// Read the Function Signature Craefully, we are passing things by reference.
+    /// 
+    /// The following notes show which struct members of the section header are relevant
+    /// ```
+    /// Virtual Size     = VirtualSize          (VS)
+    /// Virtual Address  = VritualAddress       (VA)
+    /// Raw Size         = SizeOfRawData        (RS)
+    /// Raw Address      = PointerToRawdData    (RA)
+    /// Reloc Address    = PointerToRelocations (ReLocA)
+    /// 
+    /// Example:
+    ///     (TA)  = 745472
+    ///     (VA)x = 745472
+    ///     (VA)y = 749568
+    /// 
+    ///     Section := if { (TA) >= (VA)x && (TA) <= (VA)y };
+    /// ```
+    /// The example above reads as, a section of interest is equal to to the true condition.
+    /// The true condition is, for a Target Address (TA), it must be less than or equal to the
+    /// Virtual Address (VA) of the section.
+    /// 
+    fn get_dll_imports(&self, _dir_entries: &BTreeMap<String, IMAGE_DATA_DIRECTORY>, _section_table: &HashMap<String, IMAGE_SECTION_HEADER>)
+                       //_nt_opthdrs: &IMAGE_NT_HEADERS,
+
+                       //_section_table: &HashMap<String, IMAGE_SECTION_HEADER>)
     {
-        // PIMAGE_IMPORT_DESCRIPTOR
-        //offset=imageBase+text.RawOffset+(importDirectory.RVA − text.VA) 
-        //      ImageBase           => OptionalHeader.ImageBase
-        //      Text.RawOffset      => Text.RawAddress
-        //      ImportDirectory.RVA => Optional.Header.DataDirectory[0].VirtualAddress
-        //      Text.VA             => Text.VirtualAddress
-        let _image_base = 0;
+        let _target_address = _dir_entries.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
+        let _entry_iat      = _dir_entries.get("IMAGE_DIRECTORY_ENTRY_IAT").unwrap();
+        
+        let mut _vsizes_x: Vec<&DWORD> = vec![];
+        let mut _vsizes_y: Vec<&DWORD> = vec![];
+        {
+            println!("DLL IMPORTS: \n{:#?}\nDLL IAT:\n{:#?}", _target_address, _entry_iat);
+            for _vsize in _section_table.values() {
+                _vsizes_x.push(&_vsize.VirtualAddress);
+            }
+            _vsizes_x.sort();
+            
+            _vsizes_y = _vsizes_x.clone();  // Clone Original Vec List
+            _vsizes_y.push(&0);             // Push Zero Padding to the end 
+            _vsizes_y.remove(0);            // Remove first element
+
+            let list_virtual_addresses = _vsizes_x.iter().zip(_vsizes_y);
+            let mut count = 0;
+
+            for (_start, _end) in list_virtual_addresses {
+                let _range = Range { start: _start, end: &_end };
+
+                if _range.contains(&&&_target_address.VirtualAddress) {
+                    
+                    if &&&_target_address.VirtualAddress >= &_start && &&&_target_address.VirtualAddress <= &&_end {
+                        println!("\nTarget Section is Located at: 0x{:<6X}", _start);
+                        println!("Match Found: \nIndex: {:>4} => Start: {:<6} | End: {:<4}\n\n", count, _start, _end);
+                    }
+                    
+
+                }
+                count += 1;
+            }
+        }
+        // Steps:
+            // Sort the Secton Table Headers By Virtual Address
     }
 }
 /// # Unit Tests

@@ -76,8 +76,6 @@ pub struct FileHandler {
      {
         let mut _bytes: Vec<u8> = Vec::with_capacity(n_bytes as usize);
         let mut _bufr = BufReader::new(&self.handle);
-                //_bufr.read_until(_b, &mut _bytes)?;
-        //let mut _bufr = BufReader::with_capacity(n_bytes as usize, &self.handle);
 
         _bufr.read_to_end(&mut _bytes)?;
         

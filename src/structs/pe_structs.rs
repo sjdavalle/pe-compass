@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{ HashMap, BTreeMap };
 
 ///
 /// # Portable Executable Structures
@@ -536,7 +536,7 @@ pub struct PE_FILE {
     pub ImageDosHeader:         IMAGE_DOS_HEADER,
     pub ImageDosStub:           String,
     pub ImageNtHeaders:         IMAGE_NT_HEADERS,
-    pub ImageDataDirectory:     HashMap<String, IMAGE_DATA_DIRECTORY>,
+    pub ImageDataDirectory:     BTreeMap<String, IMAGE_DATA_DIRECTORY>,
     pub ImageSectionHeaders:    HashMap<String, IMAGE_SECTION_HEADER>
 }
 ///
