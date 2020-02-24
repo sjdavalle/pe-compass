@@ -114,6 +114,22 @@ impl PeParser {
         let _doshdr: IMAGE_DOS_HEADER = self.content.pread_with(_offset, LE).unwrap();
         _doshdr
     }
+    ///
+    ///
+    ///
+    ///
+    fn get_dos_stub_string(&self) -> String
+    {
+        let _offset = 0x4D as usize;
+    
+        let _dos_stub: PE_DOS_STUB = self.content.pread_with(_offset, LE).unwrap();
+        
+        let mut _dos_string = String::with_capacity(40usize);
+        _dos_string.push_str(std::str::from_utf8(&_dos_stub.upper[..]).unwrap());
+        _dos_string.push_str(std::str::from_utf8(&_dos_stub.lower[..]).unwrap());
+                
+        _dos_string
+    }
     /// # PE Parser InspectNTHeader Method
     /// This parses a custom object struct (co_struct) of a selected subset of the
     /// IMAGE_OPTIONAL_HEADER to be used in the validation stage which allows you
@@ -201,7 +217,7 @@ impl PeParser {
                    12   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_IAT")             ; _data_map.insert(_type, *_entry) },
                    13   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT")    ; _data_map.insert(_type, *_entry) },
                    14   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR")  ; _data_map.insert(_type, *_entry) },
-                   _    => continue // reserved, undocumented
+                   _    =>  continue // reserved, undocumented
                 };
             }
         }
@@ -260,19 +276,6 @@ impl PeParser {
         //      ImportDirectory.RVA => Optional.Header.DataDirectory[0].VirtualAddress
         //      Text.VA             => Text.VirtualAddress
         let _image_base = 0;
-    }
-    ///
-    fn get_dos_stub_string(&self) -> String
-    {
-        let _offset = 0x4D as usize;
-    
-        let _dos_stub: PE_DOS_STUB = self.content.pread_with(_offset, LE).unwrap();
-        
-        let mut _dos_string = String::with_capacity(40usize);
-        _dos_string.push_str(std::str::from_utf8(&_dos_stub.upper[..]).unwrap());
-        _dos_string.push_str(std::str::from_utf8(&_dos_stub.lower[..]).unwrap());
-                
-        _dos_string
     }
 }
 /// # Unit Tests
