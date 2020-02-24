@@ -134,6 +134,8 @@ impl PeParser {
     /// let _pe = PeParser::new("foo.exe");
     /// 
     /// let _dh: IMAGE_DOS_HEADER = _pe.content.pread(0usize, LE).unwrap();
+    ///
+    /// let _nthdr: IMAGE_NT_HEADERS32 = _pe.get_image_nt_headers32(_dh.e_lfanew);
     /// ```    
     fn get_image_nt_headers32(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS32
     {
@@ -149,6 +151,8 @@ impl PeParser {
     /// let _pe = PeParser::new("foo.exe");
     /// 
     /// let _dh: IMAGE_DOS_HEADER = _pe.content.pread(0usize, LE).unwrap();
+    ///
+    /// let _nthdr: IMAGE_NT_HEADERS64 = _pe.get_image_nt_headers64(_dh.e_lfanew);
     /// ```    
     fn get_image_nt_headers64(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS64
     {
@@ -232,6 +236,9 @@ impl PeParser {
         let mut _section_name: &str;
         
         while _total_bytes_sections != 0 {
+            // Increment Offset By 40 Bytes each iteration
+            // Build Custom HashMap with section names and section header
+            //
             _section_header = self.content.pread_with(_offset_starts_sechdr, LE).unwrap();
             _section_name   = std::str::from_utf8(&_section_header.Name[..]).unwrap();
             
