@@ -293,14 +293,21 @@ impl PeParser {
     /// The true condition is, for a Target Address (TA), it must be less than or equal to the
     /// Virtual Address (VA) of the section.
     /// 
+    /// The formula to find the file offset (location within file on disk) is:
+    /// ```
+    /// File Offset := TA - VA + RA;
+    /// ```
     fn get_dll_imports(&self, _dir_entries: &BTreeMap<String, IMAGE_DATA_DIRECTORY>, _section_table: &HashMap<String, IMAGE_SECTION_HEADER>)
     {
-        let _target_address = _dir_entries.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
-        let _entry_iat      = _dir_entries.get("IMAGE_DIRECTORY_ENTRY_IAT").unwrap();
+        let mut _file_offset: DWORD;
         
-        let mut _rvas_x: Vec<&DWORD> = vec![];
-        let mut _rvas_y: Vec<&DWORD> = vec![];
         {
+            let _target_address = _dir_entries.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
+            let _entry_iat      = _dir_entries.get("IMAGE_DIRECTORY_ENTRY_IAT").unwrap();
+
+            let mut _rvas_x: Vec<&DWORD> = vec![];
+            let mut _rvas_y: Vec<&DWORD> = vec![];
+
             for _v in _section_table.values() {
                 _rvas_x.push(&_v.VirtualAddress);
             }
@@ -322,8 +329,10 @@ impl PeParser {
                         
                         for (_key, _value) in _section_table.iter() {
                             if &&_value.VirtualAddress == _x {
-                                println!("\n\nMatch Found: SectionName: {}\nIndex: {:>4} => Start: {:<6} | End: {:<4}\n\n",
+                                println!("\n\nMatch Found: SectionName: {}\nIndex: {:>4} => Start: {:<6} | End: {:<4}",
                                         _key, count, _x, _y);
+                                _file_offset = **_ta - *_x + _section_table[_key].PointerToRawData;
+                                println!("FileOffset: 0x{:x}\n\n", _file_offset);
                             }
                         }
                     }
