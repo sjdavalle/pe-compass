@@ -85,8 +85,9 @@ impl PeParser {
 
             _data_map = self.get_data_directories(&_image_data_dir);
             _section_table_headers = self.get_section_headers(&_doshdr.e_lfanew, &_nt_test);
-
-            self.get_dll_imports(&_data_map, &_section_table_headers);
+            
+            // Acquire EAT & IAT
+            self.get_iat_offset(&_data_map, &_section_table_headers);
         }
 
         PE_FILE {
@@ -275,6 +276,7 @@ impl PeParser {
     /// Read the Function Signature Cafefully, we are passing things by reference.
     /// 
     /// The following notes show which struct members of the section header are relevant
+    ///
     /// ```
     /// Virtual Size     = VirtualSize          (VS)
     /// Virtual Address  = VritualAddress       (VA)
@@ -289,6 +291,7 @@ impl PeParser {
     /// 
     ///     Section := if { (TA) >= (VA)x && (TA) <= (VA)y };
     /// ```
+    ///
     /// The example above reads as, a section of interest is equal to to the true condition.
     /// The true condition is, for a Target Address (TA), it must be less than or equal to the
     /// Virtual Address (VA) of the section.
@@ -297,10 +300,14 @@ impl PeParser {
     /// ```
     /// File Offset := TA - VA + RA;
     /// ```
-    fn get_dll_imports(&self, _dir_entries: &BTreeMap<String, IMAGE_DATA_DIRECTORY>, _section_table: &HashMap<String, IMAGE_SECTION_HEADER>)
+    fn get_iat_offset(&self,
+                       _dir_entries: &BTreeMap<String, IMAGE_DATA_DIRECTORY>,
+                       _section_table: &HashMap<String, IMAGE_SECTION_HEADER>) -> DWORD
     {
+        //REFACTOR THIS
+        //
+        //
         let mut _file_offset: DWORD;
-        
         {
             let _target_address = _dir_entries.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
             let _entry_iat      = _dir_entries.get("IMAGE_DIRECTORY_ENTRY_IAT").unwrap();
@@ -329,8 +336,9 @@ impl PeParser {
                         
                         for (_key, _value) in _section_table.iter() {
                             if &&_value.VirtualAddress == _x {
-                                println!("\n\nMatch Found: SectionName: {}\nIndex: {:>4} => Start: {:<6} | End: {:<4}",
-                                        _key, count, _x, _y);
+                                println!("\n\nMatch Found: SectionName: {}
+                                         \nIndex: {:>4} => Start: {:<6} | End: {:<4}", _key, count, _x, _y);
+                                         
                                 _file_offset = **_ta - *_x + _section_table[_key].PointerToRawData;
                                 println!("FileOffset: 0x{:x}\n\n", _file_offset);
                             }
@@ -340,8 +348,7 @@ impl PeParser {
                 count += 1;
             }
         }
-        // Steps:
-            // Sort the Secton Table Headers By Virtual Address
+        _file_offset
     }
 }
 /// # Unit Tests
