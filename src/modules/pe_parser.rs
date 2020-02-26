@@ -34,7 +34,7 @@ impl PeParser {
     /// ```
     /// let _pe = PeParser::new("foo.exe");
     /// ```
-    pub fn pp_new(fp: &str) -> Self
+    pub fn new(fp: &str) -> Self
     {
         let _file = FileHandler::open(fp, "r");
         let _fsize = _file.size;
