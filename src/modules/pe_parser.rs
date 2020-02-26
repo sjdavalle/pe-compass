@@ -1,6 +1,7 @@
 use std::collections::{ HashMap, BTreeMap };
 use std::ops::Range;
 
+// 3rd Parties
 use scroll::{ Pread, LE };
 
 #[path = "../utils/filesystem/file_handler.rs"] mod file_handler;
@@ -33,7 +34,7 @@ impl PeParser {
     /// ```
     /// let _pe = PeParser::new("foo.exe");
     /// ```
-    pub fn new(fp: &str) -> Self
+    pub fn pp_new(fp: &str) -> Self
     {
         let _file = FileHandler::open(fp, "r");
         let _fsize = _file.size;
@@ -85,9 +86,15 @@ impl PeParser {
 
             _data_map = self.get_data_directories(&_image_data_dir);
             _section_table_headers = self.get_section_headers(&_doshdr.e_lfanew, &_nt_test);
-            
+        }
+
+        {
             // Acquire EAT & IAT
-            self.get_iat_offset(&_data_map, &_section_table_headers);
+            let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
+            //let _eiat = _data_map.get("IMAGE_DIRECTORY_ENTRY_IAT").unwrap();
+            let mut _imports: PE_RVA_TRACKER = self.get_file_offset_from_directory_entry("imports", _eimp, &_section_table_headers);
+            //let mut _iat: PE_RVA_TRACKER = self.get_file_offset_from_directory_entry("iat", _eiat, &_section_table_headers);
+            self.get_import_descriptors(&mut _imports);
         }
 
         PE_FILE {
@@ -300,18 +307,13 @@ impl PeParser {
     /// ```
     /// File Offset := TA - VA + RA;
     /// ```
-    fn get_iat_offset(&self,
-                       _dir_entries: &BTreeMap<String, IMAGE_DATA_DIRECTORY>,
-                       _section_table: &HashMap<String, IMAGE_SECTION_HEADER>) -> DWORD
+    fn get_file_offset_from_directory_entry(&self,
+                                            _entry_name: &str,
+                                            _dir_entry: &IMAGE_DATA_DIRECTORY,
+                                            _section_table: &HashMap<String, IMAGE_SECTION_HEADER>) -> PE_RVA_TRACKER
     {
-        //REFACTOR THIS
-        //
-        //
-        let mut _file_offset: DWORD;
+        let mut _rva_tracker = PE_RVA_TRACKER::new();
         {
-            let _target_address = _dir_entries.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
-            let _entry_iat      = _dir_entries.get("IMAGE_DIRECTORY_ENTRY_IAT").unwrap();
-
             let mut _rvas_x: Vec<&DWORD> = vec![];
             let mut _rvas_y: Vec<&DWORD> = vec![];
 
@@ -325,30 +327,85 @@ impl PeParser {
             _rvas_y.remove(0);          // Remove first element; aligned for zip iter
 
             let list_virtual_addresses = _rvas_x.iter().zip(_rvas_y);
-            let mut count = 0;
 
             for (_x, _y) in list_virtual_addresses {
                 let _range = Range { start: _x, end: &_y };
-                let _ta = &&&_target_address.VirtualAddress;
-                
+                let _ta = &&&_dir_entry.VirtualAddress;
+
                 if _range.contains(_ta) {    
                     if _ta >= &_x && _ta <= &&_y {
                         
                         for (_key, _value) in _section_table.iter() {
                             if &&_value.VirtualAddress == _x {
-                                println!("\n\nMatch Found: SectionName: {}
-                                         \nIndex: {:>4} => Start: {:<6} | End: {:<4}", _key, count, _x, _y);
-                                         
-                                _file_offset = **_ta - *_x + _section_table[_key].PointerToRawData;
-                                println!("FileOffset: 0x{:x}\n\n", _file_offset);
+                                // Populate the RVA Struct
+                                _rva_tracker.update(_entry_name, ***_ta, **_x, _section_table[_key].PointerToRawData, _key.to_string());
+                                _rva_tracker.get_file_offset();
                             }
                         }
                     }
                 }
-                count += 1;
             }
         }
-        _file_offset
+        println!("{:#?}", _rva_tracker);
+        _rva_tracker
+    }
+    ///
+    /// 
+    /// 
+    fn get_import_descriptors(&self, _rva: &mut PE_RVA_TRACKER)
+    {
+        const SIZE_OF_IMAGE_IMPORT_DESCRIPTOR: usize = 20 as usize;
+
+        let mut _offset: usize = _rva.file_offset as usize;
+        let mut _descriptors_list: Vec<IMAGE_IMPORT_DESCRIPTOR> = vec![];
+        let mut _descriptor: IMAGE_IMPORT_DESCRIPTOR;
+        let _null_descriptor = IMAGE_IMPORT_DESCRIPTOR::load_null_descriptor();
+
+        // Find the Image Descriptors
+        loop {
+            // Iterate through the file by offset
+            _descriptor = self.content.pread_with(_offset, LE).unwrap();
+            // Add each descriptor found to the list
+            _descriptors_list.push(_descriptor);
+            // Advance the offset
+            _offset += SIZE_OF_IMAGE_IMPORT_DESCRIPTOR;
+
+            if _descriptor == _null_descriptor {
+                println!("Finished Looking For Descriptors");
+                _descriptors_list.pop();    // remove the null descriptor
+                break;
+            }
+        }
+        //println!("List of Descriptors: {} Imports\n{:#?}", _descriptors_list.len(), _descriptors_list);
+        // Parse Image Thunk Datas
+        // Steps:
+            // Get the RVA from ImageFirstThunk
+        let _d: IMAGE_IMPORT_DESCRIPTOR = _descriptors_list[0];
+        println!("IMAGE DESCRIPTOR:\n{:#?}\n", _d);
+
+        // Get The Name of the DLL
+        _rva.new_offset_from(_d.Name);
+        _offset = _rva.file_offset as usize;
+        let _dll_name: IMAGE_IMPORT_DESCRIPTOR_NAME = self.content.pread_with(_offset, LE).unwrap();
+        _dll_name.string_from();
+
+        println!("DESCRIPTOR NAME:\n{:#?}", _dll_name);
+
+
+
+        _rva.new_offset_from(_d.OriginalFirstThunk);
+        _offset = _rva.file_offset as usize;
+        println!("New Target: Original First Thunk Located at: 0x{:x}h", _rva.file_offset);
+
+            // Serialize Image Thunk
+        let _thunk: IMAGE_THUNK_DATA32 = self.content.pread_with(_offset, LE).unwrap();
+        println!("IMAGE THUNK: \n{:#?}", _thunk);
+            // Get the RVA for the ImageImportName
+        _rva.new_offset_from(_thunk.AddressOfData);
+        _offset = _rva.file_offset as usize;
+            // Serialize ImageImportByName:  AreFileApisANSI
+        let _import_by_name: IMAGE_IMPORT_BY_NAME = self.content.pread_with(_offset, LE).unwrap();
+        println!("\nIMAGE IMPORT BY NAME: Address 0x{:x}h\n{:#?}", _offset, _import_by_name);
     }
 }
 /// # Unit Tests

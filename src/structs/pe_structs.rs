@@ -260,41 +260,56 @@ impl ::std::clone::Clone for IMAGE_DIRECTORY_ENTRY_IMPORT {
 /// 
 /// 
 ///
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, PartialOrd, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_IMPORT_DESCRIPTOR {
-    pub _union:             DUMMY_UNION_NAME,
-    pub ForwarderCahain:    DWORD,
+    pub OriginalFirstThunk: DWORD,
+    pub TimeDateStamp:      DWORD,
+    pub ForwarderChain:     DWORD,
     pub Name:               DWORD,
-    pub FirstThunk:         DWORD
+    pub FirstThunk:         DWORD,
 }
 impl ::std::clone::Clone for IMAGE_IMPORT_DESCRIPTOR {
     fn clone(&self) -> Self {
         *self
     }
 }
-///
-/// 
-/// 
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C)]
-pub struct DUMMY_UNION_NAME {
-    pub Characteristics:    DWORD,
-    pub OriginalFirstThunk: DWORD,
-}
-impl ::std::clone::Clone for DUMMY_UNION_NAME {
-    fn clone(&self) -> Self {
-        *self
+
+impl IMAGE_IMPORT_DESCRIPTOR {
+    /// Allows you to compare the null terminating descriptor
+    /// to identify the end of the content for a PE file.
+    /// If this matches, the file has no more DLL imports as part of
+    /// its `imports`
+    pub fn load_null_descriptor() -> Self
+    {
+        IMAGE_IMPORT_DESCRIPTOR {
+            OriginalFirstThunk  : 0,
+            TimeDateStamp       : 0,
+            ForwarderChain      : 0,
+            Name                : 0,
+            FirstThunk          : 0
+        }
     }
 }
 ///
 /// 
 /// 
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C)]
+#[repr(C, align(2))]
 pub struct IMAGE_THUNK_DATA32 {
-    pub _union:  u1_32
+    //pub _union:  u1_32
+    pub ForwarderString:    DWORD,  // PBYTE
+    pub Function:           DWORD,  // PDWORD
+    pub Ordinal:            DWORD,
+    pub AddressOfData:      DWORD   // PIMAGE_IMPORT_BY_NAME
 }
+/*
+pub struct IMAGE_THUNK_DATA32 {
+    pub AddressOfData:      DWORD,   // PIMAGE_IMPORT_BY_NAME
+    pub Function:           DWORD,  // PDWORD
+    pub Ordinal:            DWORD,
+    pub ForwarderString:    DWORD,  // PBYTE
+}*/
 impl ::std::clone::Clone for IMAGE_THUNK_DATA32 {
     fn clone(&self) -> Self {
         *self
@@ -302,7 +317,8 @@ impl ::std::clone::Clone for IMAGE_THUNK_DATA32 {
 }
 ///
 /// 
-/// 
+///
+///  
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct u1_32 {
@@ -562,6 +578,91 @@ pub struct PE_DOS_STUB {
     pub lower: [u8; 9]
 }
 impl ::std::clone::Clone for PE_DOS_STUB {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+/// # PE_RVA_TRACKER
+/// This is a custom object created to track the RVA conversion that leads to
+/// physical file offset.  Given the recurrent translation of RVAs, this approach
+/// is convenient
+/// 
+#[derive(Debug)]
+#[repr(C)] 
+pub struct PE_RVA_TRACKER {
+    pub ta:           DWORD,    // Target Address 
+    pub va:           DWORD,    // Virtual Address
+    pub ra:           DWORD,    // Raw Address
+    pub file_offset:  DWORD,    // Within File Location
+    pub section_name: String,   // Section Where Target Address resides
+    pub entry_name:   String,   // Name of Directory Entry
+}
+impl PE_RVA_TRACKER {
+    pub fn new() -> Self
+    {
+        PE_RVA_TRACKER {
+            ta: 0,
+            va: 0,
+            ra: 0,
+            file_offset: 0,
+            section_name: String::with_capacity(8usize),
+            entry_name:   String::from("empty")
+        }
+    }
+    ///
+    /// 
+    /// 
+    /// 
+    pub fn update(&mut self, _entry_name: &str, _ta: u32, _va: u32, _ra: u32, _name: String)
+    {
+        self.ta = _ta;
+        self.va = _va;
+        self.ra = _ra;
+        self.section_name = _name;
+        self.entry_name = _entry_name.to_string();
+    }
+    ///
+    /// 
+    /// 
+    /// 
+    pub fn get_file_offset(&mut self)
+    {
+        self.file_offset = self.ta - self.va + self.ra;
+    }
+    ///
+    /// 
+    /// 
+    ///
+    pub fn new_offset_from(&mut self, new_target_address: u32)
+    {
+        self.ta = new_target_address;
+        self.file_offset = self.ta - self.va + self.ra;
+    }
+}
+/// IMAGE_IMPORT_DESCRIPTOR_NAME
+/// A custom object struct to serialize two QWORDS and build a string from it by removing
+/// the null bytes at the end.
+#[derive(Debug, Copy, PartialEq, PartialOrd, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[repr(C)]
+pub struct IMAGE_IMPORT_DESCRIPTOR_NAME {
+    pub upper:  QWORD,
+    pub lower:  QWORD,
+}
+impl IMAGE_IMPORT_DESCRIPTOR_NAME {
+    pub fn string_from(&self)
+    {
+        let mut _s: String = "".to_string();
+        let _b: Vec<u8>= self.upper.to_le_bytes().iter()
+                                         .filter(|x| *x > &0)
+                                         .map(|x| *x as u8)
+                                         .collect();
+
+        _s.push_str(std::str::from_utf8(&_b[..]).unwrap());
+        println!("{}", _s)
+
+    }
+}
+impl ::std::clone::Clone for IMAGE_IMPORT_DESCRIPTOR_NAME {
     fn clone(&self) -> Self {
         *self
     }
