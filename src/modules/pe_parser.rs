@@ -230,9 +230,18 @@ impl PeParser {
         _data_map
     }
     /// # Pe Parser GetSectionHeaders Method
+    /// This method finds the PE Section Structs and organizes them into a HashMap for ease
+    /// of use later.  We want to query a section in other areas by key index such as:
     ///
+    /// ```
+    /// let _sections: HashMap<String, IMAGE_SECTION_HEADER>;
     ///
+    /// _sections = _pe.get_section_headers(e_lfanew, nt_headers);
     ///
+    /// let _code_section: IMAGE_SECTION_HEADER;
+    ///
+    /// _code_section = _sections.get_key_value(".code");
+    /// ```
     fn get_section_headers(&self, e_lfanew: &i32, _nt_headers: &INSPECT_NT_HEADERS) -> HashMap<String, IMAGE_SECTION_HEADER>
     {
         const SIZE_OF_SECTION_HEADER: usize  = 40; // 40 Bytes Long
@@ -262,18 +271,16 @@ impl PeParser {
 
             _section_header = self.content.pread_with(_offset_starts_sechdr, LE).unwrap();
             
-            // Remove Null Bytes from Section Name
-            _section_name = _section_header.Name.iter() 
+            _section_name = _section_header.Name.iter()                 // Remove Null Bytes from Section Name
                                                 .filter(|x| *x > &0)
                                                 .map(|x| *x as u8)
                                                 .collect();
 
-            // Build Custom HashMap with section names and section header
+                // Build Custom HashMap with section names and section header
             _section_table_headers.insert(String::from_utf8(_section_name).unwrap(), _section_header);
 
-            // Increment Offset By 40 Bytes each iteratio
             _total_bytes_sections -= SIZE_OF_SECTION_HEADER;
-            _offset_starts_sechdr += SIZE_OF_SECTION_HEADER;
+            _offset_starts_sechdr += SIZE_OF_SECTION_HEADER;            // Increment Offset By 40 Bytes each iteration
 
         }
         _section_table_headers
@@ -336,8 +343,12 @@ impl PeParser {
                         
                         for (_key, _value) in _section_table.iter() {
                             if &&_value.VirtualAddress == _x {
-                                // Populate the RVA Struct
-                                _rva_tracker.update(_entry_name, ***_ta, **_x, _section_table[_key].PointerToRawData, _key.to_string());
+                                _rva_tracker.update(_entry_name,                            // Dir Entry Name
+                                                    ***_ta,                                 // Dir Entry VA; Deref
+                                                    **_x,                                   // Section VA; Deref
+                                                    _section_table[_key].PointerToRawData,  // Section RA
+                                                    _key.to_string());                      // Name of PE Section
+                                                    
                                 _rva_tracker.get_file_offset();
                             }
                         }
