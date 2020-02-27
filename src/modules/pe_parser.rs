@@ -242,7 +242,11 @@ impl PeParser {
     ///
     /// _code_section = _sections.get_key_value(".code");
     /// ```
-    fn get_section_headers(&self, e_lfanew: &i32, _nt_headers: &INSPECT_NT_HEADERS) -> HashMap<String, IMAGE_SECTION_HEADER>
+    fn get_section_headers(
+        &self,
+        e_lfanew: &i32,
+        _nt_headers: &INSPECT_NT_HEADERS
+    ) -> HashMap<String, IMAGE_SECTION_HEADER>
     {
         const SIZE_OF_SECTION_HEADER: usize  = 40; // 40 Bytes Long
 
@@ -313,10 +317,12 @@ impl PeParser {
     /// ```
     /// File Offset := TA - VA + RA;
     /// ```
-    fn get_rva_from_directory_entry(&self,
-                                    _entry_name: &str,
-                                    _dir_entry: &IMAGE_DATA_DIRECTORY,
-                                    _section_table: &HashMap<String, IMAGE_SECTION_HEADER>) -> PE_RVA_TRACKER
+    fn get_rva_from_directory_entry(
+        &self,
+        _entry_name: &str,
+        _dir_entry: &IMAGE_DATA_DIRECTORY,
+        _section_table: &HashMap<String, IMAGE_SECTION_HEADER>
+    ) -> PE_RVA_TRACKER
     {
         let mut _rva_tracker = PE_RVA_TRACKER::new();
         {
