@@ -1,14 +1,16 @@
-
-use scroll::{ Pread, LE };
-
-#[path = "../errors/custom_errors.rs"] mod custom_errors;
-
-use custom_errors::exit_process;
-
 use std::io::prelude::*;
 use std::io::{ self, BufRead, BufReader, BufWriter, Read, Write };
 use std::fs::{ self, File, Metadata };
 use std::path::Path;
+
+// 3rd Party
+use scroll::{ Pread, LE };
+
+
+// My Modules
+#[path = "../errors/custom_errors.rs"] mod custom_errors;
+use custom_errors::exit_process;
+
 
 #[derive(Debug)]
 pub struct FileHandler {
@@ -17,7 +19,11 @@ pub struct FileHandler {
     pub meta:       Metadata,
     pub size:       u64
 }
- impl FileHandler {
+impl FileHandler {
+     ///
+     ///
+     ///
+     ///
      pub fn open(fp: &str, mode: &str) -> Self
      {
         let _filepath = Path::new(fp);
@@ -51,6 +57,7 @@ pub struct FileHandler {
                                     .write(_write)
                                     .open(_filepath)
                                     .unwrap();
+                                    
         let _meta = _filepath.metadata().unwrap();
         let _size = _meta.len();
 
@@ -61,6 +68,10 @@ pub struct FileHandler {
             success: true
         }
      }
+     ///
+     ///
+     ///
+     ///
      pub fn delete(fp: &str) -> Result<(), Box<dyn std::error::Error>>
      {
         let _filepath = Path::new(fp);
@@ -72,6 +83,10 @@ pub struct FileHandler {
         }
         Ok(())
      }
+     ///
+     ///
+     ///
+     ///
      pub fn read_as_bytes(&self, n_bytes: u64) -> Result<Vec<u8>, Box<dyn std::error::Error>>
      {
         let mut _bytes: Vec<u8> = Vec::with_capacity(n_bytes as usize);
