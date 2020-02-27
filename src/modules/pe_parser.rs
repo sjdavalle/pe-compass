@@ -91,10 +91,9 @@ impl PeParser {
         {
             // Acquire EAT & IAT
             let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
-            //let _eiat = _data_map.get("IMAGE_DIRECTORY_ENTRY_IAT").unwrap();
-            let mut _imports: PE_RVA_TRACKER = self.get_file_offset_from_directory_entry("imports", _eimp, &_section_table_headers);
-            //let mut _iat: PE_RVA_TRACKER = self.get_file_offset_from_directory_entry("iat", _eiat, &_section_table_headers);
-            self.get_import_descriptors(&mut _imports);
+ 
+            let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", _eimp, &_section_table_headers);
+            self.get_dll_imports(&mut _rva_imports);
         }
 
         PE_FILE {
@@ -307,10 +306,10 @@ impl PeParser {
     /// ```
     /// File Offset := TA - VA + RA;
     /// ```
-    fn get_file_offset_from_directory_entry(&self,
-                                            _entry_name: &str,
-                                            _dir_entry: &IMAGE_DATA_DIRECTORY,
-                                            _section_table: &HashMap<String, IMAGE_SECTION_HEADER>) -> PE_RVA_TRACKER
+    fn get_rva_from_directory_entry(&self,
+                                    _entry_name: &str,
+                                    _dir_entry: &IMAGE_DATA_DIRECTORY,
+                                    _section_table: &HashMap<String, IMAGE_SECTION_HEADER>) -> PE_RVA_TRACKER
     {
         let mut _rva_tracker = PE_RVA_TRACKER::new();
         {
@@ -326,9 +325,9 @@ impl PeParser {
             _rvas_y.push(&0);           // Push Zero Padding to the end 
             _rvas_y.remove(0);          // Remove first element; aligned for zip iter
 
-            let list_virtual_addresses = _rvas_x.iter().zip(_rvas_y);
+            let _list_virtual_addresses = _rvas_x.iter().zip(_rvas_y);
 
-            for (_x, _y) in list_virtual_addresses {
+            for (_x, _y) in _list_virtual_addresses {
                 let _range = Range { start: _x, end: &_y };
                 let _ta = &&&_dir_entry.VirtualAddress;
 
@@ -352,40 +351,35 @@ impl PeParser {
     ///
     /// 
     /// 
-    fn get_import_descriptors(&self, _rva: &mut PE_RVA_TRACKER)
+    fn get_dll_imports(&self, _rva: &mut PE_RVA_TRACKER)
     {
         const SIZE_OF_IMAGE_IMPORT_DESCRIPTOR: usize = 20 as usize;
-
+        
+        let _null_dll = IMAGE_IMPORT_DESCRIPTOR::load_null_descriptor();
+        
+        let mut _dll_list: Vec<IMAGE_IMPORT_DESCRIPTOR> = vec![];
+        let mut _dll: IMAGE_IMPORT_DESCRIPTOR;
+        
         let mut _offset: usize = _rva.file_offset as usize;
-        let mut _descriptors_list: Vec<IMAGE_IMPORT_DESCRIPTOR> = vec![];
-        let mut _descriptor: IMAGE_IMPORT_DESCRIPTOR;
-        let _null_descriptor = IMAGE_IMPORT_DESCRIPTOR::load_null_descriptor();
 
-        // Find the Image Descriptors
-        loop {
-            // Iterate through the file by offset
-            _descriptor = self.content.pread_with(_offset, LE).unwrap();
-            // Add each descriptor found to the list
-            _descriptors_list.push(_descriptor);
-            // Advance the offset
-            _offset += SIZE_OF_IMAGE_IMPORT_DESCRIPTOR;
+        loop {                                                      // Find the Image Descriptors - i.e, DLLs
+            _dll = self.content.pread_with(_offset, LE).unwrap();   // Iterate through the file by offset
+            _dll_list.push(_descriptor);                            // Add each descriptor found to the list
 
-            if _descriptor == _null_descriptor {
-                println!("Finished Looking For Descriptors");
-                _descriptors_list.pop();    // remove the null descriptor
+            _offset += SIZE_OF_IMAGE_IMPORT_DESCRIPTOR;             // Advance the file offset
+
+            if _dll == _null_dll {                                  // Check If Reached End of DLL list
+                _dll_list.pop();                                    // remove the null descriptor
                 break;
             }
         }
-        //println!("List of Descriptors: {} Imports\n{:#?}", _descriptors_list.len(), _descriptors_list);
         // Parse Image Thunk Datas
         // Steps:
             // Get the RVA from ImageFirstThunk
-        let _d: IMAGE_IMPORT_DESCRIPTOR = _descriptors_list[0];
-        println!("IMAGE DESCRIPTOR:\n{:#?}\n", _d);
-
-        // Get The Name of the DLL
-        _rva.new_offset_from(_d.Name);
+        _dll = _dll_list[0];
+        _rva.new_offset_from(_dll.Name);
         _offset = _rva.file_offset as usize;
+            // Get DLL Name
         let _dll_name: IMAGE_IMPORT_DESCRIPTOR_NAME = self.content.pread_with(_offset, LE).unwrap();
         _dll_name.string_from();
 
@@ -393,7 +387,7 @@ impl PeParser {
 
 
 
-        _rva.new_offset_from(_d.OriginalFirstThunk);
+        _rva.new_offset_from(_dll.OriginalFirstThunk);
         _offset = _rva.file_offset as usize;
         println!("New Target: Original First Thunk Located at: 0x{:x}h", _rva.file_offset);
 
