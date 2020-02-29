@@ -497,16 +497,3 @@ mod tests_pe_parser {
                             0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x00,0x00,0x00 ];
     }
 }
-        /*_offset = _rva.new_offset_from(_dll.OriginalFirstThunk);
-        println!("New Target: Original First Thunk Located at: 0x{:x}h", _rva.file_offset);
-
-            // Serialize Image Thunk
-        let _thunk: IMAGE_THUNK_DATA32 = self.content.pread_with(_offset, LE).unwrap();
-        println!("IMAGE THUNK: \n{:#?}", _thunk);
-            // Get the RVA for the ImageImportName
-        
-        _offset = _rva.new_offset_from(_thunk.AddressOfData);
-            // Serialize ImageImportByName:  AreFileApisANSI
-        let _import_by_name: IMAGE_IMPORT_BY_NAME = self.content.pread_with(_offset, LE).unwrap();
-        println!("\nIMAGE IMPORT BY NAME: Address 0x{:x}h\n{:#?}", _offset, _import_by_name);
-        */
