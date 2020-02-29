@@ -471,6 +471,7 @@ impl PeParser {
             let mut _functions_list: Vec<String> = vec![];
             let mut _function: String = String::new(); 
             let mut _part: u16 = 0;
+            
             for _thunk in _thunk_list {
                 _offset = _rva.new_offset_from(_thunk.AddressOfData + 2);
                 loop {
@@ -483,22 +484,20 @@ impl PeParser {
                     let _bytes = _part.to_le_bytes();
                     _function.push_str(std::str::from_utf8(&_bytes[..]).unwrap());
                     
-                    if _bytes[ _bytes.len() - 1] == 0 {
-                        // If null byte is in the last position
-                        // string ends.  Add the function name to the list.
-                        _functions_list.push(_function.clone());
+                    if _bytes[ _bytes.len() - 1] == 0 {             // If null byte in last position, string ended
+                        _function.retain(|x| x != '\u{0}');         // strip null bytes
+                        _functions_list.push(_function.clone());    // add function name to list
                         break;
                     }
-                    _offset += 2;   // advance cursor by 2 bytes
+                    _offset += 2;                                   // advance cursor by 2 bytes
                 }
-                _function.clear();  // Flush string for reuse, avoid re-alloc
+                _function.clear();                                  // Flush string for reuse, avoid re-alloc
             }
-            let _dll_profile = DLL_PROFILE {
-                                    name:       _dll_name,
-                                    imports:    _functions_list.len(),
-                                    functions:  _functions_list
-                                };
-            _results.push(_dll_profile);
+            _results.push(DLL_PROFILE {                             // populate the dll profile list
+                            name:       _dll_name,
+                            imports:    _functions_list.len(),
+                            functions:  _functions_list
+                          });
         }
         _results    // Return all _dll_imports       
     }
