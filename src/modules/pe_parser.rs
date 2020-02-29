@@ -94,7 +94,7 @@ impl PeParser {
             let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
  
             let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", _eimp, &_section_table_headers);
-            _dll_imports = self.get_dll_imports(&mut _rva_imports);
+            _dll_imports = self.get_dll_imports(&_pe_type, &mut _rva_imports);
         }
 
         PE_FILE {
@@ -370,7 +370,7 @@ impl PeParser {
     ///
     /// 
     /// 
-    fn get_dll_imports(&self, _rva: &mut PE_RVA_TRACKER) -> HashMap<String, Vec<String>>
+    fn get_dll_imports(&self, _pe_type: &u16, rva: &mut PE_RVA_TRACKER) -> HashMap<String, Vec<String>>
     {
         const SIZE_OF_IMAGE_IMPORT_DESCRIPTOR: usize = 20 as usize;
         const RANGE_OF_DLL_NAME: usize = 4 as usize;
@@ -385,7 +385,7 @@ impl PeParser {
         // Step 1
         // We begin by getting the DLLs imported by the PE file based on
         // the PE DIRECTORY ENTRY RVA matched from the relevant PE Section
-        // Loop Code Block is used to create a list of the DLLs involved
+        // 1st Loop Code Block is used to create a list of the DLLs involved
         // Watch the offset change consistent to only parse this area of the PE File
         // Move on to Step 2 after this list is acquired.
         loop {                                                      // Find the Image Descriptors - i.e, DLLs
@@ -405,7 +405,7 @@ impl PeParser {
         for _dll in _dll_list {
             // Start By Getting The Name of the DLL involved
             // Watch the _offset variable change consistently
-            // 1st LOOP Code Block is to land at the DLL Name File Offset
+            // 2nd LOOP Code Block is to land at the DLL Name File Offset
             // From there, walk the bytes to correctly parse the name of the dll.
             _offset = _rva.new_offset_from(_dll.Name);
             let mut _dll_name: String = String::new();
@@ -428,11 +428,23 @@ impl PeParser {
             // Create a Vector of IMAGE_THUNK_DATA structs (List). 
             // We use this new list of thunk datas to find the names of the functions
             // for the dll involved.
-            // 2nd LOOP Code Block is used to populate this list
+            // 3rd LOOP Code Block is used to populate this list
             // Watch the offset change again, but now to parse the thunk datas
-            _offset = _rva.new_offset_from(_dll.OriginalFirstThunk);
+            //
+            // ToDo:    Load either 32bit or 64bit IMAGE_THUNK_DATA based on the _pe_type param.
+            //          If 32bit then _offset increases by 4 <-- u32
+            //          If 64bit then _offset increases by 8 <-- u64
+            //
             let mut _thunk_list: Vec<IMAGE_THUNK_DATA32> = vec![];
             let mut _thunk: IMAGE_THUNK_DATA32;
+            let mut _thunk_size: usize = 4 as usize;
+            
+            if _pe_type == 523u16 {
+                _thunk_size = 8 as usize;
+            }
+            _offset = _rva.new_offset_from(_dll.OriginalFirstThunk);
+            
+            
             //let mut _counter: u8 = 0;
             loop {
                 _thunk = self.content.pread_with(_offset, LE).unwrap();
@@ -440,14 +452,14 @@ impl PeParser {
                     break;
                 }
                 _thunk_list.push(_thunk);
-                _offset += 4 as usize;
+                _offset += _thunk_size;
                 //_counter += 1; This counter gives us the num_of_imports
             }
             // Step 4
             // Now we parse each thunk data by using the struct member called
             // `AddressOfData` which gives us the file offset location of the 
             // name of the function being imported by the dll involved.
-            // 3rd LOOP Code Block is used to land on the offset of the function name
+            // 4th LOOP Code Block is used to land on the offset of the function name
             // but we walk 2 bytes ahead to correctly discover the end of the string
             // represensting the function name.
             // Watch the offset change again, but now we are parsing the final piece - function names
@@ -475,7 +487,7 @@ impl PeParser {
                     }
                     _offset += 2;
                 }
-                _function.clear();  
+                _function.clear();  // Flush string for reuse, avoid re-alloc
             }
             _dll_imports.insert(_dll_name, _functions_list);    // Function Imports Done, populate the HashMap
         }
