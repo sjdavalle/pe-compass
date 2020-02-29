@@ -493,8 +493,9 @@ impl PeParser {
                 }
                 _function.clear();                                  // Flush string for reuse, avoid re-alloc
             }
+            _functions_list.sort();
             _results.push(DLL_PROFILE {                             // populate the dll profile list
-                            name:       _dll_name,
+                            name:       _dll_name.to_lowercase(),
                             imports:    _functions_list.len(),
                             functions:  _functions_list
                           });

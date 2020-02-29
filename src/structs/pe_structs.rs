@@ -1,5 +1,5 @@
 use std::collections::{ HashMap, BTreeMap };
-
+use std::ffi::{ OsString };
 ///
 /// # Portable Executable Structures
 /// 
@@ -518,6 +518,7 @@ impl ::std::clone::Clone for INSPECT_IMAGE_OPTIONAL_HEADER {
 ///
 #[derive(Debug)]
 pub struct PE_FILE {
+    //pub pename:                 OsString,
     pub petype:                 u16,
     pub ImageDosHeader:         IMAGE_DOS_HEADER,
     pub ImageDosStub:           String,

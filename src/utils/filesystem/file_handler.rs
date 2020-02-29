@@ -2,6 +2,7 @@ use std::io::prelude::*;
 use std::io::{ self, BufRead, BufReader, BufWriter, Read, Write };
 use std::fs::{ self, File, Metadata };
 use std::path::Path;
+//use std::ffi::{ OsStr, OsString };
 
 // 3rd Party
 use scroll::{ Pread, LE };
@@ -15,7 +16,8 @@ use custom_errors::exit_process;
 #[derive(Debug)]
 pub struct FileHandler {
     pub success:    bool,
-    pub handle:     File, 
+    pub handle:     File,
+    //pub name:       OsString, 
     pub meta:       Metadata,
     pub size:       u64
 }
@@ -57,12 +59,14 @@ impl FileHandler {
                                     .write(_write)
                                     .open(_filepath)
                                     .unwrap();
-                                    
+
+        let _name = _filepath.file_name().unwrap();          
         let _meta = _filepath.metadata().unwrap();
         let _size = _meta.len();
 
         FileHandler {
             handle: _file,
+            //name:   _name.to_os_string(),
             meta:   _meta,
             size:   _size,
             success: true
