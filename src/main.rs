@@ -26,6 +26,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>>
     //let _sample = "pe-samples/putty.exe";
     let _pe = PeParser::new(_sample);
     let _file = _pe.inspect_file();
-    //println!("{:#?}", _file);
+    println!("{:#?}", _file);
     Ok(())
 }

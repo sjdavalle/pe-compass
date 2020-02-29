@@ -554,7 +554,8 @@ pub struct PE_FILE {
     pub ImageDosStub:           String,
     pub ImageNtHeaders:         IMAGE_NT_HEADERS,
     pub ImageDataDirectory:     BTreeMap<String, IMAGE_DATA_DIRECTORY>,
-    pub ImageSectionHeaders:    HashMap<String, IMAGE_SECTION_HEADER>
+    pub ImageSectionHeaders:    HashMap<String, IMAGE_SECTION_HEADER>,
+    pub ImageDLLImports:           HashMap<String, Vec<String>>
 }
 ///
 ///
