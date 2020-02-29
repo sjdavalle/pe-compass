@@ -352,10 +352,10 @@ impl ::std::clone::Clone for IMAGE_THUNK_DATA64 {
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct u1_64 {
-    pub ForwarderString:    ULONGLONG,  // PBYTE
+    pub AddressOfData:      ULONGLONG   // PIMAGE_IMPORT_BY_NAME
     pub Function:           ULONGLONG,  // PDWORD
     pub Ordinal:            ULONGLONG,
-    pub AddressOfData:      ULONGLONG   // PIMAGE_IMPORT_BY_NAME
+    pub ForwarderString:    ULONGLONG,  // PBYTE
 }
 
 impl ::std::clone::Clone for u1_64 {
