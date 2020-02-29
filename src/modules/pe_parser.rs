@@ -68,7 +68,8 @@ impl PeParser {
         let mut _image_data_dir: [u64; 16] = [0u64; 16];
         let mut _data_map: BTreeMap<String, IMAGE_DATA_DIRECTORY>;
         let mut _section_table_headers: HashMap<String, IMAGE_SECTION_HEADER>;
-        let mut _dll_imports: HashMap<String, Vec<String>>;
+        //let mut _dll_imports: HashMap<String, Vec<String>>;
+        let mut _dll_imports: Vec<DLL_PROFILE>;
 
         {
             let _nt_test: INSPECT_NT_HEADERS = self.inspect_nt_headers(_doshdr.e_lfanew);   // Drop these headers after block
@@ -94,7 +95,7 @@ impl PeParser {
             let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
  
             let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", _eimp, &_section_table_headers);
-            _dll_imports = self.get_dll_imports(&_pe_type, &mut _rva_imports);
+            _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports);
         }
 
         PE_FILE {
@@ -370,7 +371,7 @@ impl PeParser {
     ///
     /// 
     /// 
-    fn get_dll_imports(&self, _pe_type: &u16, rva: &mut PE_RVA_TRACKER) -> HashMap<String, Vec<String>>
+    fn get_dll_imports(&self, _pe_type: &u16, _rva: &mut PE_RVA_TRACKER) -> Vec<DLL_PROFILE>//-> HashMap<String, Vec<String>>
     {
         const SIZE_OF_IMAGE_IMPORT_DESCRIPTOR: usize = 20 as usize;
         const RANGE_OF_DLL_NAME: usize = 4 as usize;
@@ -381,7 +382,9 @@ impl PeParser {
         let mut _dll: IMAGE_IMPORT_DESCRIPTOR;
         
         let mut _offset: usize = _rva.file_offset as usize;
-        let mut _dll_imports: HashMap<String, Vec<String>> = HashMap::new();
+        let mut _results: Vec<DLL_PROFILE> = vec![];
+        //let mut _dll_imports: HashMap<String, Vec<String>> = HashMap::new();
+
         // Step 1
         // We begin by getting the DLLs imported by the PE file based on
         // the PE DIRECTORY ENTRY RVA matched from the relevant PE Section
@@ -435,15 +438,14 @@ impl PeParser {
             //          If 32bit then _offset increases by 4 <-- u32
             //          If 64bit then _offset increases by 8 <-- u64
             //
-            let mut _thunk_list: Vec<IMAGE_THUNK_DATA32> = vec![];
-            let mut _thunk: IMAGE_THUNK_DATA32;
             let mut _thunk_size: usize = 4 as usize;
+            let mut _thunk: IMAGE_THUNK_DATA32;
+            let mut _thunk_list: Vec<IMAGE_THUNK_DATA32> = vec![];
             
-            if _pe_type == 523u16 {
+            if _pe_type == &523u16 {
                 _thunk_size = 8 as usize;
             }
             _offset = _rva.new_offset_from(_dll.OriginalFirstThunk);
-            
             
             //let mut _counter: u8 = 0;
             loop {
@@ -469,7 +471,6 @@ impl PeParser {
             let mut _counter = 0;
             for _thunk in _thunk_list {
                 _offset = _rva.new_offset_from(_thunk.AddressOfData + 2);
-                _counter += 1;
                 loop {
                     // Get the Function Names involved.
                     // Advance the cursor 2 bytes at a time.
@@ -489,9 +490,16 @@ impl PeParser {
                 }
                 _function.clear();  // Flush string for reuse, avoid re-alloc
             }
-            _dll_imports.insert(_dll_name, _functions_list);    // Function Imports Done, populate the HashMap
+            let _dll_profile = DLL_PROFILE {
+                                    name:       _dll_name,
+                                    imports:    _functions_list.len(),
+                                    functions:  _functions_list
+                                };
+            _results.push(_dll_profile);
+            //_dll_imports.insert(_dll_name, _functions_list);    // Function Imports Done, populate the HashMap
         }
-        _dll_imports       
+        //_dll_imports
+        _results       
     }
 }
 /// # Unit Tests

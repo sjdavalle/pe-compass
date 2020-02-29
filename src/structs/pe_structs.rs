@@ -319,46 +319,15 @@ impl ::std::clone::Clone for IMAGE_THUNK_DATA32 {
 ///
 /// 
 ///
-///  
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C)]
-pub struct u1_32 {
-    pub ForwarderString:    DWORD,  // PBYTE
-    pub Function:           DWORD,  // PDWORD
-    pub Ordinal:            DWORD,
-    pub AddressOfData:      DWORD   // PIMAGE_IMPORT_BY_NAME
-}
-impl ::std::clone::Clone for u1_32 {
-    fn clone(&self) -> Self {
-        *self
-    }
-}
-///
-/// 
-///
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_THUNK_DATA64 {
-    pub _union: u1_64
+    pub AddressOfData:      QWORD,   // PIMAGE_IMPORT_BY_NAME
+    pub Function:           QWORD,  // PDWORD
+    pub Ordinal:            QWORD,
+    pub ForwarderString:    QWORD,  // PBYTE
 }
 impl ::std::clone::Clone for IMAGE_THUNK_DATA64 {
-    fn clone(&self) -> Self {
-        *self
-    }
-}
-///
-/// 
-/// 
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C)]
-pub struct u1_64 {
-    pub AddressOfData:      ULONGLONG   // PIMAGE_IMPORT_BY_NAME
-    pub Function:           ULONGLONG,  // PDWORD
-    pub Ordinal:            ULONGLONG,
-    pub ForwarderString:    ULONGLONG,  // PBYTE
-}
-
-impl ::std::clone::Clone for u1_64 {
     fn clone(&self) -> Self {
         *self
     }
@@ -555,7 +524,8 @@ pub struct PE_FILE {
     pub ImageNtHeaders:         IMAGE_NT_HEADERS,
     pub ImageDataDirectory:     BTreeMap<String, IMAGE_DATA_DIRECTORY>,
     pub ImageSectionHeaders:    HashMap<String, IMAGE_SECTION_HEADER>,
-    pub ImageDLLImports:           HashMap<String, Vec<String>>
+    //pub ImageDLLImports:        HashMap<String, Vec<String>>
+    pub ImageDLLImports:        Vec<DLL_PROFILE>
 }
 ///
 ///
@@ -642,3 +612,13 @@ impl PE_RVA_TRACKER {
         (self.ta - self.va + self.ra) as usize
     }
 }
+/// PE DLL IMPORTS - DLL PROFILE
+/// 
+/// 
+///
+#[derive(Hash, Debug, Eq, PartialEq)]
+pub struct DLL_PROFILE {
+    pub name:       String,
+    pub imports:    usize,
+    pub functions:  Vec<String>
+} 
