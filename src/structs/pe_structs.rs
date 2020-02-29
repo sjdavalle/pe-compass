@@ -295,21 +295,22 @@ impl IMAGE_IMPORT_DESCRIPTOR {
 /// 
 /// 
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C, align(2))]
-pub struct IMAGE_THUNK_DATA32 {
+#[repr(C)]
+/*pub struct IMAGE_THUNK_DATA32 {
     //pub _union:  u1_32
     pub ForwarderString:    DWORD,  // PBYTE
     pub Function:           DWORD,  // PDWORD
     pub Ordinal:            DWORD,
     pub AddressOfData:      DWORD   // PIMAGE_IMPORT_BY_NAME
-}
-/*
+}*/
+
 pub struct IMAGE_THUNK_DATA32 {
     pub AddressOfData:      DWORD,   // PIMAGE_IMPORT_BY_NAME
     pub Function:           DWORD,  // PDWORD
     pub Ordinal:            DWORD,
     pub ForwarderString:    DWORD,  // PBYTE
-}*/
+}
+
 impl ::std::clone::Clone for IMAGE_THUNK_DATA32 {
     fn clone(&self) -> Self {
         *self
@@ -633,37 +634,10 @@ impl PE_RVA_TRACKER {
     /// 
     /// 
     ///
-    pub fn new_offset_from(&mut self, new_target_address: u32)
+    pub fn new_offset_from(&mut self, new_target_address: u32) -> usize
     {
         self.ta = new_target_address;
         self.file_offset = self.ta - self.va + self.ra;
-    }
-}
-/// IMAGE_IMPORT_DESCRIPTOR_NAME
-/// A custom object struct to serialize two QWORDS and build a string from it by removing
-/// the null bytes at the end.
-#[derive(Debug, Copy, PartialEq, PartialOrd, Pread, Pwrite, IOread, IOwrite, SizeWith)]
-#[repr(C)]
-pub struct IMAGE_IMPORT_DESCRIPTOR_NAME {
-    pub upper:  QWORD,
-    pub lower:  QWORD,
-}
-impl IMAGE_IMPORT_DESCRIPTOR_NAME {
-    pub fn string_from(&self)
-    {
-        let mut _s: String = "".to_string();
-        let _b: Vec<u8>= self.upper.to_le_bytes().iter()
-                                         .filter(|x| *x > &0)
-                                         .map(|x| *x as u8)
-                                         .collect();
-
-        _s.push_str(std::str::from_utf8(&_b[..]).unwrap());
-        println!("{}", _s)
-
-    }
-}
-impl ::std::clone::Clone for IMAGE_IMPORT_DESCRIPTOR_NAME {
-    fn clone(&self) -> Self {
-        *self
+        (self.ta - self.va + self.ra) as usize
     }
 }

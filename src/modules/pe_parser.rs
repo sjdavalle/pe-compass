@@ -371,7 +371,8 @@ impl PeParser {
     fn get_dll_imports(&self, _rva: &mut PE_RVA_TRACKER)
     {
         const SIZE_OF_IMAGE_IMPORT_DESCRIPTOR: usize = 20 as usize;
-        
+        const RANGE_OF_DLL_NAME: usize = 4 as usize;
+
         let _null_dll = IMAGE_IMPORT_DESCRIPTOR::load_null_descriptor();
         
         let mut _dll_list: Vec<IMAGE_IMPORT_DESCRIPTOR> = vec![];
@@ -381,7 +382,7 @@ impl PeParser {
 
         loop {                                                      // Find the Image Descriptors - i.e, DLLs
             _dll = self.content.pread_with(_offset, LE).unwrap();   // Iterate through the file by offset
-            _dll_list.push(_descriptor);                            // Add each descriptor found to the list
+            _dll_list.push(_dll);                                   // Add each descriptor found to the list
 
             _offset += SIZE_OF_IMAGE_IMPORT_DESCRIPTOR;             // Advance the file offset
 
@@ -390,33 +391,87 @@ impl PeParser {
                 break;
             }
         }
-        // Parse Image Thunk Datas
-        // Steps:
-            // Get the RVA from ImageFirstThunk
-        _dll = _dll_list[0];
-        _rva.new_offset_from(_dll.Name);
-        _offset = _rva.file_offset as usize;
-            // Get DLL Name
-        let _dll_name: IMAGE_IMPORT_DESCRIPTOR_NAME = self.content.pread_with(_offset, LE).unwrap();
-        _dll_name.string_from();
 
-        println!("DESCRIPTOR NAME:\n{:#?}", _dll_name);
+        for _dll in _dll_list {
+            // Step 1
+            // Start By Getting The Name of the DLL involved
+            // Watch the _offset variable change consistently
+            // 1st LOOP Code Block is to land at the DLL Name File Offset
+            // From there, walk the bytes to correctly parse the name of the dll.
+            _offset = _rva.new_offset_from(_dll.Name);
+            let mut _dll_name: String = String::new();
+            let mut _s: String = String::new();
 
-
-
-        _rva.new_offset_from(_dll.OriginalFirstThunk);
-        _offset = _rva.file_offset as usize;
-        println!("New Target: Original First Thunk Located at: 0x{:x}h", _rva.file_offset);
-
-            // Serialize Image Thunk
-        let _thunk: IMAGE_THUNK_DATA32 = self.content.pread_with(_offset, LE).unwrap();
-        println!("IMAGE THUNK: \n{:#?}", _thunk);
-            // Get the RVA for the ImageImportName
-        _rva.new_offset_from(_thunk.AddressOfData);
-        _offset = _rva.file_offset as usize;
-            // Serialize ImageImportByName:  AreFileApisANSI
-        let _import_by_name: IMAGE_IMPORT_BY_NAME = self.content.pread_with(_offset, LE).unwrap();
-        println!("\nIMAGE IMPORT BY NAME: Address 0x{:x}h\n{:#?}", _offset, _import_by_name);
+            loop {                                         
+                let _bytes: u32 = self.content.pread_with(_offset, LE).unwrap();    // Read the DLL Name by 4 byte increment
+                let _dbytes = _bytes.to_le_bytes();                                 // Convert Decimal to LE Bytes Array
+                _s.push_str(std::str::from_utf8(&_dbytes[..]).unwrap());            // Convert Bytes to String
+                if _s.contains(".dll") {                                            // Check if string contains .dll marker for end
+                    let _v: Vec<&str> = _s.split(".dll").collect();
+                    _dll_name.push_str(_v[0]);
+                    _dll_name.push_str(".dll");
+                    break;
+                }
+                _offset += RANGE_OF_DLL_NAME;
+            }
+            // Step 2
+            // Now move into acquiring the IMAGE_THUNK_DATAs for the DLL involved.
+            // Create a Vector of IMAGE_THUNK_DATA structs (List). 
+            // We use this new list of thunk datas to find the names of the functions
+            // for the dll involved.
+            // 2nd LOOP Code Block is used to populate this list
+            // Watch the offset change again, but now to parse the thunk datas
+            _offset = _rva.new_offset_from(_dll.OriginalFirstThunk);
+            let mut _thunk_list: Vec<IMAGE_THUNK_DATA32> = vec![];
+            let mut _thunk: IMAGE_THUNK_DATA32;
+            //let mut _counter: u8 = 0;
+            loop {
+                _thunk = self.content.pread_with(_offset, LE).unwrap();
+                if _thunk.AddressOfData == 0 {
+                    break;
+                }
+                _thunk_list.push(_thunk);
+                _offset += 4 as usize;
+                //_counter += 1; This counter gives us the num_of_imports
+            }
+            // Step 3
+            // Now we parse each thunk data by using the struct member called
+            // `AddressOfData` which gives us the file offset location of the 
+            // name of the function being imported by the dll involved.
+            // 3rd LOOP Code Block is used to land on the offset of the function name
+            // but we walk 2 bytes ahead to correctly discover the end of the string
+            // represensting the function name.
+            // Watch the offset change again, but now we are parsing the final piece - function names
+            let mut _dll_imports: HashMap<String, Vec<String>> = HashMap::new();
+            let mut _functions_list: Vec<String> = vec![];
+            let mut _function: String = String::new(); 
+            let mut _part: u16 = 0;
+            let mut _counter = 0;
+            for _thunk in _thunk_list {
+                _offset = _rva.new_offset_from(_thunk.AddressOfData + 2);
+                _counter += 1;
+                loop {
+                    // Get the Function Names involved.
+                    // Advance the cursor 2 bytes at a time.
+                    // In each iteration inspect the bytes for the null bytes 0x00.
+                    // When null byte is found, the string name terminates and we
+                    // can move on to the next thunk.
+                    _part = self.content.pread_with(_offset, LE).unwrap();
+                    let _bytes = _part.to_le_bytes();
+                    _function.push_str(std::str::from_utf8(&_bytes[..]).unwrap());
+                    
+                    if _bytes[ _bytes.len() - 1] == 0 {
+                        //println!("Index : {:<4} | Offset: 0x{:x}h | Function Name: {:<10}", _counter, _offset, _function);
+                        _functions_list.push(_function.clone());
+                        break;
+                    }
+                    _offset += 2;
+                }
+                _function.clear();  
+            }
+            _dll_imports.insert(_dll_name, _functions_list);    // Function Imports Done, populate the HashMap
+            println!("DLL Imports For: \n{:#?}", _dll_imports);            
+        }       
     }
 }
 /// # Unit Tests
@@ -434,3 +489,16 @@ mod tests_pe_parser {
                             0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x00,0x00,0x00 ];
     }
 }
+        /*_offset = _rva.new_offset_from(_dll.OriginalFirstThunk);
+        println!("New Target: Original First Thunk Located at: 0x{:x}h", _rva.file_offset);
+
+            // Serialize Image Thunk
+        let _thunk: IMAGE_THUNK_DATA32 = self.content.pread_with(_offset, LE).unwrap();
+        println!("IMAGE THUNK: \n{:#?}", _thunk);
+            // Get the RVA for the ImageImportName
+        
+        _offset = _rva.new_offset_from(_thunk.AddressOfData);
+            // Serialize ImageImportByName:  AreFileApisANSI
+        let _import_by_name: IMAGE_IMPORT_BY_NAME = self.content.pread_with(_offset, LE).unwrap();
+        println!("\nIMAGE IMPORT BY NAME: Address 0x{:x}h\n{:#?}", _offset, _import_by_name);
+        */
