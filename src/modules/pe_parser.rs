@@ -69,7 +69,11 @@ impl PeParser {
         let mut _data_map: BTreeMap<String, IMAGE_DATA_DIRECTORY>;
         let mut _section_table_headers: HashMap<String, IMAGE_SECTION_HEADER>;
         let mut _dll_imports: Vec<DLL_PROFILE>;
-
+        
+        //  1st Internal code block
+        //  We use this block to drop non-essential data structures and save memory
+        //  through the file inspection phase because we have to determine if a file
+        //  that needs to be parsed is either a 32 or 64 bit PE.
         {
             let _nt_test: INSPECT_NT_HEADERS = self.inspect_nt_headers(_doshdr.e_lfanew);   // Drop these headers after block
             _petype = _nt_test.OptionalHeader.Magic;
@@ -88,7 +92,9 @@ impl PeParser {
             _data_map = self.get_data_directories(&_image_data_dir);
             _section_table_headers = self.get_section_headers(&_doshdr.e_lfanew, &_nt_test);
         }
-
+        // 2nd Internal code block is used again to keep essential data structures.
+        // However, here we want to focus on parsing tedious sections of the file that come from
+        // either EAT or IAT tables.
         {
             // Acquire IAT
             let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
@@ -96,7 +102,10 @@ impl PeParser {
             let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", _eimp, &_section_table_headers);
             _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports);
         }
-
+        //  Finally build the custom object PE_FILE with the essential data structures
+        //  to be used by the program.
+        //  Note:   This is the object that represents the goal of the PeParser module.
+        //          Remember, this module is only for serializing the file to human structs.
         PE_FILE {
             petype:                 _petype,
             ImageDosHeader:         _doshdr,
@@ -364,13 +373,12 @@ impl PeParser {
                 }
             }
         }
-        println!("{:#?}", _rva_tracker);
         _rva_tracker
     }
     ///
     /// 
     /// 
-    fn get_dll_imports(&self, _pe_type: &u16, _rva: &mut PE_RVA_TRACKER) -> Vec<DLL_PROFILE>//-> HashMap<String, Vec<String>>
+    fn get_dll_imports(&self, _pe_type: &u16, _rva: &mut PE_RVA_TRACKER) -> Vec<DLL_PROFILE>
     {
         const SIZE_OF_IMAGE_IMPORT_DESCRIPTOR: usize = 20 as usize;
         const RANGE_OF_DLL_NAME: usize = 4 as usize;
@@ -382,7 +390,6 @@ impl PeParser {
         
         let mut _results: Vec<DLL_PROFILE> = vec![];
         let mut _offset: usize = _rva.file_offset as usize;
-        //let mut _dll_imports: HashMap<String, Vec<String>> = HashMap::new();
 
         // Step 1
         // We begin by getting the DLLs imported by the PE file based on
@@ -395,7 +402,7 @@ impl PeParser {
             _dll = self.content.pread_with(_offset, LE).unwrap();   // Iterate through the file by offset
             _dll_list.push(_dll);                                   // Add each descriptor found to the list
 
-            _offset += SIZE_OF_IMAGE_IMPORT_DESCRIPTOR;             // Advance the file offset
+            _offset += SIZE_OF_IMAGE_IMPORT_DESCRIPTOR;             // Advance the file offset by 20 bytes
 
             if _dll == _null_dll {                                  // Check If Reached End of DLL list
                 _dll_list.pop();                                    // remove the null descriptor
@@ -482,7 +489,7 @@ impl PeParser {
                         _functions_list.push(_function.clone());
                         break;
                     }
-                    _offset += 2;
+                    _offset += 2;   // advance cursor by 2 bytes
                 }
                 _function.clear();  // Flush string for reuse, avoid re-alloc
             }
