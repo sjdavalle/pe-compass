@@ -1,5 +1,9 @@
 use std::collections::HashMap;
 use std::ffi::{ OsString };
+
+// 3rd Parties
+use serde_derive::{ Deserialize, Serialize };
+
 ///
 /// # Portable Executable Structures
 /// 
@@ -33,7 +37,7 @@ pub type BOOLEAN    = BYTE;
 /// 
 /// Size: 64 Bytes
 ///
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_DOS_HEADER {
     pub e_magic:     WORD,         // Magic Number
