@@ -553,7 +553,7 @@ impl ::std::clone::Clone for INSPECT_IMAGE_OPTIONAL_HEADER {
 ///
 #[derive(Debug, Deserialize, Serialize)]
 pub struct PE_FILE {
-    //pub pename:                 OsString,
+    pub pename:                 String,
     pub petype:                 u16,
     pub ImageDosHeader:         IMAGE_DOS_HEADER,
     pub ImageDosStub:           String,

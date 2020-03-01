@@ -107,6 +107,7 @@ impl PeParser {
         //  Note:   This is the object that represents the goal of the PeParser module.
         //          Remember, this module is only for serializing the file to human structs.
         PE_FILE {
+            pename:                 self.handler.name.clone(),
             petype:                 _petype,
             ImageDosHeader:         _doshdr,
             ImageDosStub:           _dos_stub,

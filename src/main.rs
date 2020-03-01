@@ -9,16 +9,19 @@ extern crate scroll;
 
 extern crate clap;
 
+extern crate serde_json;
+extern crate serde;
+
 /// Imports: Rust STD Lib
 
 /// Imports: 3rd Party Crates
-
+use serde_json::*;
 /// Imports: My Modules & Utils
 
 mod modules;
 use modules::pe_parser::PeParser;
 
-fn main() -> Result<(), Box<dyn std::error::Error>>
+fn main() -> Result<()>
 {
     //let _sample = "pe-samples/sqlite3x64.dll";
     let _sample = "pe-samples/sqlite3x86.dll";
@@ -26,6 +29,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>>
     //let _sample = "pe-samples/putty.exe";
     let _pe = PeParser::new(_sample);
     let _file = _pe.inspect_file();
-    println!("{:#?}", _file);
+    println!("{}", serde_json::to_string_pretty(&_file)?);
     Ok(())
 }
