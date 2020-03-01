@@ -131,10 +131,11 @@ impl PeParser {
         let _doshdr: IMAGE_DOS_HEADER = self.content.pread_with(_offset, LE).unwrap();
         _doshdr
     }
-    ///
-    ///
-    ///
-    ///
+    /// # Pe Parser GetDosStubString Method
+    /// This validates the presence of the famous string of the dos stub.
+    /// The string is 40 bytes long and since Rust has a default condition
+    /// for arrays size greater than 32 items, we split this into an upper
+    /// and lower bound fields of a custom struct.
     fn get_dos_stub_string(&self) -> String
     {
         let _offset = 0x4D as usize;
@@ -482,7 +483,7 @@ impl PeParser {
                     let _bytes = _part.to_le_bytes();
                     _function.push_str(std::str::from_utf8(&_bytes[..]).unwrap());
                     
-                    if _bytes[ _bytes.len() - 1] == 0 {             // If null byte in last position, string ended
+                    if _bytes[_bytes.len() - 1] == 0 {             // If null byte in last position, string ended
                         _function.retain(|x| x != '\u{0}');         // strip null bytes
                         _functions_list.push(_function.clone());    // add function name to list
                         break;
