@@ -134,8 +134,16 @@ impl PeParser {
     /// # Pe Parser GetDosStubString Method
     /// This validates the presence of the famous string of the dos stub.
     /// The string is 40 bytes long and since Rust has a default condition
-    /// for arrays size greater than 32 items, we split this into an upper
+    /// for arrays of size greater than 32 items, we split this into an upper
     /// and lower bound fields of a custom struct.
+    ///
+    /// ```
+    /// let _pe = PeParser::new("foo.exe");
+    ///
+    /// let _ds: String = _pe.get_dos_stub_string();
+    ///
+    /// assert_eq!(_ds, "This program cannot be run in DOS Mode!");
+    /// ```
     fn get_dos_stub_string(&self) -> String
     {
         let _offset = 0x4D as usize;
