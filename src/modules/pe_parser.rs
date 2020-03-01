@@ -418,10 +418,9 @@ impl PeParser {
             //
             // 2nd LOOP Code Block is to land at the DLL Name File Offset
             // From there, walk the bytes to correctly parse the name of the dll.
-            _offset = _rva.new_offset_from(_dll.Name);
             let mut _dll_name: String = String::new();
             let mut _s: String = String::new();
-
+            _offset = _rva.new_offset_from(_dll.Name);
             loop {                                         
                 let _bytes: u32 = self.content.pread_with(_offset, LE).unwrap();    // Read the DLL Name by 4 byte increment
                 let _dbytes = _bytes.to_le_bytes();                                 // Convert Decimal to LE Bytes Array
@@ -450,7 +449,6 @@ impl PeParser {
                 _thunk_size = 8 as usize;
             }
             _offset = _rva.new_offset_from(_dll.OriginalFirstThunk);
-            
             loop {
                 _thunk = self.content.pread_with(_offset, LE).unwrap();
                 if _thunk.AddressOfData == 0 {
