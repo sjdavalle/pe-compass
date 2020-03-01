@@ -1,4 +1,4 @@
-use std::collections::{ HashMap, BTreeMap };
+use std::collections::HashMap;
 use std::ffi::{ OsString };
 ///
 /// # Portable Executable Structures
@@ -523,7 +523,7 @@ pub struct PE_FILE {
     pub ImageDosHeader:         IMAGE_DOS_HEADER,
     pub ImageDosStub:           String,
     pub ImageNtHeaders:         IMAGE_NT_HEADERS,
-    pub ImageDataDirectory:     BTreeMap<String, IMAGE_DATA_DIRECTORY>,
+    pub ImageDataDirectory:     HashMap<String, IMAGE_DATA_DIRECTORY>,
     pub ImageSectionHeaders:    HashMap<String, IMAGE_SECTION_HEADER>,
     //pub ImageDLLImports:        HashMap<String, Vec<String>>
     pub ImageDLLImports:        Vec<DLL_PROFILE>

@@ -1,4 +1,4 @@
-use std::collections::{ HashMap, BTreeMap };
+use std::collections::HashMap;
 use std::ops::Range;
 
 // 3rd Parties
@@ -222,7 +222,7 @@ impl PeParser {
         }
 
         // Now Build the dataMap
-        let mut _data_map: BTreeMap<String, IMAGE_DATA_DIRECTORY> = BTreeMap::new();
+        let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY> = HashMap::new();
         let mut _type: String;
 
         for (_idx, _entry) in _data_directories.iter().enumerate() {
