@@ -37,7 +37,7 @@ pub type BOOLEAN    = BYTE;
 /// 
 /// Size: 64 Bytes
 ///
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_DOS_HEADER {
     pub e_magic:     WORD,         // Magic Number
@@ -60,13 +60,18 @@ pub struct IMAGE_DOS_HEADER {
     pub e_res2:      [WORD; 10],   // Reserved Words
     pub e_lfanew:    LONG          // File Address of new exe header
 }
+impl ::std::clone::Clone for IMAGE_DOS_HEADER {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
 /// # IMAGE_NT_HEADERS32
 /// 
 /// Size: 248 Bytes
 ///         Signature:          4  Bytes
 ///         FileHeader:         20 Bytes
 ///         OptionalHeader32    224 Bytes
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_NT_HEADERS32 {
     pub Signature:      DWORD,
@@ -83,7 +88,7 @@ impl ::std::clone::Clone for IMAGE_NT_HEADERS32 {
 ///         Signature:          4   Bytes
 ///         FileHeader:         20  Bytes
 ///         OptionalHeader64:   244 Bytes
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_NT_HEADERS64 {
     pub Signature:      DWORD,                  // 4 bytes
@@ -100,7 +105,7 @@ impl ::std::clone::Clone for IMAGE_NT_HEADERS64 {
 /// 
 /// Size: 20 Bytes
 /// 
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_FILE_HEADER {
     pub Machine:                WORD,   // 2
@@ -121,7 +126,7 @@ impl ::std::clone::Clone for IMAGE_FILE_HEADER {
 /// Size: 224 Bytes
 ///     Standard Fields: 28 Bytes
 ///     Windows  Fields: 196 Bytes `includes Data Directories Array`
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_OPTIONAL_HEADER32 {
     // Standard Fields
@@ -168,7 +173,7 @@ impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER32 {
 /// Size = 240 Bytes
 ///     Standard Fields: 24 Bytes
 ///     Windows  Fields: 216 Bytes `includes Data_Directory Array`
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_OPTIONAL_HEADER64 {
     // Standard Fields
@@ -213,7 +218,7 @@ impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER64 {
 /// Size: 40 Bytes
 /// 
 /// 
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_SECTION_HEADER {
     pub Name:                           [BYTE; 8], // 8
@@ -235,7 +240,7 @@ impl ::std::clone::Clone for IMAGE_SECTION_HEADER {
 /// # IMAGE_DATA_DIRECTORY
 /// There are 16 data directory structs.
 /// 
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_DATA_DIRECTORY {
     pub VirtualAddress:  DWORD,
@@ -248,7 +253,7 @@ impl ::std::clone::Clone for IMAGE_DATA_DIRECTORY {
 }
 ///
 /* 
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_DIRECTORY_ENTRY_IMPORT {
 
@@ -264,7 +269,7 @@ impl ::std::clone::Clone for IMAGE_DIRECTORY_ENTRY_IMPORT {
 /// 
 /// 
 ///
-#[derive(Debug, Copy, PartialEq, PartialOrd, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, PartialOrd, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_IMPORT_DESCRIPTOR {
     pub OriginalFirstThunk: DWORD,
@@ -298,16 +303,8 @@ impl IMAGE_IMPORT_DESCRIPTOR {
 ///
 /// 
 /// 
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
-/*pub struct IMAGE_THUNK_DATA32 {
-    //pub _union:  u1_32
-    pub ForwarderString:    DWORD,  // PBYTE
-    pub Function:           DWORD,  // PDWORD
-    pub Ordinal:            DWORD,
-    pub AddressOfData:      DWORD   // PIMAGE_IMPORT_BY_NAME
-}*/
-
 pub struct IMAGE_THUNK_DATA32 {
     pub AddressOfData:      DWORD,   // PIMAGE_IMPORT_BY_NAME
     pub Function:           DWORD,  // PDWORD
@@ -323,7 +320,7 @@ impl ::std::clone::Clone for IMAGE_THUNK_DATA32 {
 ///
 /// 
 ///
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_THUNK_DATA64 {
     pub AddressOfData:      QWORD,   // PIMAGE_IMPORT_BY_NAME
@@ -339,7 +336,7 @@ impl ::std::clone::Clone for IMAGE_THUNK_DATA64 {
 ///
 /// 
 ///
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_IMPORT_BY_NAME {
     pub Hint:   WORD,
@@ -353,7 +350,7 @@ impl ::std::clone::Clone for IMAGE_IMPORT_BY_NAME {
 /// 
 /// 
 ///  
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_COFF_SYMBOLS_HEADER {
     pub NumberOfSymbols:        DWORD,
@@ -365,11 +362,16 @@ pub struct IMAGE_COFF_SYMBOLS_HEADER {
     pub RvaToFirstByteOfData:   DWORD,
     pub RvaToLastByteOfData:    DWORD,
 }
+impl ::std::clone::Clone for IMAGE_COFF_SYMBOLS_HEADER {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
 ///
 /// 
 /// 
 /// 
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_DEBUG_DIRECTORY {
     pub Characteristics:    DWORD,
@@ -381,11 +383,16 @@ pub struct IMAGE_DEBUG_DIRECTORY {
     pub AddressOfRawData:   DWORD,
     pub PointerToRawData:   DWORD,
 }
+impl ::std::clone::Clone for IMAGE_DEBUG_DIRECTORY {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
 ///
 /// 
 /// 
 /// 
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_DEBUG_MISC {
     pub DataType:   DWORD,
@@ -394,41 +401,60 @@ pub struct IMAGE_DEBUG_MISC {
     pub Reserved:   [BYTE; 3],
     pub Data:       [BYTE; 0],
 }
+impl ::std::clone::Clone for IMAGE_DEBUG_MISC {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
 ///
 /// 
 /// 
 /// 
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_FUNCTION_ENTRY {
     pub StartingAddress:    DWORD,
     pub EndingAddress:      DWORD,
     pub EndOfPrologue:      DWORD,
 }
+impl ::std::clone::Clone for IMAGE_FUNCTION_ENTRY {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
 ///
 /// 
 /// 
 /// 
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_FUNCTION_ENTRY64 {
     pub StartingAddress:                    ULONGLONG,
     pub EndingAddress:                      ULONGLONG,
     pub EndOfPrologueOrUnwindInfoAddress:   ULONGLONG,
 }
-
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+impl ::std::clone::Clone for IMAGE_FUNCTION_ENTRY64 {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_RUNTIME_FUNCTION_ENTRY {
     pub BeginAddress:       DWORD,
     pub EndAddress:         DWORD,
     pub UnwindInfoAddress:  DWORD,
 }
+impl ::std::clone::Clone for IMAGE_RUNTIME_FUNCTION_ENTRY {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
 ///
 /// 
 /// 
 /// 
-#[derive(Debug, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
 #[repr(C)]
 pub struct IMAGE_RESOURCE_DIRECTORY {
     pub Characteristics:        DWORD,
@@ -437,6 +463,11 @@ pub struct IMAGE_RESOURCE_DIRECTORY {
     pub MinorVersion:           WORD,
     pub NumberOfNamedEntries:   WORD,
     pub NumberOfIdEntries:      WORD
+}
+impl ::std::clone::Clone for IMAGE_RESOURCE_DIRECTORY {
+    fn clone(&self) -> Self {
+        *self
+    }
 }
 /// # PE Custom Object Structs - CO_STRUCTS
 /// The structs in this file are derived from the specification
@@ -458,7 +489,7 @@ pub struct IMAGE_RESOURCE_DIRECTORY {
 /// In contrast, the `PE_32` or `PE_64` structs are a custom object that represent
 /// the full values of a file being parsed.
 /// 
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct INSPECT_NT_HEADERS {
     pub Signature:      DWORD,
@@ -473,7 +504,7 @@ impl ::std::clone::Clone for INSPECT_NT_HEADERS {
 ///
 /// 
 /// 
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct INSPECT_IMAGE_FILE_HEADER {
     pub Machine:                WORD,   // 2
@@ -492,7 +523,7 @@ impl ::std::clone::Clone for INSPECT_IMAGE_FILE_HEADER {
 ///
 ///
 ///
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct INSPECT_IMAGE_OPTIONAL_HEADER {
     pub Magic:                          WORD,   // 2    Describes PE Type: 32 or 64 Bit
@@ -520,7 +551,7 @@ impl ::std::clone::Clone for INSPECT_IMAGE_OPTIONAL_HEADER {
 /// objective
 ///
 ///
-#[derive(Debug)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct PE_FILE {
     //pub pename:                 OsString,
     pub petype:                 u16,
@@ -529,26 +560,26 @@ pub struct PE_FILE {
     pub ImageNtHeaders:         IMAGE_NT_HEADERS,
     pub ImageDataDirectory:     HashMap<String, IMAGE_DATA_DIRECTORY>,
     pub ImageSectionHeaders:    HashMap<String, IMAGE_SECTION_HEADER>,
-    //pub ImageDLLImports:        HashMap<String, Vec<String>>
     pub ImageDLLImports:        Vec<DLL_PROFILE>
 }
+
 ///
 ///
 ///
-#[derive(Debug)]
+#[derive(Debug, Copy, Deserialize, Serialize)]
 pub enum IMAGE_NT_HEADERS {
     x86(IMAGE_NT_HEADERS32),
     x64(IMAGE_NT_HEADERS64)
 }
-/*impl ::std::clone::Clone for IMAGE_NT_HEADERS {
+impl ::std::clone::Clone for IMAGE_NT_HEADERS {
     fn clone(&self) -> Self {
         *self
     }
-}*/
+}
 ///
 ///
 ///
-#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith)]
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct PE_DOS_STUB {
     pub upper: [u8; 30],    // Avoid Rust Array 32 Length Error
@@ -574,6 +605,7 @@ pub struct PE_RVA_TRACKER {
     pub section_name: String,   // Section Where Target Address resides
     pub entry_name:   String,   // Name of Directory Entry
 }
+
 impl PE_RVA_TRACKER {
     pub fn new() -> Self
     {
@@ -621,9 +653,9 @@ impl PE_RVA_TRACKER {
 /// 
 /// 
 ///
-#[derive(Hash, Debug, Eq, PartialEq)]
+#[derive(Hash, Debug, Eq, PartialEq, Deserialize, Serialize)]
 pub struct DLL_PROFILE {
     pub name:       String,
     pub imports:    usize,
     pub functions:  Vec<String>
-} 
+}

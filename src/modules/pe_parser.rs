@@ -66,7 +66,7 @@ impl PeParser {
         let mut _nt_headers: IMAGE_NT_HEADERS;
         
         let mut _image_data_dir: [u64; 16] = [0u64; 16];
-        let mut _data_map: BTreeMap<String, IMAGE_DATA_DIRECTORY>;
+        let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY>;
         let mut _section_table_headers: HashMap<String, IMAGE_SECTION_HEADER>;
         let mut _dll_imports: Vec<DLL_PROFILE>;
         
@@ -209,7 +209,7 @@ impl PeParser {
     /// ```
     /// let _pe = PeParser::new("foo.exe")
     /// ```
-    fn get_data_directories(&self, data_dir: &[u64; 16usize]) -> BTreeMap<String, IMAGE_DATA_DIRECTORY>
+    fn get_data_directories(&self, data_dir: &[u64; 16usize]) -> HashMap<String, IMAGE_DATA_DIRECTORY>
     {
         let mut _data_directories: Vec<IMAGE_DATA_DIRECTORY> = Vec::with_capacity(16usize);
         let _offset = 0 as usize;
