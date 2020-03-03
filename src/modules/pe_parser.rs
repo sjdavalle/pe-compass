@@ -432,13 +432,27 @@ impl PeParser {
             let mut _s: String = String::new();
             _offset = _rva.new_offset_from(_dll.Name);
             loop {                                         
-                let _bytes: u32 = self.content.pread_with(_offset, LE).unwrap();    // Read the DLL Name by 4 byte increment
-                let _dbytes = _bytes.to_le_bytes();                                 // Convert Decimal to LE Bytes Array
-                _s.push_str(std::str::from_utf8(&_dbytes[..]).unwrap());            // Convert Bytes to String
-                if _s.contains(".dll") {                                            // Check if string contains .dll marker for end
-                    let _v: Vec<&str> = _s.split(".dll").collect();
-                    _dll_name.push_str(_v[0]);
-                    _dll_name.push_str(".dll");
+                let _part: u32 = self.content.pread_with(_offset, LE).unwrap();    // Read the DLL Name by 4 byte increment
+                let _bytes  = _part.to_le_bytes();   
+                let _dbytes: Vec<char> = _part.to_le_bytes().iter()
+                                                            .map(|x| *x as u8)
+                                                            .filter(|x| x.is_ascii())
+                                                            .map(|x| x as char)
+                                                            .collect();
+                for _db in _dbytes {
+                    _dll_name.push(_db);
+                }                             
+                //_s.push_str(std::str::from_utf8(&_dbytes[..]).unwrap());                                  // Convert Bytes to String
+                //if _s.contains(".dll") || _s.contains('\u{0}') {
+                if _dll_name.contains('\u{0}') { 
+                    if _dll_name.contains(".drv") || _s.contains(".DRV") {
+                        _dll_name.clear();
+                        break;
+                    }
+                    //let _v: Vec<&str> = _s.split('\u{0}').collect();
+                    //_dll_name.push_str(_v[0]);                            // Check if string contains .dll marker for end
+                    _dll_name.retain(|x| x != '\u{0}');
+                    _dll_name.retain(|x| x.is_ascii());
                     break;
                 }
                 _offset += RANGE_OF_DLL_NAME;
@@ -490,10 +504,19 @@ impl PeParser {
                     // can move on to the next thunk.
                     _part = self.content.pread_with(_offset, LE).unwrap();
                     let _bytes = _part.to_le_bytes();
-                    _function.push_str(std::str::from_utf8(&_bytes[..]).unwrap());
+                    let _dbytes: Vec<char> = _part.to_le_bytes().iter()
+                                                    .map(|x| *x as u8)
+                                                    .filter(|x| x.is_ascii())
+                                                    .map(|x| x as char)
+                                                    .collect();
+
+                    //_function.push_str(std::str::from_utf8(&_bytes[..]).unwrap());
+                    for _db in _dbytes {
+                        _function.push(_db);
+                    }
                     
                     if _bytes[_bytes.len() - 1] == 0 {             // If null byte in last position, string ended
-                        _function.retain(|x| x != '\u{0}');         // strip null bytes
+                        _function.retain(|x| x != '\u{0000}');         // strip null bytes
                         _functions_list.push(_function.clone());    // add function name to list
                         break;
                     }

@@ -645,7 +645,7 @@ impl PE_RVA_TRACKER {
     pub fn new_offset_from(&mut self, new_target_address: u32) -> usize
     {
         self.ta = new_target_address;
-        self.file_offset = self.ta - self.va + self.ra;
+        self.file_offset = (self.ta - self.va) + self.ra;
         (self.ta - self.va + self.ra) as usize
     }
 }

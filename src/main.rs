@@ -24,9 +24,11 @@ use modules::pe_parser::PeParser;
 fn main() -> Result<()>
 {
     //let _sample = "pe-samples/sqlite3x64.dll";
-    let _sample = "pe-samples/sqlite3x86.dll";
+    //let _sample = "pe-samples/sqlite3x86.dll";
     //let _sample = "pe-samples/7z1900.exe";
     //let _sample = "pe-samples/putty.exe";
+    let _sample = "pe-samples/rdpclip.exe";
+    //let _sample = "pe-samples/print.exe";
     let _pe = PeParser::new(_sample);
     let _file = _pe.inspect_file();
     println!("{}", serde_json::to_string_pretty(&_file)?);
