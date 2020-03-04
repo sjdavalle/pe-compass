@@ -439,20 +439,20 @@ impl PeParser {
                                                             .filter(|x| x.is_ascii())
                                                             .map(|x| x as char)
                                                             .collect();
-                for _db in _dbytes {
-                    _dll_name.push(_db);
+                for _d in _dbytes {
+                    _dll_name.push(_d);
                 }                             
-                //_s.push_str(std::str::from_utf8(&_dbytes[..]).unwrap());                                  // Convert Bytes to String
-                //if _s.contains(".dll") || _s.contains('\u{0}') {
                 if _dll_name.contains('\u{0}') { 
-                    if _dll_name.contains(".drv") || _s.contains(".DRV") {
-                        _dll_name.clear();
+                    if _dll_name.contains(".drv") || _dll_name.contains(".DRV") {
+                        let _v: Vec<&str> = _dll_name.split(".drv").collect();
+                        _dll_name = String::from(_v[0]);
+                        _dll_name.push_str(".drv");
                         break;
                     }
-                    //let _v: Vec<&str> = _s.split('\u{0}').collect();
-                    //_dll_name.push_str(_v[0]);                            // Check if string contains .dll marker for end
-                    _dll_name.retain(|x| x != '\u{0}');
-                    _dll_name.retain(|x| x.is_ascii());
+
+                    let _v: Vec<&str> = _dll_name.split(".dll").collect();
+                    _dll_name = String::from(_v[0]);
+                    _dll_name.push_str(".dll");
                     break;
                 }
                 _offset += RANGE_OF_DLL_NAME;
@@ -465,10 +465,12 @@ impl PeParser {
             //
             // 3rd LOOP Code Block is used to populate this list
             // Watch the offset change again, but now to parse the thunk datas
+            let mut _is_ordinal: bool = false;
             let mut _thunk_size: usize = 4 as usize;
             let mut _thunk: IMAGE_THUNK_DATA32;
             let mut _thunk_list: Vec<IMAGE_THUNK_DATA32> = vec![];
-            
+            const IMAGE_ORDINAL_FLAG: u32 = 0x8000_0000;
+
             if _pe_type == &523u16 {
                 _thunk_size = 8 as usize;
             }
@@ -476,6 +478,11 @@ impl PeParser {
             loop {
                 _thunk = self.content.pread_with(_offset, LE).unwrap();
                 if _thunk.AddressOfData == 0 {
+                    break;
+                }
+                //let _is_ordinal: bool = self.check_if_ordinal32(_thunk.Ordinal);
+                _is_ordinal = self.check_if_ordinal32(_thunk.Ordinal);
+                if _is_ordinal {
                     break;
                 }
                 _thunk_list.push(_thunk);
@@ -511,8 +518,8 @@ impl PeParser {
                                                     .collect();
 
                     //_function.push_str(std::str::from_utf8(&_bytes[..]).unwrap());
-                    for _db in _dbytes {
-                        _function.push(_db);
+                    for _d in _dbytes {
+                        _function.push(_d);
                     }
                     
                     if _bytes[_bytes.len() - 1] == 0 {             // If null byte in last position, string ended
@@ -533,6 +540,38 @@ impl PeParser {
         }
         _results    // Return all _dll_imports       
     }
+    fn check_if_ordinal32(&self, ord_va: u32) -> bool
+    {
+        const IMAGE_ORDINAL_FLAG32: u32 = 0x8000_0000;
+        let mut ord_value: u32 = ord_va;
+        ord_value |= ord_value >> 1;
+        ord_value |= ord_value >> 2;
+        ord_value |= ord_value >> 4;
+        ord_value |= ord_value >> 8;
+        ord_value |= ord_value >> 16;
+        ord_value = (ord_value >> 1) + 1;
+        if ord_value == IMAGE_ORDINAL_FLAG32 {
+            true
+        } else {
+            false
+        }
+    }
+    fn check_if_ordinal64(&self, ord_va: u32) -> bool
+    {
+        const IMAGE_ORDINAL_FLAG64: u64 = 0x80000000_00000000;
+        let mut ord_value: u64 = ord_va as u64;
+        ord_value |= ord_value >> 1;
+        ord_value |= ord_value >> 2;
+        ord_value |= ord_value >> 4;
+        ord_value |= ord_value >> 8;
+        ord_value |= ord_value >> 16;
+        ord_value = (ord_value >> 1) + 1;
+        if ord_value == IMAGE_ORDINAL_FLAG64 {
+            true
+        } else {
+            false
+        }
+    }    
 }
 /// # Unit Tests
 ///
