@@ -44,7 +44,6 @@ impl PeParser {
         let _fsize = _file.size;
         
         if _fsize < 64 {
-            //std::process::exit(0x0100); // If file size less than 64 bytes exit
             exit_process("Desired Target is less than 64 Bytes. Likely Not a real PE File");
         }
         // ToDo: Add Validator Code Here for Sigs before reading File
@@ -277,19 +276,19 @@ impl PeParser {
         const SIZE_OF_SECTION_HEADER: usize  = 40; // 40 Bytes Long
 
         // Steps:
-            //  . Get Number of Sections in Scope for the PE File
+            //  Get Number of Sections in Scope for the PE File
         let _numof_pe_sections: usize = _nt_headers.FileHeader.NumberOfSections as usize;
         
-            //  . Calculate Total Bytes to Read for All Sections
+            //  Calculate Total Bytes to Read for All Sections
         let mut _total_bytes_sections = SIZE_OF_SECTION_HEADER * _numof_pe_sections;
 
-            //  . Get Size of Optional Header from FileHeader
+            //  Get Size of Optional Header from FileHeader
         let _sizeof_pe_opthdr: usize = _nt_headers.FileHeader.SizeOfOptionalHeader as usize;
 
-            //  . Calculate The Starting Offset of the OptionalHeader from NtHeaders
+            //  Calculate The Starting Offset of the OptionalHeader from NtHeaders
         let _offset_starts_opthdr = (e_lfanew + 24) as usize;
         
-            //  . Calculate The Starting Offset of the Section Headers
+            //  Calculate The Starting Offset of the Section Headers
         let mut _offset_starts_sechdr = _offset_starts_opthdr + _sizeof_pe_opthdr;
         
         let mut _section_table_headers: HashMap<String, IMAGE_SECTION_HEADER> = HashMap::new();
@@ -390,9 +389,11 @@ impl PeParser {
         }
         _rva_tracker
     }
-    ///
+    /// #Pe Parser - GetDLLImports Methods
+    /// This method parses the names of the DLLs involved and names of functions
+    /// within the DLL being imported.
     /// 
-    /// 
+    /// *Note* this method avoids/ignores imports by ordinal value
     fn get_dll_imports(&self, _pe_type: &u16, _rva: &mut PE_RVA_TRACKER) -> Vec<DLL_PROFILE>
     {
         const SIZE_OF_IMAGE_IMPORT_DESCRIPTOR: usize = 20 as usize;
@@ -424,28 +425,16 @@ impl PeParser {
                 break;
             }
         }
-        // Step 2
         // Now that we have all the DLLs involved, let's parse the imports
         // for each of them.
+        // At this stage all we have are IMAGE_IMPORT_DESCRIPTOR structs
         for _dll in _dll_list {
-            // Start By Getting The Name of the DLL involved
-            // Watch the _offset variable change consistently.
-            //
-            // 2nd LOOP Code Block is to land at the DLL Name File Offset
-            // From there, walk the bytes to correctly parse the name of the dll.
             _offset = _rva.new_offset_from(_dll.Name);
             let _dll_name = self.get_dll_name(_offset);
-            // Step 3
-            // Now move into acquiring the IMAGE_THUNK_DATAs for the DLL involved.
-            // Create a Vector of IMAGE_THUNK_DATA structs (List). 
-            // We use this new list of thunk datas to find the names of the functions
-            // for the dll involved.
-            //
-            // 3rd LOOP Code Block is used to populate this list
-            // Watch the offset change again, but now to parse the thunk datas
+
             _offset = _rva.new_offset_from(_dll.OriginalFirstThunk);
-            //let _thunk_list = self.get_dll_thunks32(_offset);
             let _dll_thunks: DLL_THUNK_DATA;
+            
             _dll_thunks = match _pe_type {
                 &267 => DLL_THUNK_DATA::x86(self.get_dll_thunks32(_offset)),
                 &523 => DLL_THUNK_DATA::x64(self.get_dll_thunks64(_offset)),
@@ -455,13 +444,9 @@ impl PeParser {
 
             _thunk_list = match _dll_thunks {
                 DLL_THUNK_DATA::x86(value) => { 
-                    //let _addr32 = value[0].AddressOfData + 2;
-                    //_offset = _rva.new_offset_from(_addr32);
                     self.get_dll_function_names32(_rva, _dll_name, value)
                 },
                 DLL_THUNK_DATA::x64(value) => {
-                    //let _addr64 = value[0].AddressOfData as u32; 
-                    //_offset = _rva.new_offset_from(_addr64 + 2);
                     self.get_dll_function_names64(_rva, _dll_name, value)
                 }
             };
@@ -501,12 +486,15 @@ impl PeParser {
             false
         }
     }
+    /// #Pe Parser - GetDLLName
+    /// This method obtains the name of the DLL imported by the file
+    /// as seen in the IMAGE_IMPORT_DESCRIPTOR struct and its member
+    /// called `Name`
     fn get_dll_name(&self, _offset: usize) -> String
     {
         const RANGE_OF_DLL_NAME: usize = 4 as usize;
         let mut _dll_name: String = String::new();
         let mut _offset: usize = _offset;
-        //_offset = _rva.new_offset_from(_dll_name_rva);
         loop {                                         
             let _part: u32 = self.content.pread_with(_offset, LE).unwrap();    // Read the DLL Name by 4 byte increment
             let _bytes  = _part.to_le_bytes();   
@@ -532,8 +520,10 @@ impl PeParser {
         }
         _dll_name
     }
-    ///
-    /// 
+    /// #Pe Parser - GetDLLThunks32
+    /// This method is for 32bit files, and it is focused on parsing the 
+    /// IMAGE_IMPORT_BY_NAME struct pointed to from the IMAGE_IMPORT_DESCRIPTOR
+    /// struct.
     fn get_dll_thunks32(&self, _offset: usize) -> Vec<IMAGE_THUNK_DATA32>
     {
         const IMAGE_ORDINAL_FLAG32: u32 = 0x8000_0000;
@@ -558,6 +548,10 @@ impl PeParser {
         }
         _thunk_list
     }
+    /// #Pe Parser - GetDLLThunks64
+    /// This method is for 64bit files, and it is focused on parsing the 
+    /// IMAGE_IMPORT_BY_NAME struct pointed to from the IMAGE_IMPORT_DESCRIPTOR
+    /// struct.
     fn get_dll_thunks64(&self, _offset: usize) -> Vec<IMAGE_THUNK_DATA64>
     {
         const IMAGE_ORDINAL_FLAG64: u64 = 0x80000000_00000000;
@@ -582,8 +576,16 @@ impl PeParser {
         }
         _thunk_list
     }
-    //
-    fn get_dll_function_names32(&self, _rva: &mut PE_RVA_TRACKER, _dll_name: String, _thunk_list: Vec<IMAGE_THUNK_DATA32>) -> DLL_PROFILE
+    /// #Pe Parser - GetDLLFunctionNames32
+    /// This method is for 32bit files, and it is focused on parsing the 
+    /// IMAGE_IMPORT_BY_NAME struct pointed to from the IMAGE_THUNK_DATA32
+    /// struct.
+    fn get_dll_function_names32(
+            &self,
+            _rva: &mut PE_RVA_TRACKER,
+            _dll_name: String,
+            _thunk_list: Vec<IMAGE_THUNK_DATA32>
+       )-> DLL_PROFILE
     {
         let mut _functions_list: Vec <String> = vec![];
         let mut _function: String = String:: new();
@@ -612,7 +614,6 @@ impl PeParser {
                 _offset += 2;
             }
             _function.clear();
-
         }
         _functions_list.sort();
         DLL_PROFILE {                             // populate the dll profile list
@@ -621,9 +622,15 @@ impl PeParser {
             functions: _functions_list
         }
     }
-    ///
-    /// 
-    fn get_dll_function_names64(&self, _rva: &mut PE_RVA_TRACKER, _dll_name: String, _thunk_list: Vec<IMAGE_THUNK_DATA64>) -> DLL_PROFILE
+    /// #Pe Parser - GetDLLFunctionNames64
+    /// This method is for 64bit files, and it is focused on parsing the 
+    /// IMAGE_IMPORT_BY_NAME struct pointed to from the IMAGE_THUNK_DATA64
+    /// struct.
+    fn get_dll_function_names64(
+            &self, _rva: &mut PE_RVA_TRACKER,
+            _dll_name: String,
+            _thunk_list: Vec<IMAGE_THUNK_DATA64>
+       ) -> DLL_PROFILE
     {
         let mut _functions_list: Vec <String> = vec![];
         let mut _function: String = String:: new();
@@ -649,11 +656,6 @@ impl PeParser {
                     _functions_list.push(_function.clone());
                     break;
                 }
-                /*if _bytes[_bytes.len() - 1] == 0 {             // If null byte in last position, string ended
-                    _function.retain(| x | x != '\u{0000}');         // strip null bytes
-                    _functions_list.push(_function.clone());    // add function name to list
-                    break;
-                }*/
                 _offset += 2;
             }
             _function.clear();
