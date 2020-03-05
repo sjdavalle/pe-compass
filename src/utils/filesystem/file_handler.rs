@@ -30,11 +30,15 @@ impl FileHandler {
      {
         let _filepath = Path::new(fp);
 
-        /*
         {
-            Add Checks Here: ToDo
+            // Sanity Checks
+            if _filepath.is_dir(){
+                exit_process("Desired Target is a Folder/Directory. Require a file");
+            }
+            if !_filepath.exists() {
+                exit_process("Desired Target Does Not Exists.  Require an existent file");
+            }
         }
-        */
 
         let mut _read       = false;
         let mut _write      = false;

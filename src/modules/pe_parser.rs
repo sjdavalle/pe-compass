@@ -4,6 +4,10 @@ use std::ops::Range;
 // 3rd Parties
 use scroll::{ Pread, LE };
 
+// My Modules
+#[path = "../utils/errors/custom_errors.rs"] mod custom_errors;
+use custom_errors::exit_process;
+
 #[path = "../utils/filesystem/file_handler.rs"] mod file_handler;
 use file_handler::FileHandler;
 
@@ -40,7 +44,8 @@ impl PeParser {
         let _fsize = _file.size;
         
         if _fsize < 64 {
-            std::process::exit(0x0100); // If file size less than 64 bytes exit
+            //std::process::exit(0x0100); // If file size less than 64 bytes exit
+            exit_process("Desired Target is less than 64 Bytes. Likely Not a real PE File");
         }
         // ToDo: Add Validator Code Here for Sigs before reading File
         

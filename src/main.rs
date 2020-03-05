@@ -36,6 +36,7 @@ fn main() -> Result<()>
     //let _sample = "pe-samples/vcredist_x64.exe";
     //let _sample = "pe-samples/TestClientx64.exe";
     let _args = ArgumentsParser::new();
+    // Start to parse the input args
     if _args.inputs.is_present("file") {
         let _sample = _args.inputs.value_of("file").unwrap();
         let _pe = PeParser::new(_sample);
