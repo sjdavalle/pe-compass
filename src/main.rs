@@ -19,7 +19,8 @@ use serde_json::*;
 /// Imports: My Modules & Utils
 
 mod modules;
-use modules::pe_parser::PeParser;
+use modules::pe_parser::*;
+
 
 fn main() -> Result<()>
 {

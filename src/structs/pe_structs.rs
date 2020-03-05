@@ -562,10 +562,27 @@ pub struct PE_FILE {
     pub ImageSectionHeaders:    HashMap<String, IMAGE_SECTION_HEADER>,
     pub ImageDLLImports:        Vec<DLL_PROFILE>
 }
-
+///
+/// 
+/// 
+/// 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PE_OUTPUT {
+    pub pename:             String,
+    pub petype:             u16,
+    pub ImageDLLImports:    Vec<DLL_PROFILE>
+}
+///
+///
+#[derive(Debug, Deserialize, Serialize)]
+pub enum DLL_THUNK_DATA {
+    x86(Vec<IMAGE_THUNK_DATA32>),
+    x64(Vec<IMAGE_THUNK_DATA64>)
+}
 ///
 ///
 ///
+/// 
 #[derive(Debug, Copy, Deserialize, Serialize)]
 pub enum IMAGE_NT_HEADERS {
     x86(IMAGE_NT_HEADERS32),

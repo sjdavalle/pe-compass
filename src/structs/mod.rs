@@ -4,4 +4,3 @@
 /// to parse, serialize, deserialize objects into its compliant
 /// representation.
 pub mod pe_structs;
-pub mod co_structs;

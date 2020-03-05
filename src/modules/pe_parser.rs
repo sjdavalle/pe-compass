@@ -428,35 +428,8 @@ impl PeParser {
             //
             // 2nd LOOP Code Block is to land at the DLL Name File Offset
             // From there, walk the bytes to correctly parse the name of the dll.
-            let mut _dll_name: String = String::new();
-            let mut _s: String = String::new();
             _offset = _rva.new_offset_from(_dll.Name);
-            loop {                                         
-                let _part: u32 = self.content.pread_with(_offset, LE).unwrap();    // Read the DLL Name by 4 byte increment
-                let _bytes  = _part.to_le_bytes();   
-                let _dbytes: Vec<char> = _part.to_le_bytes().iter()
-                                                            .map(|x| *x as u8)
-                                                            .filter(|x| x.is_ascii())
-                                                            .map(|x| x as char)
-                                                            .collect();
-                for _d in _dbytes {
-                    _dll_name.push(_d);
-                }                             
-                if _dll_name.contains('\u{0}') { 
-                    if _dll_name.contains(".drv") || _dll_name.contains(".DRV") {
-                        let _v: Vec<&str> = _dll_name.split(".drv").collect();
-                        _dll_name = String::from(_v[0]);
-                        _dll_name.push_str(".drv");
-                        break;
-                    }
-
-                    let _v: Vec<&str> = _dll_name.split(".dll").collect();
-                    _dll_name = String::from(_v[0]);
-                    _dll_name.push_str(".dll");
-                    break;
-                }
-                _offset += RANGE_OF_DLL_NAME;
-            }
+            let _dll_name = self.get_dll_name(_offset);
             // Step 3
             // Now move into acquiring the IMAGE_THUNK_DATAs for the DLL involved.
             // Create a Vector of IMAGE_THUNK_DATA structs (List). 
@@ -465,80 +438,31 @@ impl PeParser {
             //
             // 3rd LOOP Code Block is used to populate this list
             // Watch the offset change again, but now to parse the thunk datas
-            let mut _is_ordinal: bool = false;
-            let mut _thunk_size: usize = 4 as usize;
-            let mut _thunk: IMAGE_THUNK_DATA32;
-            let mut _thunk_list: Vec<IMAGE_THUNK_DATA32> = vec![];
-            const IMAGE_ORDINAL_FLAG: u32 = 0x8000_0000;
-
-            if _pe_type == &523u16 {
-                _thunk_size = 8 as usize;
-            }
             _offset = _rva.new_offset_from(_dll.OriginalFirstThunk);
-            loop {
-                _thunk = self.content.pread_with(_offset, LE).unwrap();
-                if _thunk.AddressOfData == 0 {
-                    break;
-                }
-                //let _is_ordinal: bool = self.check_if_ordinal32(_thunk.Ordinal);
-                _is_ordinal = self.check_if_ordinal32(_thunk.Ordinal);
-                if _is_ordinal {
-                    break;
-                }
-                _thunk_list.push(_thunk);
-                _offset += _thunk_size;
-            }
-            // Step 4
-            // Now we parse each thunk data by using the struct member called
-            // `AddressOfData` which gives us the file offset location of the 
-            // name of the function being imported by the dll involved.
-            //
-            // 4th LOOP Code Block is used to land on the offset of the function name
-            // but we walk 2 bytes ahead to correctly discover the end of the string
-            // represensting the function name.
-            // Watch the offset change again, but now we are parsing the final piece - function names
-            let mut _functions_list: Vec<String> = vec![];
-            let mut _function: String = String::new(); 
-            let mut _part: u16 = 0;
-            
-            for _thunk in _thunk_list {
-                _offset = _rva.new_offset_from(_thunk.AddressOfData + 2);
-                loop {
-                    // Get the Function Names involved.
-                    // Advance the cursor 2 bytes at a time.
-                    // In each iteration inspect the bytes for the null bytes 0x00.
-                    // When null byte is found, the string name terminates and we
-                    // can move on to the next thunk.
-                    _part = self.content.pread_with(_offset, LE).unwrap();
-                    let _bytes = _part.to_le_bytes();
-                    let _dbytes: Vec<char> = _part.to_le_bytes().iter()
-                                                    .map(|x| *x as u8)
-                                                    .filter(|x| x.is_ascii())
-                                                    .map(|x| x as char)
-                                                    .collect();
+            //let _thunk_list = self.get_dll_thunks32(_offset);
+            let _dll_thunks: DLL_THUNK_DATA;
+            _dll_thunks = match _pe_type {
+                &267 => DLL_THUNK_DATA::x86(self.get_dll_thunks32(_offset)),
+                &523 => DLL_THUNK_DATA::x64(self.get_dll_thunks64(_offset)),
+                _ => std::process::exit(0x0100)
+            };
+            let _thunk_list: DLL_PROFILE;
 
-                    //_function.push_str(std::str::from_utf8(&_bytes[..]).unwrap());
-                    for _d in _dbytes {
-                        _function.push(_d);
-                    }
-                    
-                    if _bytes[_bytes.len() - 1] == 0 {             // If null byte in last position, string ended
-                        _function.retain(|x| x != '\u{0000}');         // strip null bytes
-                        _functions_list.push(_function.clone());    // add function name to list
-                        break;
-                    }
-                    _offset += 2;                                   // advance cursor by 2 bytes
+            _thunk_list = match _dll_thunks {
+                DLL_THUNK_DATA::x86(value) => { 
+                    //let _addr32 = value[0].AddressOfData + 2;
+                    //_offset = _rva.new_offset_from(_addr32);
+                    self.get_dll_function_names32(_rva, _dll_name, value)
+                },
+                DLL_THUNK_DATA::x64(value) => {
+                    //let _addr64 = value[0].AddressOfData as u32; 
+                    //_offset = _rva.new_offset_from(_addr64 + 2);
+                    self.get_dll_function_names64(_rva, _dll_name, value)
                 }
-                _function.clear();                                  // Flush string for reuse, avoid re-alloc
-            }
-            _functions_list.sort();
-            _results.push(DLL_PROFILE {                             // populate the dll profile list
-                            name:       _dll_name.to_lowercase(),
-                            imports:    _functions_list.len(),
-                            functions:  _functions_list
-                          });
+            };
+            _results.push(_thunk_list);
         }
-        _results    // Return all _dll_imports       
+        _results
     }
     fn check_if_ordinal32(&self, ord_va: u32) -> bool
     {
@@ -551,15 +475,15 @@ impl PeParser {
         ord_value |= ord_value >> 16;
         ord_value = (ord_value >> 1) + 1;
         if ord_value == IMAGE_ORDINAL_FLAG32 {
-            true
+            return true
         } else {
-            false
+            return false
         }
     }
-    fn check_if_ordinal64(&self, ord_va: u32) -> bool
+    fn check_if_ordinal64(&self, ord_va: u64) -> bool
     {
         const IMAGE_ORDINAL_FLAG64: u64 = 0x80000000_00000000;
-        let mut ord_value: u64 = ord_va as u64;
+        let mut ord_value: u64 = ord_va; //as u64;
         ord_value |= ord_value >> 1;
         ord_value |= ord_value >> 2;
         ord_value |= ord_value >> 4;
@@ -571,7 +495,171 @@ impl PeParser {
         } else {
             false
         }
-    }    
+    }
+    fn get_dll_name(&self, _offset: usize) -> String
+    {
+        const RANGE_OF_DLL_NAME: usize = 4 as usize;
+        let mut _dll_name: String = String::new();
+        let mut _offset: usize = _offset;
+        //_offset = _rva.new_offset_from(_dll_name_rva);
+        loop {                                         
+            let _part: u32 = self.content.pread_with(_offset, LE).unwrap();    // Read the DLL Name by 4 byte increment
+            let _bytes  = _part.to_le_bytes();   
+            let _dbytes: Vec<char> = _part.to_le_bytes().iter()
+                                                        .map(|x| *x as u8)
+                                                        .filter(|x| x.is_ascii())
+                                                        .map(|x| x as char)
+                                                        .collect();
+            for _d in _dbytes {
+                _dll_name.push(_d);
+            }                             
+            if _dll_name.contains('\u{0}') { 
+                let _v: Vec<&str> = _dll_name.split(".").collect();
+                _dll_name = String::from(_v[0]);
+                if _dll_name.contains('.') {
+                    let _v: Vec<&str> = _dll_name.split(".").collect();
+                    _dll_name = String::from(_v[0]);
+                }
+                _dll_name.push_str(".dll");
+                break;
+            }
+            _offset += RANGE_OF_DLL_NAME;
+        }
+        _dll_name
+    }
+    ///
+    /// 
+    fn get_dll_thunks32(&self, _offset: usize) -> Vec<IMAGE_THUNK_DATA32>
+    {
+        const IMAGE_ORDINAL_FLAG32: u32 = 0x8000_0000;
+        let mut _is_ordinal: bool = false;
+        let mut _thunk: IMAGE_THUNK_DATA32;
+        let mut _thunk_size: usize = 4 as usize;
+        let mut _thunk_list: Vec<IMAGE_THUNK_DATA32> = vec![];
+        let mut _offset: usize = _offset;
+        loop {
+            _thunk = self.content.pread_with(_offset, LE).unwrap();
+            if _thunk.AddressOfData == 0 {
+                break;
+            }
+            _is_ordinal = self.check_if_ordinal32(_thunk.Ordinal);
+            if _is_ordinal || _thunk.AddressOfData >= IMAGE_ORDINAL_FLAG32 {
+                _thunk_list.push(_thunk);
+                _thunk_list.pop();
+            } else {
+                _thunk_list.push(_thunk);
+            }
+            _offset += _thunk_size;
+        }
+        _thunk_list
+    }
+    fn get_dll_thunks64(&self, _offset: usize) -> Vec<IMAGE_THUNK_DATA64>
+    {
+        const IMAGE_ORDINAL_FLAG64: u64 = 0x80000000_00000000;
+        let mut _is_ordinal: bool = false;
+        let mut _thunk: IMAGE_THUNK_DATA64;
+        let mut _thunk_size: usize = 8 as usize;
+        let mut _thunk_list: Vec<IMAGE_THUNK_DATA64> = vec![];
+        let mut _offset: usize = _offset;
+        loop {
+            _thunk = self.content.pread_with(_offset, LE).unwrap();
+            if _thunk.AddressOfData == 0 {
+                break;
+            }
+            _is_ordinal = self.check_if_ordinal64(_thunk.Ordinal);
+            if _is_ordinal || _thunk.AddressOfData >= IMAGE_ORDINAL_FLAG64 {
+                _thunk_list.push(_thunk);
+                _thunk_list.pop();
+            } else {
+                _thunk_list.push(_thunk);
+            }
+            _offset += _thunk_size;
+        }
+        _thunk_list
+    }
+    //
+    fn get_dll_function_names32(&self, _rva: &mut PE_RVA_TRACKER, _dll_name: String, _thunk_list: Vec<IMAGE_THUNK_DATA32>) -> DLL_PROFILE
+    {
+        let mut _functions_list: Vec <String> = vec![];
+        let mut _function: String = String:: new();
+        let mut _part: u16 = 0;
+        let mut _offset: usize = 0;
+        for _thunk in _thunk_list {
+            _offset = _rva.new_offset_from(_thunk.AddressOfData + 2);
+            loop {
+                _part = self.content.pread_with(_offset, LE).unwrap();
+                let _bytes = _part.to_le_bytes();
+                let _dbytes: Vec<char> = _part.to_le_bytes().iter()
+                    .map(| x | * x as u8)
+                    .filter(| x | x.is_ascii())
+                    .map(| x | x as char)
+                    .collect();
+    
+                for _d in _dbytes {
+                    _function.push(_d);
+                }
+    
+                if _function.contains('\u{0}') {
+                    _function.retain(|x| x != '\u{0}');
+                    _functions_list.push(_function.clone());
+                    break;
+                }
+                _offset += 2;
+            }
+            _function.clear();
+
+        }
+        _functions_list.sort();
+        DLL_PROFILE {                             // populate the dll profile list
+            name: _dll_name.to_lowercase(),
+            imports: _functions_list.len(),
+            functions: _functions_list
+        }
+    }
+    ///
+    /// 
+    fn get_dll_function_names64(&self, _rva: &mut PE_RVA_TRACKER, _dll_name: String, _thunk_list: Vec<IMAGE_THUNK_DATA64>) -> DLL_PROFILE
+    {
+        let mut _functions_list: Vec <String> = vec![];
+        let mut _function: String = String:: new();
+        let mut _part: u16 = 0;
+        let mut _offset: usize = 0;
+        for _thunk in _thunk_list {
+            let _x: u32 = (_thunk.AddressOfData + 2) as u32;
+            _offset = _rva.new_offset_from(_x);
+            loop {
+                _part = self.content.pread_with(_offset, LE).unwrap();
+                let _bytes = _part.to_le_bytes();
+                let _dbytes: Vec<char> = _part.to_le_bytes().iter()
+                    .map(| x | * x as u8)
+                    .filter(| x | x.is_ascii())
+                    .map(| x | x as char)
+                    .collect();
+    
+                for _d in _dbytes {
+                    _function.push(_d);
+                }
+                if _function.contains('\u{0}') {
+                    _function.retain(|x| x != '\u{0}');
+                    _functions_list.push(_function.clone());
+                    break;
+                }
+                /*if _bytes[_bytes.len() - 1] == 0 {             // If null byte in last position, string ended
+                    _function.retain(| x | x != '\u{0000}');         // strip null bytes
+                    _functions_list.push(_function.clone());    // add function name to list
+                    break;
+                }*/
+                _offset += 2;
+            }
+            _function.clear();
+        }
+        _functions_list.sort();
+        DLL_PROFILE {                             // populate the dll profile list
+            name: _dll_name.to_lowercase(),
+            imports: _functions_list.len(),
+            functions: _functions_list
+        }
+    }                         
 }
 /// # Unit Tests
 ///
