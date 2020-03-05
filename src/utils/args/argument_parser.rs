@@ -3,7 +3,7 @@ use clap::{ App, Arg, ArgMatches };
 
 #[derive(Debug)]
 pub struct ArgumentsParser<'a> {
-    inputs: ArgMatches<'a>
+    pub inputs: ArgMatches<'a>
 }
 
 impl ArgumentsParser<'_> {
