@@ -26,7 +26,6 @@ pub struct PeParser {
     handler: FileHandler,
     content: Vec<u8>,
 }
-
 impl PeParser {
     /// # Pe Parser New Method
     /// Creates a new instance of the PE Parser Object
@@ -44,7 +43,7 @@ impl PeParser {
         let _fsize = _file.size;
         
         if _fsize < 64 {
-            exit_process("Desired Target is less than 64 Bytes. Likely Not a real PE File");
+            exit_process("Desired Target is less than 64 Bytes. Likely Not a real PE File"); // sizeof DOS_HEADER
         }
         // ToDo: Add Validator Code Here for Sigs before reading File
         
@@ -70,9 +69,9 @@ impl PeParser {
         let mut _nt_headers: IMAGE_NT_HEADERS;
         
         let mut _image_data_dir: [u64; 16] = [0u64; 16];
+        let mut _dll_imports: Vec<DLL_PROFILE>;
         let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY>;
         let mut _section_table_headers: HashMap<String, IMAGE_SECTION_HEADER>;
-        let mut _dll_imports: Vec<DLL_PROFILE>;
         
         //  1st Internal code block
         //  We use this block to drop non-essential data structures and save memory
@@ -85,7 +84,7 @@ impl PeParser {
             _nt_headers = match _petype {
                 267 => IMAGE_NT_HEADERS::x86(self.get_image_nt_headers32(_doshdr.e_lfanew)),
                 523 => IMAGE_NT_HEADERS::x64(self.get_image_nt_headers64(_doshdr.e_lfanew)),
-                _   => std::process::exit(0x0100)
+                _   => exit_process("Desired PE Type Not Supported. Only 32 or 64 Bit PE supported");
             };
             
             _image_data_dir = match &_nt_headers {
@@ -443,12 +442,8 @@ impl PeParser {
             let _thunk_list: DLL_PROFILE;
 
             _thunk_list = match _dll_thunks {
-                DLL_THUNK_DATA::x86(value) => { 
-                    self.get_dll_function_names32(_rva, _dll_name, value)
-                },
-                DLL_THUNK_DATA::x64(value) => {
-                    self.get_dll_function_names64(_rva, _dll_name, value)
-                }
+                DLL_THUNK_DATA::x86(value) => { self.get_dll_function_names32(_rva, _dll_name, value) },
+                DLL_THUNK_DATA::x64(value) => { self.get_dll_function_names64(_rva, _dll_name, value) }
             };
             _results.push(_thunk_list);
         }

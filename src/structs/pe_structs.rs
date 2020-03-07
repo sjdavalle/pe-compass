@@ -17,10 +17,7 @@ use serde_derive::{ Deserialize, Serialize };
 /// ```
 /// The above type definition within RUST allows us to not have
 /// ambiguous or significant deviation from the sepcification from
-/// Microsoft,
-/// 
-/// Lastly, reference the `wintypes,rs` file where the translated
-/// windows types to rust are kept to keep things clean,
+/// Microsoft.
 /// 
 pub type BYTE       = u8;
 pub type UCHAR      = u8;
@@ -273,7 +270,7 @@ impl ::std::clone::Clone for IMAGE_IMPORT_DESCRIPTOR {
 impl IMAGE_IMPORT_DESCRIPTOR {
     /// Allows you to compare the null terminating descriptor
     /// to identify the end of the content for a PE file.
-    /// If this matches, the file has no more DLL imports as part of
+    /// If this matches, the file has no more DLLs as part of
     /// its `imports`
     pub fn load_null_descriptor() -> Self
     {
@@ -472,7 +469,6 @@ pub struct PE_RVA_TRACKER {
     pub section_name: String,   // Section Where Target Address resides
     pub entry_name:   String,   // Name of Directory Entry
 }
-
 impl PE_RVA_TRACKER {
     pub fn new() -> Self
     {
