@@ -59,7 +59,7 @@ impl PeParser {
     /// If the inspection fails, the file is likely not legit.
     /// **Note:**   At this moment Packers are not in scope, so if a UPX0 header
     ///             is in place, the program will crash or not work.
-    /// 
+    ///
     pub fn inspect_file(&self) -> PE_FILE
     {
         let _dos_stub = self.get_dos_stub_string();
