@@ -97,13 +97,18 @@ impl FileHandler {
      ///
      ///
      ///
-     pub fn read_as_bytes(&self, n_bytes: u64) -> Result<Vec<u8>, Box<dyn std::error::Error>>
+     pub fn read_as_vecbytes(&self, n_bytes: u64) -> Result<Vec<u8>, Box<dyn std::error::Error>>
      {
-        let mut _bytes: Vec<u8> = Vec::with_capacity(n_bytes as usize);
+        //
         let mut _bufr = BufReader::new(&self.handle);
-
+        let mut _bytes: Vec<u8> = Vec::with_capacity(n_bytes as usize);
         _bufr.read_to_end(&mut _bytes)?;
-        
         Ok(_bytes)
+     }
+     pub fn read_as_bytesarray(&self, n_bytes: &mut [u8]) -> Result<(), Box<dyn std::error::Error>>
+     {
+        let mut _bufr = BufReader::new(&self.handle);
+        _bufr.read_exact(n_bytes)?;
+        Ok(())
      }
  }

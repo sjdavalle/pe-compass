@@ -26,7 +26,7 @@ use utils::args::argument_parser::ArgumentsParser;
 
 fn main() -> Result<()>
 {
-    //let _sample = "pe-samples/sqlite3x64.dll";
+    let _sample = "pe-samples/sqlite3x64.dll";
     //let _sample = "pe-samples/sqlite3x86.dll";
     //let _sample = "pe-samples/7z1900.exe";
     //let _sample = "pe-samples/putty.exe";
@@ -37,12 +37,14 @@ fn main() -> Result<()>
     //let _sample = "pe-samples/TestClientx64.exe";
     let _args = ArgumentsParser::new();
     // Start to parse the input args
+
     if _args.inputs.is_present("file") {
         let _sample = _args.inputs.value_of("file").unwrap();
         let _pe = PeParser::new(_sample);
         let _file = _pe.inspect_file();
         println!("{}", serde_json::to_string_pretty(&_file)?);
     }
+
     /*
     let _pe = PeParser::new(_sample);
     let _file = _pe.inspect_file();

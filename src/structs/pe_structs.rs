@@ -339,9 +339,9 @@ impl ::std::clone::Clone for IMAGE_THUNK_DATA64 {
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct INSPECT_NT_HEADERS {
-    pub Signature:      DWORD,
-    pub FileHeader:     INSPECT_IMAGE_FILE_HEADER,
-    pub OptionalHeader: INSPECT_IMAGE_OPTIONAL_HEADER
+    pub Signature:      DWORD,                          // 4
+    pub FileHeader:     INSPECT_IMAGE_FILE_HEADER,      // 20
+    pub OptionalHeader: INSPECT_IMAGE_OPTIONAL_HEADER   // 28
 }
 impl ::std::clone::Clone for INSPECT_NT_HEADERS {
     fn clone(&self) -> Self {
@@ -402,11 +402,11 @@ impl ::std::clone::Clone for INSPECT_IMAGE_OPTIONAL_HEADER {
 pub struct PE_FILE {
     pub pename:                 String,
     pub petype:                 u16,
-    pub ImageDosHeader:         IMAGE_DOS_HEADER,
-    pub ImageDosStub:           String,
-    pub ImageNtHeaders:         IMAGE_NT_HEADERS,
-    pub ImageDataDirectory:     HashMap<String, IMAGE_DATA_DIRECTORY>,
-    pub ImageSectionHeaders:    HashMap<String, IMAGE_SECTION_HEADER>,
+    //pub ImageDosHeader:         IMAGE_DOS_HEADER,
+    //pub ImageDosStub:           String,
+    //pub ImageNtHeaders:         IMAGE_NT_HEADERS,
+    //pub ImageDataDirectory:     HashMap<String, IMAGE_DATA_DIRECTORY>,
+    //pub ImageSectionHeaders:    HashMap<String, IMAGE_SECTION_HEADER>,
     pub ImageDLLImports:        Vec<DLL_PROFILE>
 }
 ///

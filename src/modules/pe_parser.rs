@@ -39,15 +39,23 @@ impl PeParser {
     /// ```
     pub fn new(fp: &str) -> Self
     {
-        let _file = FileHandler::open(fp, "r");
-        let _fsize = _file.size;
-        
-        if _fsize < 64 {
+        let _bfile = FileHandler::open(fp, "r");
+        if  _bfile.size  < 1024u64 {
             exit_process("Desired Target is less than 64 Bytes. Likely Not a real PE File"); // sizeof DOS_HEADER
         }
-        // ToDo: Add Validator Code Here for Sigs before reading File
-        
-        let _bytes = _file.read_as_bytes(_fsize).unwrap();
+        let mut _abytes: [u8; 512] = [0; 512];
+        _bfile.read_as_bytesarray(&mut _abytes).unwrap();
+        let _dos_signature: u16 = _abytes[..].pread_with(0usize, LE).unwrap();
+        if _dos_signature != 23117u16 {
+            exit_process("Absent PE Magic - `MZ`");
+        }
+        let _file = FileHandler::open(fp, "r");
+        let _bytes: Vec<u8> = _file.read_as_vecbytes(_file.size).unwrap();
+        /*let mut _idx: i32 = 0;
+        for _byte in &_bytes {
+            _idx += 1;
+            println!("Idx: {} | {:#?}", _idx, _byte);
+        }*/
         PeParser {
             handler: _file,
             content: _bytes,
@@ -62,7 +70,7 @@ impl PeParser {
     ///
     pub fn inspect_file(&self) -> PE_FILE
     {
-        let _dos_stub = self.get_dos_stub_string();
+        //let _dos_stub = self.get_dos_stub_string();
         let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
     
         let mut _petype: u16;
@@ -84,7 +92,10 @@ impl PeParser {
             _nt_headers = match _petype {
                 267 => IMAGE_NT_HEADERS::x86(self.get_image_nt_headers32(_doshdr.e_lfanew)),
                 523 => IMAGE_NT_HEADERS::x64(self.get_image_nt_headers64(_doshdr.e_lfanew)),
-                _   => exit_process("Desired PE Type Not Supported. Only 32 or 64 Bit PE supported");
+                _   => {
+                    println!("Desired PE Type Not Supported, only 32 or 64 bit allowed");
+                    std::process::exit(0x0100);
+                }
             };
             
             _image_data_dir = match &_nt_headers {
@@ -112,11 +123,11 @@ impl PeParser {
         PE_FILE {
             pename:                 self.handler.name.clone(),
             petype:                 _petype,
-            ImageDosHeader:         _doshdr,
-            ImageDosStub:           _dos_stub,
-            ImageNtHeaders:         _nt_headers,
-            ImageDataDirectory:     _data_map,
-            ImageSectionHeaders:    _section_table_headers,
+            //ImageDosHeader:         _doshdr,
+            //ImageDosStub:           _dos_stub,
+            //ImageNtHeaders:         _nt_headers,
+            //ImageDataDirectory:     _data_map,
+            //ImageSectionHeaders:    _section_table_headers,
             ImageDLLImports:        _dll_imports,
         }
     }
@@ -224,7 +235,9 @@ impl PeParser {
             let _data_dir: IMAGE_DATA_DIRECTORY = _bytes.pread_with(_offset, LE).unwrap();
             _data_directories.push(_data_dir);
         }
-
+        if _data_directories[1].Size == 0 {
+            exit_process("PE Imports Directory Entry Size Zero: No Imports, process exiting")
+        }
         // Now Build the dataMap
         let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY> = HashMap::new();
         let mut _type: String;
