@@ -3,6 +3,8 @@ use std::ops::Range;
 
 // 3rd Parties
 use scroll::{ Pread, LE };
+use sha2::{ Sha256, Digest };
+use md5::*;
 
 // My Modules
 #[path = "../utils/errors/custom_errors.rs"] mod custom_errors;
@@ -63,6 +65,7 @@ impl PeParser {
         // and we can not determine if that is true unless we load the NT_HEADERS.
         let _file = FileHandler::open(fp, "r");
         let _bytes: Vec<u8> = _file.read_as_vecbytes(_file.size).unwrap();
+
         PeParser {
             handler: _file,
             content: _bytes,
@@ -123,6 +126,14 @@ impl PeParser {
             let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", _eimp, &_section_table_headers);
             _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports);
         }
+        //  Hash the file's contents
+        let _md5: String = self.get_md5();
+        let _sha2: String = self.get_sha2();
+        
+        let _pehashes: PE_HASHES = PE_HASHES {
+                                        md5: _md5,
+                                        sha2: _sha2,
+                                    };
         //  Finally build the custom object PE_FILE with the essential data structures
         //  to be used by the program.
         //  Note:   This is the object that represents the goal of the PeParser module.
@@ -136,6 +147,7 @@ impl PeParser {
             //ImageDataDirectory:     _data_map,
             //ImageSectionHeaders:    _section_table_headers,
             ImageDLLImports:        _dll_imports,
+            ImageHashSignatures:    _pehashes
         }
     }
     /// # PE Parser GetDosHeader Method
@@ -686,7 +698,28 @@ impl PeParser {
             imports: _functions_list.len(),
             functions: _functions_list
         }
-    }                         
+    }
+    /// # PE Parser: GetMD5Hash Method
+    /// This method calculates the MD5 Hash of the file being inspected.
+    /// ```
+    /// let _pe = PeParser::new("foo.exe");
+    /// let _md5 = _pe.get_md5(); // Takes a Ref<[u8]>
+    /// 
+    /// println!("MD5: {:x}", _md5);
+    /// ```
+    fn get_md5(&self) -> String
+    {
+        format!("{:x}", md5::compute(&self.content[..]))
+    }
+    ///
+    /// 
+    /// 
+    fn get_sha2(&self) -> String
+    {
+        let mut _sha2 = Sha256::new();
+        _sha2.input(&self.content[..]);
+        format!("{:x}", _sha2.result())
+    }
 }
 /// # Unit Tests
 ///

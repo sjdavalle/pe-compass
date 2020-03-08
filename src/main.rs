@@ -6,8 +6,10 @@
 #[macro_use]
 extern crate scroll_derive;
 extern crate scroll;
-
 extern crate clap;
+extern crate sha2;
+extern crate md5;
+
 
 extern crate serde_json;
 extern crate serde;

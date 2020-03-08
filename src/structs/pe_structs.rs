@@ -407,7 +407,17 @@ pub struct PE_FILE {
     //pub ImageNtHeaders:         IMAGE_NT_HEADERS,
     //pub ImageDataDirectory:     HashMap<String, IMAGE_DATA_DIRECTORY>,
     //pub ImageSectionHeaders:    HashMap<String, IMAGE_SECTION_HEADER>,
-    pub ImageDLLImports:        Vec<DLL_PROFILE>
+    pub ImageDLLImports:        Vec<DLL_PROFILE>,
+    pub ImageHashSignatures:    PE_HASHES    
+}
+///
+/// 
+/// 
+/// 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct PE_HASHES {
+    pub md5:    String,
+    pub sha2:   String
 }
 ///
 /// 
