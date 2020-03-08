@@ -1,0 +1,17 @@
+{
+  "pename": "UevTemplateConfigItemGenerator.exe",
+  "petype": 267,
+  "ImageDLLImports": [
+    {
+      "name": "mscoree.dll",
+      "imports": 1,
+      "functions": [
+        "_CorExeMain"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "49f664ea3995c0f8ae5e9d1f64e0067b",
+    "sha2": "6818e8d74c921dbec7349604d3c0a6208bcd987f592327f9e6f594ef050fd8d5"
+  }
+}

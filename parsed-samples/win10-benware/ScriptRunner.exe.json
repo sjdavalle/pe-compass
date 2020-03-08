@@ -1,0 +1,17 @@
+{
+  "pename": "ScriptRunner.exe",
+  "petype": 267,
+  "ImageDLLImports": [
+    {
+      "name": "mscoree.dll",
+      "imports": 1,
+      "functions": [
+        "_CorExeMain"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "81336e4a6c950d8b00674a9a93b943a9",
+    "sha2": "94f0f639710c09c4d8329b8015347ef87ac1ebbf736fa325a4c1ff89eb261731"
+  }
+}

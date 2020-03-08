@@ -1,0 +1,141 @@
+{
+  "pename": "DsmUserTask.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "advapi32.dll",
+      "imports": 9,
+      "functions": [
+        "GetTraceEnableFlags",
+        "GetTraceEnableLevel",
+        "GetTraceLoggerHandle",
+        "RegCloseKey",
+        "RegGetValueW",
+        "RegOpenKeyExW",
+        "RegisterTraceGuidsW",
+        "TraceMessage",
+        "UnregisterTraceGuids"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 5,
+      "functions": [
+        "FormatMessageW",
+        "GetLastError",
+        "GetModuleHandleW",
+        "GetSystemTimeAsFileTime",
+        "LocalFree"
+      ]
+    },
+    {
+      "name": "user32.dll",
+      "imports": 1,
+      "functions": [
+        "LoadStringW"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 20,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__CxxFrameHandler3",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_vsnwprintf",
+        "_wcmdln",
+        "exit",
+        "free",
+        "memset",
+        "swscanf_s",
+        "wcschr"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-com-l1-1-0.dll",
+      "imports": 6,
+      "functions": [
+        "CLSIDFromString",
+        "CoCreateInstance",
+        "CoInitializeEx",
+        "CoTaskMemAlloc",
+        "CoTaskMemFree",
+        "CoUninitialize"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-synch-l1-2-0.dll",
+      "imports": 1,
+      "functions": [
+        "Sleep"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-processthreads-l1-1-0.dll",
+      "imports": 5,
+      "functions": [
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetStartupInfoW",
+        "TerminateProcess"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-rtlsupport-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-errorhandling-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "SetUnhandledExceptionFilter",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-profile-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "QueryPerformanceCounter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-sysinfo-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "GetTickCount"
+      ]
+    },
+    {
+      "name": "api-ms-win-devices-query-l1-1-0.dll",
+      "imports": 5,
+      "functions": [
+        "DevFindProperty",
+        "DevFreeObjectProperties",
+        "DevFreeObjects",
+        "DevGetObjectProperties",
+        "DevGetObjects"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "666a67deed12cc6c8430946f67cf5fc9",
+    "sha2": "3257026fdd0559fe3c92c7e4093af5f9d798f391d21db2c09366c099a26e21b8"
+  }
+}

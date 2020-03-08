@@ -1,0 +1,74 @@
+{
+  "pename": "TapiUnattend.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "advapi32.dll",
+      "imports": 5,
+      "functions": [
+        "RegCloseKey",
+        "RegCreateKeyExW",
+        "RegOpenKeyExW",
+        "RegQueryValueExW",
+        "RegSetValueExW"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 16,
+      "functions": [
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetLastError",
+        "GetModuleHandleW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "HeapSetInformation",
+        "QueryPerformanceCounter",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 16,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_callnewh",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "exit",
+        "free",
+        "malloc"
+      ]
+    },
+    {
+      "name": "wdscore.dll",
+      "imports": 3,
+      "functions": [
+        "ConstructPartialMsgVW",
+        "CurrentIP",
+        "WdsSetupLogMessageW"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "2fe50ac28b09962946d9b9159e1f5419",
+    "sha2": "30ef683c4a226931686aec61717066e35c41b6b3e9ff04d698718487369a826f"
+  }
+}

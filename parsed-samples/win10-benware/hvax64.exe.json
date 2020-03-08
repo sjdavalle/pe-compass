@@ -1,0 +1,17 @@
+{
+  "pename": "hvax64.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "kdstub.dll",
+      "imports": 1,
+      "functions": [
+        "KdInitializeLibrary"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "0d826d638175a45cf521c493c7c1493f",
+    "sha2": "72aab5c5d581651bc09683ebe9a575969fd252026e672e10f70edd150ee122eb"
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "pename": "fveprompt.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "advapi32.dll",
+      "imports": 4,
+      "functions": [
+        "RegCloseKey",
+        "RegCreateKeyW",
+        "RegGetValueW",
+        "RegSetValueExW"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 35,
+      "functions": [
+        "CloseHandle",
+        "FormatMessageW",
+        "FreeLibrary",
+        "GetCommandLineW",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetDriveTypeW",
+        "GetFileAttributesW",
+        "GetLastError",
+        "GetModuleFileNameW",
+        "GetModuleHandleExW",
+        "GetModuleHandleW",
+        "GetProcAddress",
+        "GetProcessHeap",
+        "GetProcessMitigationPolicy",
+        "GetStartupInfoW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "HeapAlloc",
+        "HeapFree",
+        "HeapSetInformation",
+        "LocalAlloc",
+        "LocalFree",
+        "QueryPerformanceCounter",
+        "RegisterApplicationRestart",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetErrorMode",
+        "SetLastError",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "user32.dll",
+      "imports": 12,
+      "functions": [
+        "CreateWindowExW",
+        "DefWindowProcW",
+        "DestroyWindow",
+        "FindWindowW",
+        "GetPropW",
+        "LoadStringW",
+        "PostMessageW",
+        "RegisterClassExW",
+        "RemovePropW",
+        "SendMessageW",
+        "SetPropW",
+        "SetWindowPos"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 23,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__getmainargs",
+        "__set_app_type",
+        "__setusermatherr",
+        "_acmdln",
+        "_amsg_exit",
+        "_callnewh",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_ismbblead",
+        "_purecall",
+        "_vsnwprintf",
+        "exit",
+        "free",
+        "malloc",
+        "memcpy",
+        "memset",
+        "wcscmp"
+      ]
+    },
+    {
+      "name": "comctl32.dll",
+      "imports": 0,
+      "functions": []
+    },
+    {
+      "name": "shell32.dll",
+      "imports": 5,
+      "functions": [
+        "CommandLineToArgvW",
+        "SHGetKnownFolderIDList",
+        "SHGetPathFromIDListEx",
+        "ShellExecuteExW",
+        "ShellExecuteW"
+      ]
+    },
+    {
+      "name": "bdeui.dll",
+      "imports": 5,
+      "functions": [
+        "??0BuiVolume@@QEAA@XZ",
+        "??1BuiVolume@@QEAA@XZ",
+        "?Init@BuiVolume@@QEAAJPEAG@Z",
+        "?ManagementRequiresElevation@BuiVolume@@QEBA_NXZ",
+        "BuisDetectExistingWizard"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "1b9ec98c9542ef45d511e3d003e00369",
+    "sha2": "c7db20ca716a7defb004917a8aad5baca8b4466a12bb4383129b0cb05a8ddc3d"
+  }
+}

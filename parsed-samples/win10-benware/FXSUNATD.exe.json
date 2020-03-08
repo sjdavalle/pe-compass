@@ -1,0 +1,98 @@
+{
+  "pename": "FXSUNATD.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "advapi32.dll",
+      "imports": 6,
+      "functions": [
+        "RegCloseKey",
+        "RegCreateKeyExW",
+        "RegOpenKeyExW",
+        "RegQueryValueExW",
+        "RegSetValueExW",
+        "TraceMessage"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 25,
+      "functions": [
+        "FreeLibrary",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetLastError",
+        "GetModuleHandleW",
+        "GetProcAddress",
+        "GetProcessHeap",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "GetVersionExW",
+        "HeapAlloc",
+        "HeapFree",
+        "HeapSetInformation",
+        "LoadLibraryW",
+        "OutputDebugStringW",
+        "QueryPerformanceCounter",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetLastError",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 16,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_vsnwprintf",
+        "exit",
+        "memset",
+        "wcscmp"
+      ]
+    },
+    {
+      "name": "fxsapi.dll",
+      "imports": 6,
+      "functions": [
+        "FaxClose",
+        "FaxConnectFaxServerW",
+        "FaxEnumPortsExW",
+        "FaxFreeBuffer",
+        "FaxSetExtensionDataW",
+        "FaxSetPortExW"
+      ]
+    },
+    {
+      "name": "winspool.dll",
+      "imports": 5,
+      "functions": [
+        "ClosePrinter",
+        "EnumPrintersW",
+        "GetPrinterW",
+        "OpenPrinterW",
+        "SetPrinterW"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "183fe82f1b9674fce7f5b3c6d0e6688c",
+    "sha2": "8df36e87dab3ec15a9fb96e431657bd19ba61da7e11c232c8a722008e8512c85"
+  }
+}

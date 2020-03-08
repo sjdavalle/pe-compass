@@ -1,0 +1,290 @@
+{
+  "pename": "taskhostw.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "msvcrt.dll",
+      "imports": 38,
+      "functions": [
+        "??0exception@@QEAA@AEBQEBD@Z",
+        "??0exception@@QEAA@AEBQEBDH@Z",
+        "??0exception@@QEAA@AEBV0@@Z",
+        "??1exception@@UEAA@XZ",
+        "??1type_info@@UEAA@XZ",
+        "??3@YAXPEAX@Z",
+        "?terminate@@YAXXZ",
+        "?what@exception@@UEBAPEBDXZ",
+        "_CxxThrowException",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__CxxFrameHandler3",
+        "__dllonexit",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_callnewh",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_lock",
+        "_onexit",
+        "_purecall",
+        "_unlock",
+        "_wcmdln",
+        "calloc",
+        "exit",
+        "free",
+        "malloc",
+        "memcpy",
+        "memcpy_s",
+        "memmove",
+        "memmove_s",
+        "memset",
+        "wcsstr"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-heap-l1-1-0.dll",
+      "imports": 6,
+      "functions": [
+        "GetProcessHeap",
+        "HeapAlloc",
+        "HeapDestroy",
+        "HeapFree",
+        "HeapReAlloc",
+        "HeapSize"
+      ]
+    },
+    {
+      "name": "api-ms-win-eventing-classicprovider-l1-1-0.dll",
+      "imports": 6,
+      "functions": [
+        "GetTraceEnableFlags",
+        "GetTraceEnableLevel",
+        "GetTraceLoggerHandle",
+        "RegisterTraceGuidsW",
+        "TraceMessage",
+        "UnregisterTraceGuids"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-errorhandling-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "GetLastError",
+        "SetUnhandledExceptionFilter",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-synch-l1-2-0.dll",
+      "imports": 1,
+      "functions": [
+        "Sleep"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-processthreads-l1-1-0.dll",
+      "imports": 11,
+      "functions": [
+        "CreateThread",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThread",
+        "GetCurrentThreadId",
+        "GetExitCodeThread",
+        "GetStartupInfoW",
+        "GetThreadPriority",
+        "SetProcessShutdownParameters",
+        "SetThreadPriority",
+        "TerminateProcess"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-libraryloader-l1-2-0.dll",
+      "imports": 2,
+      "functions": [
+        "GetModuleHandleW",
+        "LoadStringW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-profile-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "QueryPerformanceCounter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-sysinfo-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "GetSystemTimeAsFileTime",
+        "GetTickCount"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-rtlsupport-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind"
+      ]
+    },
+    {
+      "name": "rpcrt4.dll",
+      "imports": 10,
+      "functions": [
+        "Ndr64AsyncClientCall",
+        "NdrClientCall3",
+        "RpcAsyncCancelCall",
+        "RpcAsyncCompleteCall",
+        "RpcAsyncInitializeHandle",
+        "RpcBindingFree",
+        "RpcBindingFromStringBindingW",
+        "RpcBindingSetAuthInfoExW",
+        "RpcStringBindingComposeW",
+        "RpcStringFreeW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-com-l1-1-0.dll",
+      "imports": 7,
+      "functions": [
+        "CoCancelCall",
+        "CoCreateInstance",
+        "CoDisableCallCancellation",
+        "CoEnableCallCancellation",
+        "CoInitializeEx",
+        "CoInitializeSecurity",
+        "CoUninitialize"
+      ]
+    },
+    {
+      "name": "api-ms-win-security-base-l1-1-0.dll",
+      "imports": 22,
+      "functions": [
+        "AddAce",
+        "AllocateAndInitializeSid",
+        "CopySid",
+        "CreateWellKnownSid",
+        "FreeSid",
+        "GetAclInformation",
+        "GetLengthSid",
+        "GetSecurityDescriptorControl",
+        "GetSecurityDescriptorDacl",
+        "GetSecurityDescriptorGroup",
+        "GetSecurityDescriptorOwner",
+        "GetSecurityDescriptorSacl",
+        "GetSidLengthRequired",
+        "GetSidSubAuthority",
+        "InitializeAcl",
+        "InitializeSecurityDescriptor",
+        "InitializeSid",
+        "IsValidSid",
+        "MakeAbsoluteSD",
+        "SetSecurityDescriptorDacl",
+        "SetSecurityDescriptorGroup",
+        "SetSecurityDescriptorOwner"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-synch-l1-1-0.dll",
+      "imports": 11,
+      "functions": [
+        "AcquireSRWLockExclusive",
+        "CreateEventW",
+        "DeleteCriticalSection",
+        "EnterCriticalSection",
+        "InitializeCriticalSection",
+        "InitializeSRWLock",
+        "LeaveCriticalSection",
+        "ReleaseSRWLockExclusive",
+        "ResetEvent",
+        "SetEvent",
+        "WaitForSingleObject"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-handle-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "CloseHandle"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-debug-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "IsDebuggerPresent"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-registry-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "RegGetValueW"
+      ]
+    },
+    {
+      "name": "oleaut32.dll",
+      "imports": 0,
+      "functions": []
+    },
+    {
+      "name": "api-ms-win-core-delayload-l1-1-1.dll",
+      "imports": 1,
+      "functions": [
+        "ResolveDelayLoadedAPI"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-delayload-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "DelayLoadFailureHook"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-heap-l2-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "LocalFree"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-threadpool-legacy-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "CreateTimerQueueTimer",
+        "DeleteTimerQueueTimer"
+      ]
+    },
+    {
+      "name": "ntdll.dll",
+      "imports": 5,
+      "functions": [
+        "DbgPrintEx",
+        "EtwTraceMessage",
+        "NtSetInformationProcess",
+        "RtlIsMultiSessionSku",
+        "RtlUnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-apiquery-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "ApiSetQueryApiSetPresence"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "de1185dc5ea6e4a153af5696c88e610d",
+    "sha2": "fd58e34c18455d20c686c6c9297a5dcd7113a68b6f83f7eba260d1e32b07fec4"
+  }
+}

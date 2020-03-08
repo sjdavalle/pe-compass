@@ -1,0 +1,128 @@
+{
+  "pename": "WorkFolders.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "advapi32.dll",
+      "imports": 9,
+      "functions": [
+        "EventRegister",
+        "EventUnregister",
+        "EventWriteTransfer",
+        "GetTraceEnableFlags",
+        "GetTraceEnableLevel",
+        "GetTraceLoggerHandle",
+        "RegisterTraceGuidsW",
+        "TraceMessage",
+        "UnregisterTraceGuids"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 35,
+      "functions": [
+        "??0exception@@QEAA@AEBQEBD@Z",
+        "??0exception@@QEAA@AEBQEBDH@Z",
+        "??0exception@@QEAA@AEBV0@@Z",
+        "??1exception@@UEAA@XZ",
+        "??1type_info@@UEAA@XZ",
+        "??3@YAXPEAX@Z",
+        "?terminate@@YAXXZ",
+        "?what@exception@@UEBAPEBDXZ",
+        "_CxxThrowException",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__CxxFrameHandler3",
+        "__dllonexit",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_callnewh",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_lock",
+        "_onexit",
+        "_purecall",
+        "_unlock",
+        "_vsnwprintf",
+        "_wcmdln",
+        "_wcsicmp",
+        "exit",
+        "malloc",
+        "memcpy",
+        "memmove",
+        "memset"
+      ]
+    },
+    {
+      "name": "shell32.dll",
+      "imports": 1,
+      "functions": [
+        "ShellExecuteW"
+      ]
+    },
+    {
+      "name": "oleaut32.dll",
+      "imports": 0,
+      "functions": []
+    },
+    {
+      "name": "ntdll.dll",
+      "imports": 3,
+      "functions": [
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-com-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "CoCreateInstance",
+        "CoInitializeEx",
+        "CoUninitialize"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 12,
+      "functions": [
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetModuleHandleW",
+        "GetStartupInfoW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "QueryPerformanceCounter",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "dmenrollengine.dll",
+      "imports": 1,
+      "functions": [
+        "EnrollEngineInitialize"
+      ]
+    },
+    {
+      "name": "policymanager.dll",
+      "imports": 1,
+      "functions": [
+        "PolicyManager_GetPolicyInt"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "43412a035847649c4fb2daa6de336d86",
+    "sha2": "1d0f042818c521d5606501ebd47a048c8de07f2e9c705c4e1e0e3e39728d286f"
+  }
+}

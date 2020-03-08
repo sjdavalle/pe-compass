@@ -1,0 +1,135 @@
+{
+  "pename": "SyncAppvPublishingServer.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "kernel32.dll",
+      "imports": 33,
+      "functions": [
+        "CloseHandle",
+        "CreateMutexExW",
+        "CreateSemaphoreExW",
+        "DebugBreak",
+        "FormatMessageW",
+        "GetConsoleWindow",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetLastError",
+        "GetModuleFileNameA",
+        "GetModuleHandleExW",
+        "GetModuleHandleW",
+        "GetProcAddress",
+        "GetProcessHeap",
+        "GetStartupInfoW",
+        "GetSystemTimeAsFileTime",
+        "HeapAlloc",
+        "HeapFree",
+        "InitializeSListHead",
+        "IsDebuggerPresent",
+        "IsProcessorFeaturePresent",
+        "OpenSemaphoreW",
+        "OutputDebugStringW",
+        "QueryPerformanceCounter",
+        "ReleaseMutex",
+        "ReleaseSemaphore",
+        "SetLastError",
+        "SetUnhandledExceptionFilter",
+        "TerminateProcess",
+        "UnhandledExceptionFilter",
+        "WaitForSingleObject",
+        "WaitForSingleObjectEx"
+      ]
+    },
+    {
+      "name": "user32.dll",
+      "imports": 1,
+      "functions": [
+        "ShowWindow"
+      ]
+    },
+    {
+      "name": "api-ms-win-crt-runtime-l1-1-0.dll",
+      "imports": 4,
+      "functions": [
+        "_c_exit",
+        "_initterm",
+        "_initterm_e",
+        "_register_thread_local_exe_atexit_callback"
+      ]
+    },
+    {
+      "name": "api-ms-win-crt-string-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "memset"
+      ]
+    },
+    {
+      "name": "api-ms-win-crt-private-l1-1-0.dll",
+      "imports": 30,
+      "functions": [
+        "_CxxThrowException",
+        "__C_specific_handler",
+        "__CxxFrameHandler3",
+        "_o___p__commode",
+        "_o___std_exception_copy",
+        "_o___std_exception_destroy",
+        "_o___stdio_common_vsnprintf_s",
+        "_o___stdio_common_vswprintf",
+        "_o__cexit",
+        "_o__configthreadlocale",
+        "_o__configure_wide_argv",
+        "_o__crt_atexit",
+        "_o__errno",
+        "_o__exit",
+        "_o__get_wide_winmain_command_line",
+        "_o__initialize_onexit_table",
+        "_o__initialize_wide_environment",
+        "_o__invalid_parameter_noinfo",
+        "_o__register_onexit_function",
+        "_o__seh_filter_exe",
+        "_o__set_app_type",
+        "_o__set_fmode",
+        "_o__set_new_mode",
+        "_o__wcsicmp",
+        "_o__wtoi",
+        "_o_exit",
+        "_o_free",
+        "_o_isdigit",
+        "_o_terminate",
+        "memcpy"
+      ]
+    },
+    {
+      "name": "ntdll.dll",
+      "imports": 3,
+      "functions": [
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind"
+      ]
+    },
+    {
+      "name": "shell32.dll",
+      "imports": 1,
+      "functions": [
+        "CommandLineToArgvW"
+      ]
+    },
+    {
+      "name": "ole32.dll",
+      "imports": 4,
+      "functions": [
+        "CoCreateInstance",
+        "CoInitialize",
+        "CoSetProxyBlanket",
+        "CoUninitialize"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "9118620dd03376097e5c421e65af75d4",
+    "sha2": "0b053fcb175c4d6bd676a9c64c9168976fc988936ef7850ff3a84b2c6d77250c"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "pename": "ResetEngine.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "kernel32.dll",
+      "imports": 20,
+      "functions": [
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetLastError",
+        "GetModuleHandleW",
+        "GetProcAddress",
+        "GetStartupInfoW",
+        "GetSystemTimeAsFileTime",
+        "GetSystemWindowsDirectoryW",
+        "GetTickCount",
+        "LoadLibraryExW",
+        "LocalFree",
+        "QueryPerformanceCounter",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 18,
+      "functions": [
+        "??1type_info@@UEAA@XZ",
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_wcmdln",
+        "_wcsicmp",
+        "exit",
+        "free",
+        "memset"
+      ]
+    },
+    {
+      "name": "shell32.dll",
+      "imports": 1,
+      "functions": [
+        "CommandLineToArgvW"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "654ba245ba8ea4b3524ca26e60b3060a",
+    "sha2": "8542e009d7d70f552ccedd31490819c75004fd8682395bdcfacb2192a82ae1eb"
+  }
+}

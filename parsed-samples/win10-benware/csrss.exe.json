@@ -1,0 +1,38 @@
+{
+  "pename": "csrss.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "ntdll.dll",
+      "imports": 14,
+      "functions": [
+        "NtSetInformationProcess",
+        "NtTerminateProcess",
+        "NtTerminateThread",
+        "RtlAllocateHeap",
+        "RtlCaptureContext",
+        "RtlFreeAnsiString",
+        "RtlLookupFunctionEntry",
+        "RtlNormalizeProcessParams",
+        "RtlSetHeapInformation",
+        "RtlSetUnhandledExceptionFilter",
+        "RtlUnhandledExceptionFilter",
+        "RtlUnicodeStringToAnsiString",
+        "RtlVirtualUnwind",
+        "isspace"
+      ]
+    },
+    {
+      "name": "csrsrv.dll",
+      "imports": 2,
+      "functions": [
+        "CsrServerInitialization",
+        "CsrUnhandledExceptionFilter"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "23019322ffecb179746210be52d6de60",
+    "sha2": "f2c7d894abe8ac0b4c2a597caa6b3efe7ad2bdb4226845798d954c5ab9c9bf15"
+  }
+}

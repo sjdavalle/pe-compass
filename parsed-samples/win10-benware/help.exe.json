@@ -1,0 +1,68 @@
+{
+  "pename": "help.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "kernel32.dll",
+      "imports": 25,
+      "functions": [
+        "FormatMessageW",
+        "GetConsoleMode",
+        "GetConsoleOutputCP",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetFileType",
+        "GetModuleHandleW",
+        "GetStdHandle",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "HeapSetInformation",
+        "LocalFree",
+        "QueryPerformanceCounter",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetThreadUILanguage",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter",
+        "WideCharToMultiByte",
+        "WriteConsoleW",
+        "WriteFile"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 21,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_ultow",
+        "_wcsnicmp",
+        "_wsystem",
+        "exit",
+        "free",
+        "malloc",
+        "setlocale",
+        "wcscat_s",
+        "wcscpy_s"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "80e14a673a0d00e6850e2d60fa4f6e7b",
+    "sha2": "1c89739c752705bf6d2b1173dceed6306a4b571507f25736568442cb63e9babe"
+  }
+}

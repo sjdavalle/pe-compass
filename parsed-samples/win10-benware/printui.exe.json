@@ -1,0 +1,96 @@
+{
+  "pename": "printui.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "advapi32.dll",
+      "imports": 7,
+      "functions": [
+        "RegCloseKey",
+        "RegCreateKeyExW",
+        "RegDeleteKeyExW",
+        "RegDeleteValueW",
+        "RegOpenKeyExW",
+        "RegQueryValueExW",
+        "RegSetValueExW"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 18,
+      "functions": [
+        "FreeLibrary",
+        "GetCommandLineW",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetLastError",
+        "GetModuleHandleW",
+        "GetProcAddress",
+        "GetStartupInfoW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "HeapSetInformation",
+        "LoadLibraryW",
+        "QueryPerformanceCounter",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "gdi32.dll",
+      "imports": 1,
+      "functions": [
+        "GetStockObject"
+      ]
+    },
+    {
+      "name": "user32.dll",
+      "imports": 5,
+      "functions": [
+        "CreateWindowExW",
+        "DefWindowProcW",
+        "DestroyWindow",
+        "LoadCursorW",
+        "RegisterClassW"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 16,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_wcmdln",
+        "exit",
+        "iswspace",
+        "memset"
+      ]
+    },
+    {
+      "name": "ntdll.dll",
+      "imports": 3,
+      "functions": [
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "4126afe6096da99b479c49a0a38a931f",
+    "sha2": "895d3638847b53f1f669ea1a04d53ef56859ae389872e0069688c22d57944217"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "pename": "appidtel.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "msvcrt.dll",
+      "imports": 33,
+      "functions": [
+        "??0exception@@QEAA@AEBQEBD@Z",
+        "??0exception@@QEAA@AEBQEBDH@Z",
+        "??0exception@@QEAA@AEBV0@@Z",
+        "??1exception@@UEAA@XZ",
+        "??1type_info@@UEAA@XZ",
+        "??3@YAXPEAX@Z",
+        "?terminate@@YAXXZ",
+        "?what@exception@@UEBAPEBDXZ",
+        "_CxxThrowException",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__CxxFrameHandler3",
+        "__dllonexit",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_callnewh",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_lock",
+        "_onexit",
+        "_purecall",
+        "_unlock",
+        "_wcsicmp",
+        "_wtoi64",
+        "exit",
+        "malloc",
+        "memcpy",
+        "memmove"
+      ]
+    },
+    {
+      "name": "ntdll.dll",
+      "imports": 4,
+      "functions": [
+        "NtQuerySystemTime",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind"
+      ]
+    },
+    {
+      "name": "advapi32.dll",
+      "imports": 9,
+      "functions": [
+        "ChangeServiceConfigW",
+        "CloseServiceHandle",
+        "ControlService",
+        "OpenSCManagerW",
+        "OpenServiceW",
+        "RegCloseKey",
+        "RegCreateKeyW",
+        "RegSetValueExW",
+        "StartServiceW"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 12,
+      "functions": [
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetLastError",
+        "GetModuleHandleW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "QueryPerformanceCounter",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "a72b839ade0f1a3e2ab66882098c054c",
+    "sha2": "7a57bb7ccff38063c16e7b8ec73c6f059fff20ea9a4f5eef183d48ff37afe16a"
+  }
+}

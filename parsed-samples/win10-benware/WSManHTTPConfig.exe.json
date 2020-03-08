@@ -1,0 +1,192 @@
+{
+  "pename": "WSManHTTPConfig.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "msvcrt.dll",
+      "imports": 32,
+      "functions": [
+        "??0exception@@QEAA@AEBQEBD@Z",
+        "??0exception@@QEAA@AEBQEBDH@Z",
+        "??0exception@@QEAA@AEBV0@@Z",
+        "??1exception@@UEAA@XZ",
+        "??1type_info@@UEAA@XZ",
+        "?terminate@@YAXXZ",
+        "?what@exception@@UEBAPEBDXZ",
+        "_CxxThrowException",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__CxxFrameHandler3",
+        "__dllonexit",
+        "__iob_func",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_lock",
+        "_onexit",
+        "_purecall",
+        "_unlock",
+        "_wcsicmp",
+        "exit",
+        "fwprintf",
+        "memcpy",
+        "memmove",
+        "memset"
+      ]
+    },
+    {
+      "name": "api-ms-win-eventing-classicprovider-l1-1-0.dll",
+      "imports": 5,
+      "functions": [
+        "GetTraceEnableFlags",
+        "GetTraceEnableLevel",
+        "GetTraceLoggerHandle",
+        "RegisterTraceGuidsW",
+        "TraceMessage"
+      ]
+    },
+    {
+      "name": "oleaut32.dll",
+      "imports": 0,
+      "functions": []
+    },
+    {
+      "name": "api-ms-win-core-errorhandling-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "GetLastError",
+        "SetUnhandledExceptionFilter",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-com-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "CoCreateInstance",
+        "CoInitializeEx",
+        "CoUninitialize"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-sysinfo-l1-2-0.dll",
+      "imports": 1,
+      "functions": [
+        "VerSetConditionMask"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-sysinfo-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "GetVersionExW"
+      ]
+    },
+    {
+      "name": "api-ms-win-service-management-l1-1-0.dll",
+      "imports": 4,
+      "functions": [
+        "CloseServiceHandle",
+        "OpenSCManagerW",
+        "OpenServiceW",
+        "StartServiceW"
+      ]
+    },
+    {
+      "name": "api-ms-win-service-management-l2-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "ChangeServiceConfig2W",
+        "QueryServiceConfigW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-heap-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "HeapSetInformation"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-synch-l1-2-0.dll",
+      "imports": 1,
+      "functions": [
+        "Sleep"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-libraryloader-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "GetModuleHandleW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-profile-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "QueryPerformanceCounter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-processthreads-l1-1-0.dll",
+      "imports": 4,
+      "functions": [
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "TerminateProcess"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-rtlsupport-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-kernel32-legacy-l1-1-1.dll",
+      "imports": 1,
+      "functions": [
+        "VerifyVersionInfoW"
+      ]
+    },
+    {
+      "name": "wsmsvc.dll",
+      "imports": 16,
+      "functions": [
+        "??0?$AutoDeleteVector@E@@QEAA@XZ",
+        "??0CErrorContext@@QEAA@_N@Z",
+        "??0OnHTTPInitialize@@QEAA@XZ",
+        "??1?$AutoDeleteVector@E@@QEAA@XZ",
+        "??1CErrorContext@@UEAA@XZ",
+        "??1CWSManCriticalSection@@QEAA@XZ",
+        "??1OnHTTPInitialize@@QEAA@XZ",
+        "??4?$AutoDeleteVector@E@@QEAAAEAV0@PEAE@Z",
+        "?Alloc@WSManMemory@@SAPEAX_KHW4_NitsFaultMode@@@Z",
+        "?Free@WSManMemory@@SAXPEAXH@Z",
+        "?GetErrorCode@CErrorContext@@UEBAKXZ",
+        "HandleMigration",
+        "MoveSettingsToMigrationKey",
+        "RemovePluginXmlNewAttrForThresholdOrGreater",
+        "UninstallMigration",
+        "WSManError"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "175deb18d8f6e41f4621f7725376f214",
+    "sha2": "52125d49363feb64c45b9a78bc164f26e6ae80a1ff29e7c41903f884877165d6"
+  }
+}

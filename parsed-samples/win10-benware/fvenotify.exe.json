@@ -1,0 +1,192 @@
+{
+  "pename": "fvenotify.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "advapi32.dll",
+      "imports": 8,
+      "functions": [
+        "AdjustTokenPrivileges",
+        "AllocateAndInitializeSid",
+        "CheckTokenMembership",
+        "FreeSid",
+        "InitiateShutdownW",
+        "LookupPrivilegeValueW",
+        "OpenProcessToken",
+        "RegGetValueW"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 35,
+      "functions": [
+        "CloseHandle",
+        "CreateFileW",
+        "CreateMutexW",
+        "FormatMessageW",
+        "FreeLibrary",
+        "GetCommandLineW",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetLastError",
+        "GetModuleFileNameW",
+        "GetModuleHandleExW",
+        "GetModuleHandleW",
+        "GetProcAddress",
+        "GetProcessHeap",
+        "GetProcessMitigationPolicy",
+        "GetStartupInfoW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "HeapAlloc",
+        "HeapFree",
+        "HeapSetInformation",
+        "LoadLibraryW",
+        "LocalAlloc",
+        "LocalFree",
+        "QueryPerformanceCounter",
+        "RegisterApplicationRestart",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetLastError",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "gdi32.dll",
+      "imports": 6,
+      "functions": [
+        "BitBlt",
+        "CreateCompatibleDC",
+        "DeleteDC",
+        "DeleteObject",
+        "GetObjectW",
+        "SelectObject"
+      ]
+    },
+    {
+      "name": "user32.dll",
+      "imports": 30,
+      "functions": [
+        "CreateIconIndirect",
+        "CreateWindowExW",
+        "DefWindowProcW",
+        "DestroyIcon",
+        "DestroyWindow",
+        "DispatchMessageW",
+        "DrawIconEx",
+        "GetCursorPos",
+        "GetIconInfo",
+        "GetMessageW",
+        "GetSubMenu",
+        "GetSystemMetrics",
+        "GetWindowLongPtrW",
+        "LoadIconW",
+        "LoadImageW",
+        "LoadMenuW",
+        "LoadStringW",
+        "MoveWindow",
+        "PostMessageW",
+        "PostQuitMessage",
+        "RegisterClassExW",
+        "RegisterDeviceNotificationW",
+        "RegisterWindowMessageW",
+        "SendMessageW",
+        "SetForegroundWindow",
+        "SetWindowLongPtrW",
+        "ShowWindow",
+        "TrackPopupMenu",
+        "TranslateMessage",
+        "UnregisterDeviceNotification"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 25,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__CxxFrameHandler3",
+        "__getmainargs",
+        "__set_app_type",
+        "__setusermatherr",
+        "_acmdln",
+        "_amsg_exit",
+        "_callnewh",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_ismbblead",
+        "_vsnwprintf",
+        "exit",
+        "free",
+        "malloc",
+        "memcpy",
+        "memset",
+        "towupper",
+        "wcscmp",
+        "wcstol"
+      ]
+    },
+    {
+      "name": "comctl32.dll",
+      "imports": 0,
+      "functions": []
+    },
+    {
+      "name": "shell32.dll",
+      "imports": 4,
+      "functions": [
+        "CommandLineToArgvW",
+        "ShellExecuteW",
+        "Shell_NotifyIconGetRect",
+        "Shell_NotifyIconW"
+      ]
+    },
+    {
+      "name": "bdeui.dll",
+      "imports": 18,
+      "functions": [
+        "??0BuiVolume@@QEAA@_N@Z",
+        "??1BuiVolume@@QEAA@XZ",
+        "?CanBeResumed@BuiVolume@@QEBA_NXZ",
+        "?DeleteVolumeList@BuiVolume@@SAXPEAPEAU_BuiVolumeNode@@@Z",
+        "?GetAllVolumes@BuiVolume@@SAJPEAPEAU_BuiVolumeNode@@@Z",
+        "?GetConvertedPercent@BuiVolume@@QEBANXZ",
+        "?ImplicitPauseConversion@BuiVolume@@QEAAJXZ",
+        "?Init@BuiVolume@@QEAAJPEAG@Z",
+        "?IsFveNotifyNecessary@BuiVolume@@QEBA_NXZ",
+        "?ManagementRequiresElevation@BuiVolume@@QEBA_NXZ",
+        "?RefreshStatus@BuiVolume@@QEAAJ_N@Z",
+        "?ResumeConversion@BuiVolume@@QEAAJXZ",
+        "?ResumeStatusRefreshing@BuiVolume@@QEAAXXZ",
+        "?SetProxyObject@BuiVolume@@QEAAXPEAUIDispatch@@@Z",
+        "?SuspendStatusRefreshing@BuiVolume@@QEAAXXZ",
+        "BuisCreateElevatedProxyObject",
+        "BuisCreateProxyObject",
+        "BuisIsHardwareReadyForConversion"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-com-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "CoCreateInstance",
+        "CoInitializeEx",
+        "CoUninitialize"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "d7b50b5843efd63dbaae341b8e70856d",
+    "sha2": "aa3cc04a5a3c0e986e54d50eb73be618780a8bbbcf2cf650a7838b347b6e140f"
+  }
+}

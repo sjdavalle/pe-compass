@@ -1,0 +1,59 @@
+{
+  "pename": "write.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "shell32.dll",
+      "imports": 1,
+      "functions": [
+        "ShellExecuteW"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 16,
+      "functions": [
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetModuleHandleW",
+        "GetStartupInfoW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "HeapSetInformation",
+        "QueryPerformanceCounter",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 14,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_wcmdln",
+        "exit"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "1d27f61cc5d659247d2e0c111c5386de",
+    "sha2": "ee25f7a64b299968be5109c6ab8d692cebe12ff7bbafebf53918787c602f104c"
+  }
+}

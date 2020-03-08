@@ -1,0 +1,84 @@
+{
+  "pename": "BitLockerWizard.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "kernel32.dll",
+      "imports": 19,
+      "functions": [
+        "GetCommandLineW",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetLastError",
+        "GetModuleHandleW",
+        "GetProcessHeap",
+        "GetStartupInfoW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "HeapSetInformation",
+        "QueryPerformanceCounter",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 19,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__getmainargs",
+        "__iob_func",
+        "__set_app_type",
+        "__setusermatherr",
+        "_acmdln",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_ismbblead",
+        "exit",
+        "fwprintf",
+        "memset",
+        "towupper"
+      ]
+    },
+    {
+      "name": "fvewiz.dll",
+      "imports": 2,
+      "functions": [
+        "FveuiWizard",
+        "FveuipClearFveWizOnStartup"
+      ]
+    },
+    {
+      "name": "ole32.dll",
+      "imports": 2,
+      "functions": [
+        "CoInitialize",
+        "CoUninitialize"
+      ]
+    },
+    {
+      "name": "shell32.dll",
+      "imports": 2,
+      "functions": [
+        "CommandLineToArgvW",
+        "ShellExecuteW"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "6b919b72e58391b39a09ee388fa89bbb",
+    "sha2": "55e42024de2eb71766fec591c9f1f4827b367c958fa9f28aa4a8b8d128fe1faf"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "pename": "regedt32.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "kernel32.dll",
+      "imports": 21,
+      "functions": [
+        "ExitProcess",
+        "GetCommandLineA",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetModuleHandleA",
+        "GetModuleHandleW",
+        "GetStartupInfoA",
+        "GetStartupInfoW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "GetWindowsDirectoryA",
+        "HeapSetInformation",
+        "QueryPerformanceCounter",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 15,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__getmainargs",
+        "__set_app_type",
+        "__setusermatherr",
+        "_acmdln",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_ismbblead",
+        "exit"
+      ]
+    },
+    {
+      "name": "shell32.dll",
+      "imports": 1,
+      "functions": [
+        "ShellExecuteA"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-shlwapi-legacy-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "PathAppendA"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "a7f7948eaa6287a29805ffd997e4016f",
+    "sha2": "34de90ad6602150328e106e4e8279e2f3399a729bff54c32fad60b453bc8c718"
+  }
+}

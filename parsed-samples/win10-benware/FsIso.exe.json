@@ -1,0 +1,162 @@
+{
+  "pename": "FsIso.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "msvcrt.dll",
+      "imports": 22,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__CxxFrameHandler3",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_callnewh",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_vsnprintf_s",
+        "calloc",
+        "exit",
+        "free",
+        "malloc",
+        "memcmp",
+        "memcpy",
+        "memset"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-heap-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "GetProcessHeap",
+        "HeapAlloc",
+        "HeapFree"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-synch-l1-1-0.dll",
+      "imports": 5,
+      "functions": [
+        "AcquireSRWLockExclusive",
+        "CreateEventW",
+        "ReleaseSRWLockExclusive",
+        "SetEvent",
+        "WaitForSingleObject"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-handle-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "CloseHandle"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-errorhandling-l1-1-0.dll",
+      "imports": 4,
+      "functions": [
+        "GetLastError",
+        "RaiseException",
+        "SetUnhandledExceptionFilter",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "api-ms-win-eventing-provider-l1-1-0.dll",
+      "imports": 4,
+      "functions": [
+        "EventRegister",
+        "EventSetInformation",
+        "EventUnregister",
+        "EventWriteTransfer"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-memory-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "MapViewOfFile",
+        "UnmapViewOfFile"
+      ]
+    },
+    {
+      "name": "rpcrt4.dll",
+      "imports": 7,
+      "functions": [
+        "NdrServerCall2",
+        "NdrServerCallAll",
+        "RpcMgmtStopServerListening",
+        "RpcServerListen",
+        "RpcServerRegisterIf",
+        "RpcServerUnregisterIf",
+        "RpcServerUseProtseqEpW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-synch-l1-2-0.dll",
+      "imports": 1,
+      "functions": [
+        "Sleep"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-libraryloader-l1-2-0.dll",
+      "imports": 1,
+      "functions": [
+        "GetModuleHandleW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-profile-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "QueryPerformanceCounter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-processthreads-l1-1-0.dll",
+      "imports": 4,
+      "functions": [
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "TerminateProcess"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-sysinfo-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "GetSystemTimeAsFileTime",
+        "GetTickCount"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-rtlsupport-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind"
+      ]
+    },
+    {
+      "name": "iumsdk.dll",
+      "imports": 2,
+      "functions": [
+        "CreateSecureSection",
+        "OpenSecureSection"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "6c4614c8f778f5c3878cff88bdd55045",
+    "sha2": "08f241a2cf201f06662503258cef904834bf508f5fe7879e6dd9d567c77571b7"
+  }
+}

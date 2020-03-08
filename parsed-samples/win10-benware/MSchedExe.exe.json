@@ -1,0 +1,66 @@
+{
+  "pename": "MSchedExe.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "kernel32.dll",
+      "imports": 13,
+      "functions": [
+        "CompareStringOrdinal",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetModuleHandleW",
+        "GetStartupInfoW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "QueryPerformanceCounter",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 14,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_wcmdln",
+        "exit"
+      ]
+    },
+    {
+      "name": "ntdll.dll",
+      "imports": 3,
+      "functions": [
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind"
+      ]
+    },
+    {
+      "name": "maintenanceui.dll",
+      "imports": 2,
+      "functions": [
+        "StartMaintenance",
+        "StopMaintenance"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "08e812abe592d0c4b3d899225bce5fb6",
+    "sha2": "e67cf2a0938effaccbc2564659c3e39a9fc2b43a15f6f7793963c58f2f19e6ce"
+  }
+}

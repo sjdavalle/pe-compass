@@ -1,0 +1,577 @@
+{
+  "pename": "vds.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "user32.dll",
+      "imports": 10,
+      "functions": [
+        "CharNextW",
+        "DefWindowProcW",
+        "DispatchMessageW",
+        "GetMessageW",
+        "LoadStringW",
+        "MessageBoxW",
+        "PeekMessageW",
+        "PostThreadMessageW",
+        "RegisterDeviceNotificationW",
+        "UnregisterDeviceNotification"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 42,
+      "functions": [
+        "??1type_info@@UEAA@XZ",
+        "?_set_se_translator@@YAP6AXIPEAU_EXCEPTION_POINTERS@@@ZP6AXI0@Z@Z",
+        "?terminate@@YAXXZ",
+        "_CxxThrowException",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__CxxFrameHandler3",
+        "__dllonexit",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_callnewh",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_lock",
+        "_ltow",
+        "_onexit",
+        "_purecall",
+        "_unlock",
+        "_vsnwprintf",
+        "_wcmdln",
+        "_wcsicmp",
+        "_wcsnicmp",
+        "_wtol",
+        "exit",
+        "free",
+        "malloc",
+        "memcmp",
+        "memcpy",
+        "memset",
+        "rand",
+        "srand",
+        "swscanf_s",
+        "time",
+        "towupper",
+        "wcscpy_s",
+        "wcsncmp",
+        "wcsstr"
+      ]
+    },
+    {
+      "name": "atl.dll",
+      "imports": 0,
+      "functions": []
+    },
+    {
+      "name": "ntdll.dll",
+      "imports": 12,
+      "functions": [
+        "NtQueryVolumeInformationFile",
+        "RtlAcquireResourceExclusive",
+        "RtlAcquireResourceShared",
+        "RtlAdjustPrivilege",
+        "RtlCaptureContext",
+        "RtlConvertExclusiveToShared",
+        "RtlConvertSharedToExclusive",
+        "RtlDeleteResource",
+        "RtlInitializeResource",
+        "RtlLookupFunctionEntry",
+        "RtlReleaseResource",
+        "RtlVirtualUnwind"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-debug-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "OutputDebugStringW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-errorhandling-l1-1-0.dll",
+      "imports": 4,
+      "functions": [
+        "GetLastError",
+        "SetLastError",
+        "SetUnhandledExceptionFilter",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-file-l1-1-0.dll",
+      "imports": 14,
+      "functions": [
+        "CreateFileW",
+        "DefineDosDeviceW",
+        "DeleteVolumeMountPointW",
+        "FindFirstVolumeW",
+        "FindNextVolumeW",
+        "FindVolumeClose",
+        "GetDriveTypeW",
+        "GetFileAttributesW",
+        "GetVolumePathNameW",
+        "QueryDosDeviceW",
+        "ReadFile",
+        "RemoveDirectoryW",
+        "SetFilePointerEx",
+        "WriteFile"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-file-l1-2-0.dll",
+      "imports": 2,
+      "functions": [
+        "GetVolumeNameForVolumeMountPointW",
+        "GetVolumePathNamesForVolumeNameW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-handle-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "CloseHandle"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-heap-l1-1-0.dll",
+      "imports": 4,
+      "functions": [
+        "GetProcessHeap",
+        "HeapAlloc",
+        "HeapFree",
+        "HeapSetInformation"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-io-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "DeviceIoControl"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-libraryloader-l1-2-0.dll",
+      "imports": 5,
+      "functions": [
+        "FreeLibrary",
+        "GetModuleFileNameW",
+        "GetModuleHandleW",
+        "GetProcAddress",
+        "LoadLibraryExW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-libraryloader-l1-2-1.dll",
+      "imports": 1,
+      "functions": [
+        "LoadLibraryW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-registry-l1-1-0.dll",
+      "imports": 8,
+      "functions": [
+        "RegCloseKey",
+        "RegCreateKeyExW",
+        "RegDeleteValueW",
+        "RegEnumKeyExW",
+        "RegGetValueW",
+        "RegOpenKeyExW",
+        "RegQueryValueExW",
+        "RegSetValueExW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-processenvironment-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "GetCommandLineW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-processthreads-l1-1-0.dll",
+      "imports": 11,
+      "functions": [
+        "CreateThread",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThread",
+        "GetCurrentThreadId",
+        "GetStartupInfoW",
+        "OpenProcessToken",
+        "OpenThreadToken",
+        "ResumeThread",
+        "SetThreadToken",
+        "TerminateProcess"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-processthreads-l1-1-1.dll",
+      "imports": 1,
+      "functions": [
+        "SetProcessMitigationPolicy"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-profile-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "QueryPerformanceCounter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-string-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "WideCharToMultiByte"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-synch-l1-1-0.dll",
+      "imports": 8,
+      "functions": [
+        "CreateEventW",
+        "DeleteCriticalSection",
+        "EnterCriticalSection",
+        "InitializeCriticalSection",
+        "LeaveCriticalSection",
+        "ReleaseSemaphore",
+        "SetEvent",
+        "WaitForSingleObject"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-synch-l1-2-1.dll",
+      "imports": 2,
+      "functions": [
+        "CreateSemaphoreW",
+        "WaitForMultipleObjects"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-synch-l1-2-0.dll",
+      "imports": 1,
+      "functions": [
+        "Sleep"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-sysinfo-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "GetSystemDirectoryW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount"
+      ]
+    },
+    {
+      "name": "api-ms-win-security-base-l1-1-0.dll",
+      "imports": 9,
+      "functions": [
+        "AddAccessAllowedAce",
+        "AdjustTokenPrivileges",
+        "DuplicateTokenEx",
+        "FreeSid",
+        "GetLengthSid",
+        "GetSecurityDescriptorLength",
+        "IsValidSid",
+        "MakeAbsoluteSD",
+        "MakeSelfRelativeSD"
+      ]
+    },
+    {
+      "name": "api-ms-win-service-core-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "SetServiceStatus",
+        "StartServiceCtrlDispatcherW"
+      ]
+    },
+    {
+      "name": "api-ms-win-service-winsvc-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "ControlService",
+        "RegisterServiceCtrlHandlerW"
+      ]
+    },
+    {
+      "name": "api-ms-win-service-management-l1-1-0.dll",
+      "imports": 5,
+      "functions": [
+        "CloseServiceHandle",
+        "CreateServiceW",
+        "DeleteService",
+        "OpenSCManagerW",
+        "OpenServiceW"
+      ]
+    },
+    {
+      "name": "api-ms-win-service-management-l2-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "ChangeServiceConfig2W",
+        "QueryServiceObjectSecurity",
+        "SetServiceObjectSecurity"
+      ]
+    },
+    {
+      "name": "setupapi.dll",
+      "imports": 11,
+      "functions": [
+        "CM_Get_DevNode_Status",
+        "CM_Get_Parent",
+        "CM_Query_And_Remove_SubTreeW",
+        "CM_Reenumerate_DevNode_Ex",
+        "SetupDiCallClassInstaller",
+        "SetupDiDestroyDeviceInfoList",
+        "SetupDiEnumDeviceInfo",
+        "SetupDiEnumDeviceInterfaces",
+        "SetupDiGetClassDevsW",
+        "SetupDiGetCustomDevicePropertyW",
+        "SetupDiGetDeviceInterfaceDetailW"
+      ]
+    },
+    {
+      "name": "osuninst.dll",
+      "imports": 1,
+      "functions": [
+        "IsUninstallImageValid"
+      ]
+    },
+    {
+      "name": "vdsutil.dll",
+      "imports": 144,
+      "functions": [
+        "??0CGlobalResource@@QEAA@XZ",
+        "??0CRtlList@@QEAA@P6AXPEAVCRtlEntry@@@Z@Z",
+        "??0CRtlMap@@QEAA@KP6AXPEAVCRtlEntry@@@Z1@Z",
+        "??0CVdsAsyncObjectBase@@QEAA@XZ",
+        "??0CVdsCallTracer@@QEAA@KPEBD@Z",
+        "??0CVdsWmiVariantObjectArrayEnum@@QEAA@XZ",
+        "??1CGlobalResource@@QEAA@XZ",
+        "??1CRtlList@@QEAA@XZ",
+        "??1CRtlMap@@UEAA@XZ",
+        "??1CVdsAsyncObjectBase@@QEAA@XZ",
+        "??1CVdsCallTracer@@QEAA@XZ",
+        "??1CVdsWmiVariantObjectArrayEnum@@QEAA@XZ",
+        "?Append@CPrvEnumObject@@QEAAJPEAUIUnknown@@@Z",
+        "?Attach@CVdsWmiVariantObjectArrayEnum@@QEAAJPEAUtagVARIANT@@@Z",
+        "?Begin@CRtlList@@QEAA?AVCRtlListIter@@XZ",
+        "?Begin@CRtlMap@@QEAA?AVCRtlMapIter@@XZ",
+        "?Clear@CPrvEnumObject@@QEAAXXZ",
+        "?Clone@CPrvEnumObject@@UEAAJPEAPEAUIEnumVdsObject@@@Z",
+        "?Detach@CVdsWmiVariantObjectArrayEnum@@QEAAJXZ",
+        "?End@CRtlList@@QEAA?AVCRtlListIter@@XZ",
+        "?Find@CRtlMap@@QEAAHAEAVCRtlEntry@@PEAV2@@Z",
+        "?FindPtr@CRtlMap@@QEAAHAEAVCRtlEntry@@PEAPEAV2@@Z",
+        "?GetEntry@CRtlListIter@@QEAAPEAVCRtlEntry@@XZ",
+        "?GetEntryPointer@CRtlListIter@@QEAAPEAXXZ",
+        "?Initialize@CGlobalResource@@QEAAJXZ",
+        "?Initialize@CVdsAsyncObjectBase@@SAKXZ",
+        "?Initialize@CVdsPnPNotificationBase@@QEAAKXZ",
+        "?Insert@CRtlMap@@QEAAHAEAVCRtlEntry@@0@Z",
+        "?InsertHeadPointer@CRtlList@@QEAAHPEAX@Z",
+        "?InsertTailPointer@CRtlList@@QEAAHPEAX@Z",
+        "?InsertUnique@CRtlMap@@QEAAHAEAVCRtlEntry@@0@Z",
+        "?Next@CPrvEnumObject@@UEAAJKPEAPEAUIUnknown@@PEAK@Z",
+        "?Next@CRtlListIter@@QEAAAEAV1@XZ",
+        "?Next@CRtlMapIter@@QEAAAEAV1@XZ",
+        "?Next@CVdsWmiVariantObjectArrayEnum@@QEAAJPEAPEAUIWbemClassObject@@@Z",
+        "?Prev@CRtlListIter@@QEAAAEAV1@XZ",
+        "?QueryStatus@CVdsAsyncObjectBase@@UEAAJPEAJPEAK@Z",
+        "?RegisterHandle@CVdsPnPNotificationBase@@QEAAKPEAXPEAPEAX@Z",
+        "?Remove@CRtlList@@QEAAXAEAVCRtlListIter@@@Z",
+        "?Remove@CRtlMap@@QEAAHAEAVCRtlEntry@@@Z",
+        "?RemoveAll@CRtlList@@QEAAXXZ",
+        "?RemoveAll@CRtlMap@@QEAAXH@Z",
+        "?Reset@CPrvEnumObject@@UEAAJXZ",
+        "?SetCompletionStatus@CVdsAsyncObjectBase@@QEAAXJK@Z",
+        "?Signal@CVdsAsyncObjectBase@@QEAAXXZ",
+        "?Skip@CPrvEnumObject@@UEAAJK@Z",
+        "?Uninitialize@CVdsAsyncObjectBase@@SAXXZ",
+        "?Uninitialize@CVdsPnPNotificationBase@@QEAAXXZ",
+        "?UnregisterHandle@CVdsPnPNotificationBase@@QEAAXPEAX@Z",
+        "?WaitImpl@CVdsAsyncObjectBase@@QEAAJPEAJ@Z",
+        "AcquireRundownProtection",
+        "AddEventSource",
+        "AllocateAndGetVolumePathName",
+        "AssignTempVolumeName",
+        "CoFreeStringArray",
+        "CreateDeviceInfoSet",
+        "DeleteBcdObjects",
+        "DeleteNetworkShare",
+        "GarbageCollectDriveLetters",
+        "GetBootFromDiskNumber",
+        "GetDeviceAndMediaType",
+        "GetDeviceId",
+        "GetDeviceLocationEx",
+        "GetDeviceManufacturerInfo",
+        "GetDeviceName",
+        "GetDeviceNumber",
+        "GetDeviceRegistryPropertyByInfo",
+        "GetDeviceRegistryPropertyByInst",
+        "GetDiskIdentifiers",
+        "GetDiskLayout",
+        "GetDiskOfflineReason",
+        "GetDiskRedundancyCount",
+        "GetFMIFSEnableCompressionRoutine",
+        "GetFMIFSFormatEx2Routine",
+        "GetFMIFSGetDefaultFilesystemRoutine",
+        "GetFileSystemRecognitionName",
+        "GetInterfaceDetailData",
+        "GetMediaGeometryEx",
+        "GetPartitionInformation",
+        "GetStorageAccessAlignmentProperty",
+        "GetVolumeDiskExtentInfo",
+        "GetVolumeGuidPathnames",
+        "GetVolumeName",
+        "GetVolumeUniqueId",
+        "GuidToString",
+        "InitializeRundownProtection",
+        "InitializeSecurityDescriptorHelper",
+        "InvalidateDiskCache",
+        "IsClientSKU",
+        "IsDiskClustered",
+        "IsDiskCurrentStateReadOnly",
+        "IsDiskReadOnly",
+        "IsDriveLetter",
+        "IsEfiFirmware",
+        "IsNoAutoMount",
+        "IsRunningOnAMD64",
+        "IsVdsLoggingEnabled",
+        "IsWinPE",
+        "LockDismountVolume",
+        "LockVolume",
+        "LogError",
+        "LogInfo",
+        "MountVolume",
+        "OpenDevice",
+        "ReleaseRundownProtection",
+        "RemoveEventSource",
+        "RemoveTempVolumeName",
+        "StartReferenceHistory",
+        "StopReferenceHistory",
+        "UnInitializeGlobalResouce",
+        "VdsAllocateEmptyString",
+        "VdsAllocateString",
+        "VdsDisableCOMFatalExceptionHandling",
+        "VdsDoesDiskHaveArcPath",
+        "VdsHeapAlloc",
+        "VdsHeapFree",
+        "VdsInitializeCriticalSection",
+        "VdsIscsiCacheSessionDevices",
+        "VdsIscsiCheckEqualIpAddress",
+        "VdsIscsiGetIpAddressFromInstance",
+        "VdsIscsiIpAddressToIpsecId",
+        "VdsIscsiIpAddressToString",
+        "VdsIscsiIpsecIdToIpAddress",
+        "VdsTrace",
+        "VdsTraceEx",
+        "VdsTraceExW",
+        "VdsTraceW",
+        "VdsWmiCallMethod",
+        "VdsWmiConnectToNamespace",
+        "VdsWmiCopyFromVariantByteArray",
+        "VdsWmiCreateClassInstance",
+        "VdsWmiCreateVariantArray",
+        "VdsWmiFindInstanceOfClass",
+        "VdsWmiGetByteFromInstance",
+        "VdsWmiGetMethodArgumentObject",
+        "VdsWmiGetObjectFromInstance",
+        "VdsWmiGetObjectInVariantObjectArray",
+        "VdsWmiGetUlongFromInstance",
+        "VdsWmiGetUlonglongFromInstance",
+        "VdsWmiSetObjectInInstance",
+        "VdsWmiSetUlongInInstance",
+        "VdsWmiSetUlonglongInInstance",
+        "WaitForRundownProtectionRelease",
+        "WriteBootCode"
+      ]
+    },
+    {
+      "name": "api-ms-win-eventing-provider-l1-1-0.dll",
+      "imports": 4,
+      "functions": [
+        "EventRegister",
+        "EventSetInformation",
+        "EventUnregister",
+        "EventWriteTransfer"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-localization-l1-2-0.dll",
+      "imports": 1,
+      "functions": [
+        "FormatMessageW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-heap-l2-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "LocalFree"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-memory-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "VirtualAlloc",
+        "VirtualFree"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-string-obsolete-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "lstrcmpiW",
+        "lstrlenW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-kernel32-legacy-l1-1-1.dll",
+      "imports": 4,
+      "functions": [
+        "FindFirstVolumeMountPointW",
+        "FindNextVolumeMountPointW",
+        "FindVolumeMountPointClose",
+        "SetVolumeMountPointW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-delayload-l1-1-1.dll",
+      "imports": 1,
+      "functions": [
+        "ResolveDelayLoadedAPI"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-delayload-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "DelayLoadFailureHook"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-rtlsupport-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "RtlCompareMemory"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "774339d0ac38e93e136329c586749a9e",
+    "sha2": "dfb0f5c163b45f769be1f0dbf51254b67bfe191e37b049628a659381b445983a"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "pename": "microsoft.windows.softwarelogo.showdesktop.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "advapi32.dll",
+      "imports": 2,
+      "functions": [
+        "GetTokenInformation",
+        "OpenProcessToken"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 22,
+      "functions": [
+        "CloseHandle",
+        "CreateFileW",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetLastError",
+        "GetModuleHandleW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "K32EnumProcesses",
+        "K32GetProcessImageFileNameW",
+        "OpenProcess",
+        "QueryPerformanceCounter",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter",
+        "WideCharToMultiByte",
+        "WriteFile"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 17,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_vsnwprintf_s",
+        "_wcsicmp",
+        "exit",
+        "memset",
+        "wprintf"
+      ]
+    },
+    {
+      "name": "ole32.dll",
+      "imports": 3,
+      "functions": [
+        "CoCreateInstance",
+        "CoInitializeEx",
+        "CoUninitialize"
+      ]
+    },
+    {
+      "name": "shlwapi.dll",
+      "imports": 1,
+      "functions": [
+        "PathStripPathW"
+      ]
+    },
+    {
+      "name": "user32.dll",
+      "imports": 2,
+      "functions": [
+        "EnumDisplayMonitors",
+        "SendInput"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "c93fb8d49931759b4d8b70ff7bea0e85",
+    "sha2": "ca175ca2f52dd2cb9250026feeb38d2ca66614ee794c9a5f249c40b25c7c8290"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "pename": "tscon.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "winsta.dll",
+      "imports": 4,
+      "functions": [
+        "LogonIdFromWinStationNameW",
+        "WinStationConnectW",
+        "WinStationNameFromLogonIdW",
+        "WinStationOpenServerW"
+      ]
+    },
+    {
+      "name": "user32.dll",
+      "imports": 1,
+      "functions": [
+        "LoadStringW"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 38,
+      "functions": [
+        "FindClose",
+        "FindFirstFileW",
+        "FindNextFileW",
+        "FormatMessageW",
+        "FreeLibrary",
+        "GetCommandLineW",
+        "GetConsoleMode",
+        "GetConsoleOutputCP",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetFileAttributesW",
+        "GetFileType",
+        "GetLastError",
+        "GetModuleHandleW",
+        "GetStdHandle",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "HeapSetInformation",
+        "LoadLibraryW",
+        "LocalAlloc",
+        "LocalFree",
+        "MultiByteToWideChar",
+        "QueryPerformanceCounter",
+        "ReadConsoleW",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetConsoleMode",
+        "SetLastError",
+        "SetThreadUILanguage",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter",
+        "VerSetConditionMask",
+        "VerifyVersionInfoW",
+        "WriteConsoleW"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 36,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__getmainargs",
+        "__iob_func",
+        "__set_app_type",
+        "__setusermatherr",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_ultoa",
+        "_wcsdup",
+        "_wcslwr",
+        "_wcsnicmp",
+        "_wsetlocale",
+        "exit",
+        "free",
+        "fwprintf",
+        "iswctype",
+        "malloc",
+        "memcpy",
+        "memmove",
+        "memset",
+        "putchar",
+        "setlocale",
+        "swprintf_s",
+        "vfwprintf",
+        "vswprintf_s",
+        "wcscat_s",
+        "wcschr",
+        "wcscpy_s",
+        "wcstol",
+        "wcstoul"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "df63ed6744525c475cd9f347ef2a7adc",
+    "sha2": "ec0e8104cec80f4503fc1776f03b20d124a83ab3268968f3f1de54fac443f0b0"
+  }
+}

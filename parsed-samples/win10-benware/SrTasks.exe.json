@@ -1,0 +1,180 @@
+{
+  "pename": "SrTasks.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "advapi32.dll",
+      "imports": 18,
+      "functions": [
+        "ControlTraceW",
+        "ConvertStringSecurityDescriptorToSecurityDescriptorW",
+        "CreateWellKnownSid",
+        "DeregisterEventSource",
+        "EnableTraceEx2",
+        "InitializeSecurityDescriptor",
+        "RegCloseKey",
+        "RegOpenKeyExW",
+        "RegQueryValueExW",
+        "RegSetValueExW",
+        "RegisterEventSourceW",
+        "ReportEventW",
+        "SetEntriesInAclW",
+        "SetSecurityDescriptorDacl",
+        "SetSecurityDescriptorGroup",
+        "SetSecurityDescriptorOwner",
+        "StartTraceW",
+        "TraceMessage"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 30,
+      "functions": [
+        "CloseHandle",
+        "CreateDirectoryW",
+        "CreateFileW",
+        "DeleteFileW",
+        "DeviceIoControl",
+        "ExpandEnvironmentStringsW",
+        "FindClose",
+        "FindFirstFileW",
+        "FindNextFileW",
+        "GetCommandLineW",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetDiskFreeSpaceExW",
+        "GetFileAttributesW",
+        "GetLastError",
+        "GetModuleHandleW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "GetTickCount64",
+        "GetVolumeNameForVolumeMountPointW",
+        "GetVolumePathNameW",
+        "HeapSetInformation",
+        "LocalFree",
+        "MoveFileExW",
+        "QueryPerformanceCounter",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 24,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_callnewh",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_vscwprintf",
+        "_vsnwprintf",
+        "_wcsicmp",
+        "_wcsnicmp",
+        "_wtol",
+        "exit",
+        "free",
+        "malloc",
+        "memcpy",
+        "memset",
+        "strchr"
+      ]
+    },
+    {
+      "name": "ntdll.dll",
+      "imports": 10,
+      "functions": [
+        "EtwTraceMessage",
+        "NtQueryInformationFile",
+        "NtSetInformationFile",
+        "NtSetInformationProcess",
+        "RtlCaptureContext",
+        "RtlGetLastNtStatus",
+        "RtlLookupFunctionEntry",
+        "RtlNtStatusToDosError",
+        "RtlVirtualUnwind",
+        "WinSqmAddToStreamEx"
+      ]
+    },
+    {
+      "name": "spp.dll",
+      "imports": 4,
+      "functions": [
+        "SppFreeGroupPropArray",
+        "SxTracerDebuggerBreak",
+        "SxTracerGetThreadContextRetail",
+        "SxTracerShouldTrackFailure"
+      ]
+    },
+    {
+      "name": "srclient.dll",
+      "imports": 1,
+      "functions": [
+        "SRSetRestorePointW"
+      ]
+    },
+    {
+      "name": "srcore.dll",
+      "imports": 1,
+      "functions": [
+        "SrFreeRpPropArray"
+      ]
+    },
+    {
+      "name": "user32.dll",
+      "imports": 1,
+      "functions": [
+        "LoadStringW"
+      ]
+    },
+    {
+      "name": "ole32.dll",
+      "imports": 7,
+      "functions": [
+        "CoCreateInstance",
+        "CoInitializeEx",
+        "CoInitializeSecurity",
+        "CoTaskMemAlloc",
+        "CoTaskMemFree",
+        "CoTaskMemRealloc",
+        "CoUninitialize"
+      ]
+    },
+    {
+      "name": "shell32.dll",
+      "imports": 1,
+      "functions": [
+        "CommandLineToArgvW"
+      ]
+    },
+    {
+      "name": "oleaut32.dll",
+      "imports": 0,
+      "functions": []
+    },
+    {
+      "name": "vssapi.dll",
+      "imports": 2,
+      "functions": [
+        "CreateVssBackupComponentsInternal",
+        "VssFreeSnapshotPropertiesInternal"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "eab7745b9c75eb09dab1cd3ef671d297",
+    "sha2": "e4ebf27d30ab062b6f5c59b948aba51468aa6cd3f117651cc788253ab35afacd"
+  }
+}

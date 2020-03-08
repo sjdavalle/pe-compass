@@ -1,0 +1,57 @@
+{
+  "pename": "wscadminui.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "msvcrt.dll",
+      "imports": 14,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_wcsicmp",
+        "exit"
+      ]
+    },
+    {
+      "name": "wscapi.dll",
+      "imports": 1,
+      "functions": [
+        "wscLaunchAdminMakeDefaultUI"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 14,
+      "functions": [
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetModuleHandleW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "QueryPerformanceCounter",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "0c12bf55014761060bce1e3908bd34a1",
+    "sha2": "51d58b5b7a2ca8d82cb40c511d57d0be24c485518fe2d95910c26d5250b826c8"
+  }
+}

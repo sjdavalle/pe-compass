@@ -1,0 +1,17 @@
+{
+  "pename": "hvix64.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "kdstub.dll",
+      "imports": 1,
+      "functions": [
+        "KdInitializeLibrary"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "3f7b18b05acbf2f1df56208da03df2d4",
+    "sha2": "7689971a076c72688d9f125335853be76fb6766db06776dd2ddb7f34e6e912a2"
+  }
+}

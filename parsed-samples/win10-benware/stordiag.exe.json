@@ -1,0 +1,17 @@
+{
+  "pename": "stordiag.exe",
+  "petype": 267,
+  "ImageDLLImports": [
+    {
+      "name": "mscoree.dll",
+      "imports": 1,
+      "functions": [
+        "_CorExeMain"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "90a922fdb190d75111dbe5a741ee0510",
+    "sha2": "3bc839b933d9c40a8b8d25b415c1037ba4a47009bf3c4e3a3d4c26554b7d4898"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "pename": "bthudtask.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "kernel32.dll",
+      "imports": 21,
+      "functions": [
+        "CloseHandle",
+        "CompareStringOrdinal",
+        "DelayLoadFailureHook",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetLastError",
+        "GetModuleHandleW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "OpenEventW",
+        "QueryPerformanceCounter",
+        "ResolveDelayLoadedAPI",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetEvent",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 15,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_vsnwprintf",
+        "exit",
+        "memset"
+      ]
+    },
+    {
+      "name": "advapi32.dll",
+      "imports": 2,
+      "functions": [
+        "RegCloseKey",
+        "RegQueryValueExW"
+      ]
+    },
+    {
+      "name": "devobj.dll",
+      "imports": 7,
+      "functions": [
+        "DevObjCreateDeviceInfoList",
+        "DevObjDestroyDeviceInfoList",
+        "DevObjEnumDeviceInfo",
+        "DevObjGetClassDevs",
+        "DevObjGetDeviceInstanceId",
+        "DevObjOpenDevRegKey",
+        "DevObjUninstallDevice"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "aa060c5f96d87ff96730c6295fc0b748",
+    "sha2": "5a2749040b1c746369cc240dcbeaa4bf92eb5e87ac1b68c996461eb2efa9aae3"
+  }
+}

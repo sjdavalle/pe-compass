@@ -1,0 +1,119 @@
+{
+  "pename": "LaunchTM.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "msvcrt.dll",
+      "imports": 15,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_wcmdln",
+        "exit",
+        "memset"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-heap-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "HeapSetInformation"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-processthreads-l1-1-0.dll",
+      "imports": 6,
+      "functions": [
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetStartupInfoW",
+        "SetPriorityClass",
+        "TerminateProcess"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-com-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "CoInitializeEx",
+        "CoUninitialize"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-processenvironment-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "ExpandEnvironmentStringsW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-errorhandling-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "GetLastError",
+        "SetUnhandledExceptionFilter",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-synch-l1-2-0.dll",
+      "imports": 1,
+      "functions": [
+        "Sleep"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-libraryloader-l1-2-0.dll",
+      "imports": 1,
+      "functions": [
+        "GetModuleHandleW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-profile-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "QueryPerformanceCounter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-sysinfo-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "GetSystemTimeAsFileTime",
+        "GetTickCount"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-rtlsupport-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind"
+      ]
+    },
+    {
+      "name": "shell32.dll",
+      "imports": 1,
+      "functions": [
+        "ShellExecuteExW"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "96e0b634008f2edd4d82060687d11e0f",
+    "sha2": "eb4d6e1557f667e0c5318d877994255f0ab19655083501eaadc71715175b7710"
+  }
+}

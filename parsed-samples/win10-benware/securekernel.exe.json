@@ -1,0 +1,82 @@
+{
+  "pename": "securekernel.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "skci.dll",
+      "imports": 15,
+      "functions": [
+        "SkciCompareSigningLevels",
+        "SkciCreateCodeCatalog",
+        "SkciCreateSecureImage",
+        "SkciFinalizeSecureImageHash",
+        "SkciFinishImageValidation",
+        "SkciFreeImageContext",
+        "SkciInitialize",
+        "SkciMatchHotPatch",
+        "SkciQueryImageAuthorID",
+        "SkciQueryImageUniqueID",
+        "SkciQueryInformation",
+        "SkciSetCodeIntegrityPolicy",
+        "SkciTransferVersionResource",
+        "SkciValidateDynamicCodePages",
+        "SkciValidateImageData"
+      ]
+    },
+    {
+      "name": "cng.dll",
+      "imports": 22,
+      "functions": [
+        "BCryptCloseAlgorithmProvider",
+        "BCryptCreateHash",
+        "BCryptDecrypt",
+        "BCryptDestroyHash",
+        "BCryptDestroyKey",
+        "BCryptEncrypt",
+        "BCryptFinishHash",
+        "BCryptGenRandom",
+        "BCryptGenerateSymmetricKey",
+        "BCryptGetProperty",
+        "BCryptHashData",
+        "BCryptImportKeyPair",
+        "BCryptKeyDerivation",
+        "BCryptOpenAlgorithmProvider",
+        "BCryptSetProperty",
+        "BCryptSignHash",
+        "BCryptVerifySignature",
+        "CngGetFipsAlgorithmMode",
+        "EntropyPoolTriggerReseedForIum",
+        "EntropyProvideData",
+        "EntropyRegisterSource",
+        "SystemPrng"
+      ]
+    },
+    {
+      "name": "ext-ms-win-ntos-ksr-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "KsrSkInitSystem"
+      ]
+    },
+    {
+      "name": "ext-ms-win-ntos-vmsvc-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "SvcSkInitSystem"
+      ]
+    },
+    {
+      "name": "ext-ms-win-ntos-trace-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "TraceFunctionGraphBuild",
+        "TraceFunctionGraphFree",
+        "TraceFunctionGraphWalk"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "0901182b0c6e4f89e9f671a129409bb5",
+    "sha2": "219a17fe86513ea117ee62fde0ed46b700856ac18bfe77423504b7f37b6894c2"
+  }
+}

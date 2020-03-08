@@ -1,0 +1,17 @@
+{
+  "pename": "UevAppMonitor.exe",
+  "petype": 267,
+  "ImageDLLImports": [
+    {
+      "name": "mscoree.dll",
+      "imports": 1,
+      "functions": [
+        "_CorExeMain"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "107ceeefd4042323bc94f2f641d28877",
+    "sha2": "0e09ddfa3acdb1ddfcd664ec2fe756df99eb441aa635b59379c170e8f4b056b5"
+  }
+}

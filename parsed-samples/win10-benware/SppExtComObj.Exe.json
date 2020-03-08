@@ -1,0 +1,273 @@
+{
+  "pename": "SppExtComObj.Exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "advapi32.dll",
+      "imports": 12,
+      "functions": [
+        "CryptAcquireContextW",
+        "CryptGenRandom",
+        "CryptReleaseContext",
+        "RegCloseKey",
+        "RegCreateKeyExW",
+        "RegDeleteKeyW",
+        "RegEnumKeyW",
+        "RegOpenKeyExW",
+        "RegQueryInfoKeyW",
+        "RegQueryValueExW",
+        "RegSetKeySecurity",
+        "RegSetValueExW"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 43,
+      "functions": [
+        "CloseHandle",
+        "CreateEventW",
+        "CreateProcessW",
+        "CreateThread",
+        "DecodePointer",
+        "DeleteCriticalSection",
+        "EncodePointer",
+        "EnterCriticalSection",
+        "FreeLibrary",
+        "FreeLibraryAndExitThread",
+        "GetCommandLineW",
+        "GetComputerNameExW",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThread",
+        "GetLastError",
+        "GetModuleFileNameW",
+        "GetModuleHandleExW",
+        "GetModuleHandleW",
+        "GetProcAddress",
+        "GetProcessHeap",
+        "GetSystemDirectoryW",
+        "HeapAlloc",
+        "HeapFree",
+        "HeapSetInformation",
+        "InitializeCriticalSection",
+        "InitializeCriticalSectionAndSpinCount",
+        "LeaveCriticalSection",
+        "LoadLibraryExW",
+        "LocalAlloc",
+        "LocalFree",
+        "OpenEventW",
+        "RaiseFailFastException",
+        "RtlAddFunctionTable",
+        "RtlDeleteFunctionTable",
+        "SetEvent",
+        "SetLastError",
+        "SetThreadPriority",
+        "VirtualAlloc",
+        "VirtualFree",
+        "VirtualQuery",
+        "WaitForMultipleObjects",
+        "WaitForSingleObject"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 31,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__dllonexit",
+        "__getmainargs",
+        "__set_app_type",
+        "__setusermatherr",
+        "_acmdln",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_ismbblead",
+        "_lock",
+        "_onexit",
+        "_purecall",
+        "_unlock",
+        "_vsnwprintf",
+        "_wcsicmp",
+        "exit",
+        "memcmp",
+        "memcpy",
+        "memmove",
+        "memset",
+        "rand",
+        "srand",
+        "towupper",
+        "wcschr",
+        "wcscmp"
+      ]
+    },
+    {
+      "name": "ntdll.dll",
+      "imports": 4,
+      "functions": [
+        "NtQuerySystemInformation",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind"
+      ]
+    },
+    {
+      "name": "rpcrt4.dll",
+      "imports": 33,
+      "functions": [
+        "CStdStubBuffer_AddRef",
+        "CStdStubBuffer_Connect",
+        "CStdStubBuffer_CountRefs",
+        "CStdStubBuffer_DebugServerQueryInterface",
+        "CStdStubBuffer_DebugServerRelease",
+        "CStdStubBuffer_Disconnect",
+        "CStdStubBuffer_Invoke",
+        "CStdStubBuffer_IsIIDSupported",
+        "CStdStubBuffer_QueryInterface",
+        "IUnknown_AddRef_Proxy",
+        "IUnknown_QueryInterface_Proxy",
+        "IUnknown_Release_Proxy",
+        "I_RpcExceptionFilter",
+        "I_RpcMapWin32Status",
+        "Ndr64AsyncClientCall",
+        "Ndr64AsyncServerCallAll",
+        "NdrAsyncServerCall",
+        "NdrCStdStubBuffer_Release",
+        "NdrDllGetClassObject",
+        "NdrOleAllocate",
+        "NdrOleFree",
+        "RpcAsyncCancelCall",
+        "RpcAsyncCompleteCall",
+        "RpcAsyncInitializeHandle",
+        "RpcBindingFree",
+        "RpcBindingFromStringBindingW",
+        "RpcServerRegisterIf2",
+        "RpcServerUnregisterIf",
+        "RpcServerUseProtseqEpW",
+        "RpcStringBindingComposeW",
+        "RpcStringFreeW",
+        "UuidFromStringW",
+        "UuidToStringW"
+      ]
+    },
+    {
+      "name": "oleaut32.dll",
+      "imports": 8,
+      "functions": [
+        "BSTR_UserFree64",
+        "BSTR_UserMarshal64",
+        "BSTR_UserSize64",
+        "BSTR_UserUnmarshal64",
+        "LPSAFEARRAY_UserFree64",
+        "LPSAFEARRAY_UserMarshal64",
+        "LPSAFEARRAY_UserSize64",
+        "LPSAFEARRAY_UserUnmarshal64"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-com-l1-1-0.dll",
+      "imports": 10,
+      "functions": [
+        "CoAddRefServerProcess",
+        "CoImpersonateClient",
+        "CoInitializeEx",
+        "CoRegisterClassObject",
+        "CoReleaseServerProcess",
+        "CoResumeClassObjects",
+        "CoRevertToSelf",
+        "CoRevokeClassObject",
+        "CoSuspendClassObjects",
+        "CoUninitialize"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-synch-l1-2-0.dll",
+      "imports": 1,
+      "functions": [
+        "Sleep"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-processthreads-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "GetCurrentThreadId",
+        "GetStartupInfoW",
+        "TerminateProcess"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-errorhandling-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "SetUnhandledExceptionFilter",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-profile-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "QueryPerformanceCounter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-sysinfo-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "GetSystemTimeAsFileTime",
+        "GetTickCount"
+      ]
+    },
+    {
+      "name": "ole32.dll",
+      "imports": 4,
+      "functions": [
+        "CoRegisterPSClsid",
+        "ObjectStublessClient3",
+        "ObjectStublessClient4",
+        "ObjectStublessClient5"
+      ]
+    },
+    {
+      "name": "shell32.dll",
+      "imports": 1,
+      "functions": [
+        "CommandLineToArgvW"
+      ]
+    },
+    {
+      "name": "ws2_32.dll",
+      "imports": 3,
+      "functions": [
+        "FreeAddrInfoW",
+        "GetAddrInfoW",
+        "WSAAddressToStringW"
+      ]
+    },
+    {
+      "name": "dnsapi.dll",
+      "imports": 4,
+      "functions": [
+        "DnsFree",
+        "DnsModifyRecordsInSet_W",
+        "DnsNameCompare_W",
+        "DnsQuery_W"
+      ]
+    },
+    {
+      "name": "activeds.dll",
+      "imports": 0,
+      "functions": []
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "d355610d2daf0d9009a3f4234ec60765",
+    "sha2": "794fe74cc1b6b7a3d88955b948eb720b339ce5af08c81a3c93f2e4ffad16dcb1"
+  }
+}

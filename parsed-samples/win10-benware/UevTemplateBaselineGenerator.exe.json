@@ -1,0 +1,17 @@
+{
+  "pename": "UevTemplateBaselineGenerator.exe",
+  "petype": 267,
+  "ImageDLLImports": [
+    {
+      "name": "mscoree.dll",
+      "imports": 1,
+      "functions": [
+        "_CorExeMain"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "272eeae47f33cac8beec3e95cfd5043e",
+    "sha2": "f21c064bd5d5e521f444353ff22dcf5ec672fd4c8be518f7ca389528adb54f80"
+  }
+}

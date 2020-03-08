@@ -1,0 +1,17 @@
+{
+  "pename": "Microsoft.Uev.SyncController.exe",
+  "petype": 267,
+  "ImageDLLImports": [
+    {
+      "name": "mscoree.dll",
+      "imports": 1,
+      "functions": [
+        "_CorExeMain"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "08129fc34532a1de21794049bf51015b",
+    "sha2": "ac5ef6a1ddc71df7b894af1079c7c318969ef8110cc0312d7c94ed2c5ae5017a"
+  }
+}

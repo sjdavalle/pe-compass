@@ -1,0 +1,136 @@
+{
+  "pename": "baaupdate.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "kernel32.dll",
+      "imports": 31,
+      "functions": [
+        "CloseHandle",
+        "CreateMutexW",
+        "CreateThread",
+        "ExitThread",
+        "FormatMessageW",
+        "GetCommandLineW",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetDriveTypeW",
+        "GetFileAttributesW",
+        "GetLastError",
+        "GetModuleHandleExW",
+        "GetModuleHandleW",
+        "GetProcessHeap",
+        "GetStartupInfoW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "HeapSetInformation",
+        "LocalAlloc",
+        "LocalFree",
+        "QueryPerformanceCounter",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetErrorMode",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter",
+        "WaitForSingleObject"
+      ]
+    },
+    {
+      "name": "user32.dll",
+      "imports": 10,
+      "functions": [
+        "CreateWindowExW",
+        "DefWindowProcW",
+        "DestroyWindow",
+        "GetPropW",
+        "LoadStringW",
+        "PostMessageW",
+        "RegisterClassExW",
+        "RemovePropW",
+        "SendMessageW",
+        "SetPropW"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 21,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__getmainargs",
+        "__set_app_type",
+        "__setusermatherr",
+        "_acmdln",
+        "_amsg_exit",
+        "_callnewh",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_ismbblead",
+        "_purecall",
+        "exit",
+        "free",
+        "malloc",
+        "memcpy",
+        "memset"
+      ]
+    },
+    {
+      "name": "comctl32.dll",
+      "imports": 0,
+      "functions": []
+    },
+    {
+      "name": "shell32.dll",
+      "imports": 3,
+      "functions": [
+        "CommandLineToArgvW",
+        "SHGetKnownFolderIDList",
+        "SHGetPathFromIDListEx"
+      ]
+    },
+    {
+      "name": "bdeui.dll",
+      "imports": 10,
+      "functions": [
+        "??0BuiVolume@@QEAA@XZ",
+        "??1BuiVolume@@QEAA@XZ",
+        "?ClearProxyObject@BuiVolume@@QEAAXXZ",
+        "?Init@BuiVolume@@QEAAJPEAG@Z",
+        "?ManagementRequiresElevation@BuiVolume@@QEBA_NXZ",
+        "?NeedsDiscoveryVolumeUpdate@BuiVolume@@QEAAJPEAH@Z",
+        "?ServiceDiscoveryVolume@BuiVolume@@QEAAJXZ",
+        "?SetProxyObject@BuiVolume@@QEAAXPEAUIDispatch@@@Z",
+        "BuisCreateElevatedProxyObject",
+        "BuisCreateProxyObject"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-com-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "CoInitializeEx",
+        "CoUninitialize"
+      ]
+    },
+    {
+      "name": "advapi32.dll",
+      "imports": 2,
+      "functions": [
+        "GetTokenInformation",
+        "OpenProcessToken"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "1de833e454562483bd0cd60d96b3ca0c",
+    "sha2": "e41cc8865f998862c63420574823240850955cb2c41841654d105e388447471d"
+  }
+}

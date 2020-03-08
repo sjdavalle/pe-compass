@@ -1,0 +1,59 @@
+{
+  "pename": "colorcpl.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "kernel32.dll",
+      "imports": 16,
+      "functions": [
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetModuleHandleW",
+        "GetStartupInfoW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "HeapSetInformation",
+        "QueryPerformanceCounter",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 14,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_wcmdln",
+        "exit"
+      ]
+    },
+    {
+      "name": "colorui.dll",
+      "imports": 1,
+      "functions": [
+        "LaunchColorCpl"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "25040f44b9ddab66ce97ae7eb076c1f4",
+    "sha2": "4da630079f51a5290c2b478d9179d1f4dfeb9b3ae14298244b48c4c00c73e83c"
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "pename": "SlideToShutDown.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "kernel32.dll",
+      "imports": 3,
+      "functions": [
+        "CloseHandle",
+        "CreateEventW",
+        "GetLastError"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 14,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_wcmdln",
+        "exit"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-com-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "CoCreateInstance",
+        "CoInitializeEx",
+        "CoUninitialize"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-synch-l1-2-0.dll",
+      "imports": 1,
+      "functions": [
+        "Sleep"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-processthreads-l1-1-0.dll",
+      "imports": 5,
+      "functions": [
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetStartupInfoW",
+        "TerminateProcess"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-errorhandling-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "SetUnhandledExceptionFilter",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-libraryloader-l1-2-0.dll",
+      "imports": 1,
+      "functions": [
+        "GetModuleHandleW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-profile-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "QueryPerformanceCounter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-sysinfo-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "GetSystemTimeAsFileTime",
+        "GetTickCount"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-rtlsupport-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind"
+      ]
+    },
+    {
+      "name": "imm32.dll",
+      "imports": 1,
+      "functions": [
+        "ImmDisableIME"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "c428a6ce6f4424bf148af087c0bf4b75",
+    "sha2": "9dae3b73950a5927a4a531ab0703e6703f43247823bb7c9bd921660a3f4dd182"
+  }
+}

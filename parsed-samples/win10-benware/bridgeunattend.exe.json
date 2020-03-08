@@ -1,0 +1,89 @@
+{
+  "pename": "bridgeunattend.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "advapi32.dll",
+      "imports": 3,
+      "functions": [
+        "RegCloseKey",
+        "RegOpenKeyExW",
+        "RegQueryValueExW"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 17,
+      "functions": [
+        "CloseHandle",
+        "CreateEventW",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetLastError",
+        "GetModuleHandleW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "QueryPerformanceCounter",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 29,
+      "functions": [
+        "??0exception@@QEAA@AEBQEBD@Z",
+        "??0exception@@QEAA@AEBQEBDH@Z",
+        "??0exception@@QEAA@AEBV0@@Z",
+        "??0exception@@QEAA@XZ",
+        "??1exception@@UEAA@XZ",
+        "??1type_info@@UEAA@XZ",
+        "?terminate@@YAXXZ",
+        "?what@exception@@UEBAPEBDXZ",
+        "_CxxThrowException",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__CxxFrameHandler3",
+        "__getmainargs",
+        "__set_app_type",
+        "__setusermatherr",
+        "_amsg_exit",
+        "_callnewh",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "exit",
+        "free",
+        "malloc",
+        "memcpy_s",
+        "memmove_s",
+        "memset",
+        "wcschr"
+      ]
+    },
+    {
+      "name": "ole32.dll",
+      "imports": 6,
+      "functions": [
+        "CLSIDFromString",
+        "CoCreateInstance",
+        "CoInitialize",
+        "CoSetProxyBlanket",
+        "CoTaskMemFree",
+        "CoUninitialize"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "5c32982db9b77db1815773beb1d0f0c9",
+    "sha2": "b32acfabbbcb47b847d6e580faf1872af9f901a8331be251695fc1022ae3adfc"
+  }
+}

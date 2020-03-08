@@ -1,0 +1,120 @@
+{
+  "pename": "RemotePosWorker.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "msvcrt.dll",
+      "imports": 16,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_wcmdln",
+        "exit",
+        "wcschr",
+        "wcsncmp"
+      ]
+    },
+    {
+      "name": "api-ms-win-eventing-provider-l1-1-0.dll",
+      "imports": 4,
+      "functions": [
+        "EventRegister",
+        "EventSetInformation",
+        "EventUnregister",
+        "EventWriteTransfer"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-synch-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "CreateEventW",
+        "SetEvent",
+        "WaitForSingleObject"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-sysinfo-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "GetSystemDirectoryW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-synch-l1-2-0.dll",
+      "imports": 1,
+      "functions": [
+        "Sleep"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-errorhandling-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "GetLastError",
+        "SetUnhandledExceptionFilter",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-handle-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "CloseHandle"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-libraryloader-l1-2-0.dll",
+      "imports": 4,
+      "functions": [
+        "FreeLibrary",
+        "GetModuleHandleW",
+        "GetProcAddress",
+        "LoadLibraryExW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-processthreads-l1-1-0.dll",
+      "imports": 5,
+      "functions": [
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetStartupInfoW",
+        "TerminateProcess"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-profile-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "QueryPerformanceCounter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-rtlsupport-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "38258e1faa357e01924bbc610356ecfd",
+    "sha2": "bf94c96364c18fd3e8daa0551582dbea5a448fa7384089bffed29d883bd50c7a"
+  }
+}

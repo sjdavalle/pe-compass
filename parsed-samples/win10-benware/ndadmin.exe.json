@@ -1,0 +1,107 @@
+{
+  "pename": "ndadmin.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "kernel32.dll",
+      "imports": 33,
+      "functions": [
+        "CloseHandle",
+        "CreateDirectoryW",
+        "CreateEventW",
+        "ExitProcess",
+        "ExpandEnvironmentStringsW",
+        "FreeLibrary",
+        "GetCommandLineW",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetFileAttributesW",
+        "GetFullPathNameW",
+        "GetLastError",
+        "GetModuleHandleW",
+        "GetProcAddress",
+        "GetProcessHeap",
+        "GetStartupInfoW",
+        "GetSystemTimeAsFileTime",
+        "GetSystemWindowsDirectoryW",
+        "GetTickCount",
+        "HeapAlloc",
+        "HeapFree",
+        "HeapSetInformation",
+        "LoadLibraryW",
+        "QueryPerformanceCounter",
+        "RaiseException",
+        "SetEvent",
+        "SetLastError",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter",
+        "WaitForSingleObjectEx"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 20,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__getmainargs",
+        "__set_app_type",
+        "__setusermatherr",
+        "_acmdln",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_ismbblead",
+        "_resetstkoflw",
+        "exit",
+        "memcpy",
+        "swscanf",
+        "wcschr",
+        "wcsrchr"
+      ]
+    },
+    {
+      "name": "ntdll.dll",
+      "imports": 10,
+      "functions": [
+        "NtClose",
+        "NtOpenKey",
+        "NtQueryValueKey",
+        "RtlCaptureContext",
+        "RtlFormatCurrentUserKeyPath",
+        "RtlFreeUnicodeString",
+        "RtlInitUnicodeString",
+        "RtlLookupFunctionEntry",
+        "RtlNtStatusToDosError",
+        "RtlVirtualUnwind"
+      ]
+    },
+    {
+      "name": "shell32.dll",
+      "imports": 1,
+      "functions": [
+        "CommandLineToArgvW"
+      ]
+    },
+    {
+      "name": "advapi32.dll",
+      "imports": 3,
+      "functions": [
+        "AllocateAndInitializeSid",
+        "CheckTokenMembership",
+        "FreeSid"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "8c1f5aae02987dee201a91fe1b42d3cf",
+    "sha2": "5dd4fd2c94e34f4f4901934c6fba7df742781ef271fcc5811cfb85f17848d386"
+  }
+}

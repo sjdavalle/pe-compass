@@ -1,0 +1,196 @@
+{
+  "pename": "LaunchWinApp.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "advapi32.dll",
+      "imports": 4,
+      "functions": [
+        "EventRegister",
+        "EventSetInformation",
+        "EventUnregister",
+        "EventWriteTransfer"
+      ]
+    },
+    {
+      "name": "kernel32.dll",
+      "imports": 31,
+      "functions": [
+        "CloseHandle",
+        "CreateMutexExW",
+        "CreateSemaphoreExW",
+        "DebugBreak",
+        "FormatMessageW",
+        "GetCommandLineW",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetLastError",
+        "GetModuleFileNameA",
+        "GetModuleHandleExW",
+        "GetModuleHandleW",
+        "GetProcAddress",
+        "GetProcessHeap",
+        "HeapAlloc",
+        "HeapFree",
+        "InitOnceBeginInitialize",
+        "InitOnceComplete",
+        "IsDebuggerPresent",
+        "K32EnumProcessModulesEx",
+        "K32GetModuleFileNameExW",
+        "LocalFree",
+        "OpenProcess",
+        "OpenSemaphoreW",
+        "OutputDebugStringW",
+        "ReleaseMutex",
+        "ReleaseSemaphore",
+        "SetLastError",
+        "WaitForSingleObject",
+        "WaitForSingleObjectEx"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 37,
+      "functions": [
+        "??0exception@@QEAA@AEBQEBD@Z",
+        "??0exception@@QEAA@AEBQEBDH@Z",
+        "??0exception@@QEAA@AEBV0@@Z",
+        "??0exception@@QEAA@XZ",
+        "??1exception@@UEAA@XZ",
+        "??1type_info@@UEAA@XZ",
+        "??3@YAXPEAX@Z",
+        "?terminate@@YAXXZ",
+        "?what@exception@@UEBAPEBDXZ",
+        "_CxxThrowException",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__CxxFrameHandler3",
+        "__dllonexit",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_callnewh",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_lock",
+        "_onexit",
+        "_purecall",
+        "_unlock",
+        "_vsnprintf_s",
+        "_vsnwprintf",
+        "_wcmdln",
+        "exit",
+        "malloc",
+        "memcpy",
+        "memcpy_s",
+        "memmove",
+        "memset"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-shlwapi-legacy-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "PathFindExtensionW"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-com-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "CoCreateFreeThreadedMarshaler"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-winrt-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "RoInitialize",
+        "RoUninitialize"
+      ]
+    },
+    {
+      "name": "oleaut32.dll",
+      "imports": 0,
+      "functions": []
+    },
+    {
+      "name": "api-ms-win-core-synch-l1-2-0.dll",
+      "imports": 1,
+      "functions": [
+        "Sleep"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-processthreads-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "GetStartupInfoW",
+        "TerminateProcess"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-rtlsupport-l1-1-0.dll",
+      "imports": 3,
+      "functions": [
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-errorhandling-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "SetUnhandledExceptionFilter",
+        "UnhandledExceptionFilter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-profile-l1-1-0.dll",
+      "imports": 1,
+      "functions": [
+        "QueryPerformanceCounter"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-sysinfo-l1-1-0.dll",
+      "imports": 2,
+      "functions": [
+        "GetSystemTimeAsFileTime",
+        "GetTickCount"
+      ]
+    },
+    {
+      "name": "iertutil.dll",
+      "imports": 1,
+      "functions": [
+        "CreateUri"
+      ]
+    },
+    {
+      "name": "ntdll.dll",
+      "imports": 1,
+      "functions": [
+        "NtQueryInformationProcess"
+      ]
+    },
+    {
+      "name": "shell32.dll",
+      "imports": 2,
+      "functions": [
+        "CommandLineToArgvW",
+        "ShellExecuteExW"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "c5aa6dcc513ae4768bb73dc8b49e0360",
+    "sha2": "661d7fa65c1398f973e25c961502290a93cc3311d3bef262cf53662cc4f60b78"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "pename": "msfeedssync.exe",
+  "petype": 523,
+  "ImageDLLImports": [
+    {
+      "name": "kernel32.dll",
+      "imports": 22,
+      "functions": [
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetModuleHandleW",
+        "GetProcAddress",
+        "GetStartupInfoW",
+        "GetSystemTimeAsFileTime",
+        "GetTickCount",
+        "GetVersion",
+        "GetVersionExA",
+        "InitOnceExecuteOnce",
+        "LocalAlloc",
+        "LocalFree",
+        "QueryPerformanceCounter",
+        "RtlCaptureContext",
+        "RtlLookupFunctionEntry",
+        "RtlVirtualUnwind",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "TerminateProcess",
+        "UnhandledExceptionFilter",
+        "VirtualAlloc"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 16,
+      "functions": [
+        "?terminate@@YAXXZ",
+        "_XcptFilter",
+        "__C_specific_handler",
+        "__set_app_type",
+        "__setusermatherr",
+        "__wgetmainargs",
+        "_amsg_exit",
+        "_cexit",
+        "_commode",
+        "_exit",
+        "_fmode",
+        "_initterm",
+        "_wcmdln",
+        "exit",
+        "rand_s",
+        "wcstoul"
+      ]
+    },
+    {
+      "name": "api-ms-win-core-com-l1-1-0.dll",
+      "imports": 4,
+      "functions": [
+        "CLSIDFromString",
+        "CoCreateInstance",
+        "CoInitializeEx",
+        "CoUninitialize"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "2d591c76d56e5a101a2c68977ac9cdd4",
+    "sha2": "769337886c5fac5fcfd1cad9bd248b908086bfb2ce2aa8a7bc17c9273466e266"
+  }
+}
