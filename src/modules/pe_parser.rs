@@ -52,7 +52,7 @@ impl PeParser {
             let mut _x_bytes: [u8; 512] = [0; 512];
             _bfile.read_as_bytesarray(&mut _x_bytes).unwrap();
             // Start Checks
-            let _dos_signature: u16 = &_x_bytes[..].pread_with(0usize, LE).unwrap();
+            let _dos_signature: u16 = _x_bytes[..].pread_with(0usize, LE).unwrap();
             if _dos_signature != 23117u16 {
                 exit_process("Absent PE Magic - `MZ`");
             }
