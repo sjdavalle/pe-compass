@@ -27,9 +27,160 @@ File Size:          944840
 Bytes Content Len:  944840
 Vec Content:        944840
 ```
+
+Currently, the program is run like this:
+
+```bash
+$> pe-compass -f pe-samples/sqlite3x86.dll
+```
+
+The output from above results in a limited json like this:
+
+```json 
+{
+  "pename": "sqlite3x86.dll",
+  "petype": 267,
+  "ImageDLLImports": [
+    {
+      "name": "kernel32.dll",
+      "imports": 79,
+      "functions": [
+        "AreFileApisANSI",
+        "CloseHandle",
+        "CreateFileA",
+        "CreateFileMappingA",
+        "CreateFileMappingW",
+        "CreateFileW",
+        "CreateMutexW",
+        "DeleteCriticalSection",
+        "DeleteFileA",
+        "DeleteFileW",
+        "EnterCriticalSection",
+        "FlushFileBuffers",
+        "FlushViewOfFile",
+        "FormatMessageA",
+        "FormatMessageW",
+        "FreeLibrary",
+        "GetCurrentProcess",
+        "GetCurrentProcessId",
+        "GetCurrentThreadId",
+        "GetDiskFreeSpaceA",
+        "GetDiskFreeSpaceW",
+        "GetFileAttributesA",
+        "GetFileAttributesExW",
+        "GetFileAttributesW",
+        "GetFileSize",
+        "GetFullPathNameA",
+        "GetFullPathNameW",
+        "GetLastError",
+        "GetModuleHandleA",
+        "GetProcAddress",
+        "GetProcessHeap",
+        "GetSystemInfo",
+        "GetSystemTime",
+        "GetSystemTimeAsFileTime",
+        "GetTempPathA",
+        "GetTempPathW",
+        "GetTickCount",
+        "GetVersionExA",
+        "GetVersionExW",
+        "HeapAlloc",
+        "HeapCompact",
+        "HeapCreate",
+        "HeapDestroy",
+        "HeapFree",
+        "HeapReAlloc",
+        "HeapSize",
+        "HeapValidate",
+        "InitializeCriticalSection",
+        "InterlockedCompareExchange",
+        "LeaveCriticalSection",
+        "LoadLibraryA",
+        "LoadLibraryW",
+        "LocalFree",
+        "LockFile",
+        "LockFileEx",
+        "MapViewOfFile",
+        "MultiByteToWideChar",
+        "OutputDebugStringA",
+        "OutputDebugStringW",
+        "QueryPerformanceCounter",
+        "ReadFile",
+        "SetEndOfFile",
+        "SetFilePointer",
+        "SetUnhandledExceptionFilter",
+        "Sleep",
+        "SystemTimeToFileTime",
+        "TerminateProcess",
+        "TlsGetValue",
+        "TryEnterCriticalSection",
+        "UnhandledExceptionFilter",
+        "UnlockFile",
+        "UnlockFileEx",
+        "UnmapViewOfFile",
+        "VirtualProtect",
+        "VirtualQuery",
+        "WaitForSingleObject",
+        "WaitForSingleObjectEx",
+        "WideCharToMultiByte",
+        "WriteFile"
+      ]
+    },
+    {
+      "name": "msvcrt.dll",
+      "imports": 28,
+      "functions": [
+        "__dllonexit",
+        "__setusermatherr",
+        "_amsg_exit",
+        "_beginthreadex",
+        "_endthreadex",
+        "_errno",
+        "_initterm",
+        "_iob",
+        "_lock",
+        "_onexit",
+        "_unlock",
+        "abort",
+        "calloc",
+        "fprintf",
+        "free",
+        "fwrite",
+        "localtime",
+        "malloc",
+        "memcmp",
+        "memmove",
+        "qsort",
+        "realloc",
+        "strcmp",
+        "strcspn",
+        "strlen",
+        "strncmp",
+        "strrchr",
+        "vfprintf"
+      ]
+    }
+  ],
+  "ImageHashSignatures": {
+    "md5": "c75916b15535b1bc67d92975921e95e3",
+    "sha2": "5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5"
+  }
+}
+```
+
+When we are debugging, we get access to al of the objects currently parsed.
+The final output ommits many of these fields as they are not in scope with
+the goal of the project - studying PE imports.
+
+However, in the future, anyone can modify the source or request a feature to 
+add this type of verbose output.
+
 ```json
-// Json Output of PE File Object
-// Imports Completed
+// Json Full Output of PE File Object
+// All Objects being parsed are shown below.
+// However, not every section is provided as the final output
+// because the focus of this project is the `PE IMPORTS`.
+//
 {
   "pename": "sqlite3x86.dll",
   "petype": 267,
