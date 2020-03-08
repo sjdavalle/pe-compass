@@ -39,23 +39,30 @@ impl PeParser {
     /// ```
     pub fn new(fp: &str) -> Self
     {
-        let _bfile = FileHandler::open(fp, "r");
-        if  _bfile.size  < 1024u64 {
-            exit_process("Desired Target is less than 64 Bytes. Likely Not a real PE File"); // sizeof DOS_HEADER
+        {
+            // Perform a quick inspection of the target file by focusing on the first 512 bytes.
+            // If a target file does not pass these checks, we won't bother reading it into memory
+            // or parsing it further.
+            let _bfile = FileHandler::open(fp, "r");
+            if  _bfile.size  < 1024u64 {
+                exit_process("Desired Target is less than 64 Bytes. Likely Not a real PE File"); // sizeof DOS_HEADER
+            }
+            // Load first 512 bytes
+            // Use this array to inspect the DOS_HEADER and PE_SIGNATURE
+            let mut _x_bytes: [u8; 512] = [0; 512];
+            _bfile.read_as_bytesarray(&mut _x_bytes).unwrap();
+            // Start Checks
+            let _dos_signature: u16 = &_x_bytes[..].pread_with(0usize, LE).unwrap();
+            if _dos_signature != 23117u16 {
+                exit_process("Absent PE Magic - `MZ`");
+            }
         }
-        let mut _abytes: [u8; 512] = [0; 512];
-        _bfile.read_as_bytesarray(&mut _abytes).unwrap();
-        let _dos_signature: u16 = _abytes[..].pread_with(0usize, LE).unwrap();
-        if _dos_signature != 23117u16 {
-            exit_process("Absent PE Magic - `MZ`");
-        }
+        // If the above checks did not fail then we have a real PE file.
+        // However, the deep inspection will be performed after we load the entire file.
+        // For example, we can have a PE, but it may not have an `imports` section to use
+        // and we can not determine if that is true unless we load the NT_HEADERS.
         let _file = FileHandler::open(fp, "r");
         let _bytes: Vec<u8> = _file.read_as_vecbytes(_file.size).unwrap();
-        /*let mut _idx: i32 = 0;
-        for _byte in &_bytes {
-            _idx += 1;
-            println!("Idx: {} | {:#?}", _idx, _byte);
-        }*/
         PeParser {
             handler: _file,
             content: _bytes,
@@ -438,7 +445,6 @@ impl PeParser {
             }
         }
         // Now that we have all the DLLs involved, let's parse the imports
-        // for each of them.
         // At this stage all we have are IMAGE_IMPORT_DESCRIPTOR structs
         for _dll in _dll_list {
             _offset = _rva.new_offset_from(_dll.Name);
@@ -451,18 +457,19 @@ impl PeParser {
 
             let _dll_thunks: DLL_THUNK_DATA;
             
-            _dll_thunks = match _pe_type {
-                &267 => DLL_THUNK_DATA::x86(self.get_dll_thunks32(_offset)),
-                &523 => DLL_THUNK_DATA::x64(self.get_dll_thunks64(_offset)),
+            _dll_thunks = match _pe_type {                                      // Get All ThunkData Structs
+                &267 => DLL_THUNK_DATA::x86(self.get_dll_thunks32(_offset)),    // 32Bit ThunkData
+                &523 => DLL_THUNK_DATA::x64(self.get_dll_thunks64(_offset)),    // 64Bit ThunkData
                 _ => std::process::exit(0x0100)
             };
-            let _thunk_list: DLL_PROFILE;
+            
+            let _functions_list: DLL_PROFILE;
 
-            _thunk_list = match _dll_thunks {
+            _functions_list = match _dll_thunks {
                 DLL_THUNK_DATA::x86(value) => { self.get_dll_function_names32(_rva, _dll_name, value) },
                 DLL_THUNK_DATA::x64(value) => { self.get_dll_function_names64(_rva, _dll_name, value) }
             };
-            _results.push(_thunk_list);
+            _results.push(_functions_list);
         }
         _results
     }
@@ -551,8 +558,8 @@ impl PeParser {
             }
             _is_ordinal = self.check_if_ordinal32(_thunk.Ordinal);
             if _is_ordinal || _thunk.AddressOfData >= IMAGE_ORDINAL_FLAG32 {
-                _thunk_list.push(_thunk);
-                _thunk_list.pop();
+                _thunk_list.push(_thunk);       // Add The ThunkData For Ordinal temporarily
+                _thunk_list.pop();              // and remove it immediately
             } else {
                 _thunk_list.push(_thunk);
             }
