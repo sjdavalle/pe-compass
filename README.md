@@ -14,6 +14,7 @@ A Study of PE Format through the RUST programming language.
 * Implement PE Renderer
 * Implement Database Workers
 * Optimmization Parsing
+* Support Parsing of UPX0 packed sections
 
 # Current Progress
 Current Code Base is parsing the following structs, validation in progress.
