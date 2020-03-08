@@ -444,7 +444,11 @@ impl PeParser {
             _offset = _rva.new_offset_from(_dll.Name);
             let _dll_name = self.get_dll_name(_offset);
 
-            _offset = _rva.new_offset_from(_dll.OriginalFirstThunk);
+            _offset = match _dll.OriginalFirstThunk {                   // Check if OFT is Zero, then use the FT
+                0 => { _rva.new_offset_from(_dll.FirstThunk) },         // Use the FT to point to the IAT
+                _ => { _rva.new_offset_from(_dll.OriginalFirstThunk) }  // Else, use the OFT to point to the IAT
+            };
+
             let _dll_thunks: DLL_THUNK_DATA;
             
             _dll_thunks = match _pe_type {
