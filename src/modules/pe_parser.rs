@@ -670,6 +670,7 @@ impl PeParser {
                 for _d in _dbytes {
                     _function.push(_d);
                 }
+                
                 if _function.contains('\u{0}') {
                     _function.retain(|x| x != '\u{0}');
                     _functions_list.push(_function.clone());
