@@ -28,7 +28,21 @@ impl FileHandler {
      ///
      pub fn open(fp: &str, mode: &str) -> Self
      {
-        let _filepath = Path::new(fp);
+        let mut _path_string: String = String::from(fp);
+
+        if fp.contains(r"\r\n") {
+            _path_string = _path_string.replace("\r\n", "");
+        }
+
+        if fp.contains(r"\r") {
+            _path_string = _path_string.replace(r"\r", "");
+        }
+
+        if fp.contains(r"\n") {
+            _path_string = _path_string.replace(r"\n", "");
+        }
+
+        let _filepath = Path::new(&_path_string);
 
         match mode {
             "r"|"rw"|"cra"|"crt" =>  {
@@ -82,6 +96,10 @@ impl FileHandler {
             success: true
         }
      }
+     ///
+     /// 
+     /// 
+     /// 
      pub fn write(&mut self, _content: &String) -> Result<(), Box<dyn std::error::Error>>
      {
         self.handle.write(_content.as_bytes())?;
@@ -114,6 +132,10 @@ impl FileHandler {
         _bufr.read_to_end(&mut _bytes)?;
         Ok(_bytes)
      }
+     ///
+     /// 
+     /// 
+     /// 
      pub fn read_as_bytesarray(&self, n_bytes: &mut [u8]) -> Result<(), Box<dyn std::error::Error>>
      {
         let mut _bufr = BufReader::new(&self.handle);
