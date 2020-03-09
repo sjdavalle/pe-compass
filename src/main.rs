@@ -6,13 +6,11 @@
 #[macro_use]
 extern crate scroll_derive;
 extern crate scroll;
+extern crate serde_json;
+extern crate serde;
 extern crate clap;
 extern crate sha2;
 extern crate md5;
-
-
-extern crate serde_json;
-extern crate serde;
 
 /// Imports: Rust STD Lib
 
@@ -24,6 +22,7 @@ mod modules;
 use modules::pe_parser::*;
 
 mod utils;
+use utils::filesystem::file_handler::FileHandler;
 use utils::args::argument_parser::ArgumentsParser;
 
 fn main() -> Result<()>
@@ -44,7 +43,13 @@ fn main() -> Result<()>
         let _sample = _args.inputs.value_of("file").unwrap();
         let _pe = PeParser::new(_sample);
         let _file = _pe.inspect_file();
-        println!("{}", serde_json::to_string_pretty(&_file)?);
+        let _content = serde_json::to_string_pretty(&_file)?;
+        if _args.inputs.is_present("output") {
+            let _ov = _args.inputs.value_of("output").unwrap();
+            let mut _outfile = FileHandler::open(_ov, "crw");
+            _outfile.write(&_content).expect("Could Not Write Content to Desired Output File");
+        }
+        println!("{}", _content);
     }
     /*
     let _pe = PeParser::new(_sample);

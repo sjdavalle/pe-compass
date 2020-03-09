@@ -21,6 +21,13 @@ impl ArgumentsParser<'_> {
                                 .help("File System Path of PEFILE to inspect")
                                 .takes_value(true)
                         )
+                        .arg(
+                            Arg::with_name("output")
+                            .short("o")
+                            .value_name(" OUTPUT_FILE ")
+                            .help("Destination File to Write Output to")
+                            .takes_value(true)
+                        )
                         .get_matches()
         }
     }

@@ -30,14 +30,18 @@ impl FileHandler {
      {
         let _filepath = Path::new(fp);
 
-        {
-            // Sanity Checks
-            if _filepath.is_dir(){
-                exit_process("Desired Target is a Folder/Directory. Require a file");
-            }
-            if !_filepath.exists() {
-                exit_process("Desired Target Does Not Exists.  Require an existent file");
-            }
+        match mode {
+            "r"|"rw"|"cra"|"crt" =>  {
+                // Sanity Checks
+                if _filepath.is_dir() {
+                    exit_process("Desired Target is a Folder/Directory. Require a file");
+                }
+                if !_filepath.exists() {
+                    exit_process("Desired Target Does Not Exists.  Require an existent file");
+                }
+            },
+            "crw" =>  { println!("New File To Be Created: {}", fp); },
+            _     =>  exit_process("Desired File Mode Not Suppported, Process Exiting...")
         }
 
         let mut _read       = false;
@@ -48,10 +52,10 @@ impl FileHandler {
 
         match mode {
             "r"     =>  { _read = true; },
-            "rw"    =>  { _read = true; _write = true; },
-            "crw"   =>  { _write = true; _create = true; },
-            "cra"   =>  { _write = true; _append = true; },
-            "crt"   =>  { _write = true; _truncate = true; }, 
+            "rw"    =>  { _read = true; _write = true; },       // Read-Write
+            "crw"   =>  { _write = true; _create = true; },     // Create New
+            "cra"   =>  { _write = true; _append = true; },     // Create Append
+            "crt"   =>  { _write = true; _truncate = true; },   // Create Truncate
             _       =>  exit_process("Desired File Mode Not Suppported, Process Exiting...")
         }
 
@@ -77,6 +81,11 @@ impl FileHandler {
             size:   _size,
             success: true
         }
+     }
+     pub fn write(&mut self, _content: &String) -> Result<(), Box<dyn std::error::Error>>
+     {
+        self.handle.write(_content.as_bytes())?;
+        Ok(())
      }
      ///
      ///
