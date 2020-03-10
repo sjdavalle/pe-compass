@@ -39,11 +39,13 @@ fn main() -> Result<()>
     //let _sample = "pe-samples/vcredist_x64.exe";
     //let _sample = "pe-samples/TestClientx64.exe";
     let _args = ArgumentsParser::new();
+    
     if _args.inputs.is_present("file") {
         let _sample = _args.inputs.value_of("file").unwrap();
         let _pe = PeParser::new(_sample);
         let _file = _pe.inspect_file();
         let _content = serde_json::to_string_pretty(&_file)?;
+        
         if _args.inputs.is_present("output") {
             let _ov = _args.inputs.value_of("output").unwrap();
             let mut _outfile = FileHandler::open(_ov, "crw");
