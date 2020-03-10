@@ -96,10 +96,15 @@ impl FileHandler {
             success: true
         }
      }
+     /// # FileHandler Write Method
+     /// 
+     /// This method writes content as bytes to the file whose previous call to open
+     /// produced a mutable handle to the file.
+     ///```
+     /// let mut _f = FileHandler::open("foo.txt", "crw");
      ///
-     /// 
-     /// 
-     /// 
+     /// _f.write("baz")?;
+     /// ```
      pub fn write(&mut self, _content: &String) -> Result<(), Box<dyn std::error::Error>>
      {
         let stdout = io::stdout();
@@ -107,10 +112,13 @@ impl FileHandler {
         stdout.flush();
         Ok(())
      }
+     /// # FileHandler Delete Method
      ///
-     ///
-     ///
-     ///
+     /// This method should delete a target file. No handles required, only needs
+     /// to have an existent target file desired for deletion.
+     /// ```
+     /// FileHandler::delete("foo.txt").expect("Unable to delete file error");
+     /// ```
      pub fn delete(fp: &str) -> Result<(), Box<dyn std::error::Error>>
      {
         let _filepath = Path::new(fp);
