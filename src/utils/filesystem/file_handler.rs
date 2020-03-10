@@ -107,9 +107,9 @@ impl FileHandler {
      /// ```
      pub fn write(&mut self, _content: &String) -> Result<(), Box<dyn std::error::Error>>
      {
-        let stdout = io::stdout();
+        let mut stdout = io::stdout();
         self.handle.write(_content.as_bytes())?;
-        stdout.flush();
+        stdout.flush().expect("Unable to Flush Stdout Buffer");
         Ok(())
      }
      /// # FileHandler Delete Method
