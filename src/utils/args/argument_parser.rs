@@ -1,4 +1,4 @@
-use clap::{ App, Arg, ArgMatches };
+use clap::{ App, Arg, ArgMatches, SubCommand };
 
 
 #[derive(Debug)]
@@ -12,7 +12,7 @@ impl ArgumentsParser<'_> {
         ArgumentsParser {
             inputs: App::new("\n\npe-compass")
                         .author("carlos diaz | @dfirence")
-                        .version(" - v.0.0.7")
+                        .version(" - v.0.0.8")
                         .about("A Study of the Portable Executable Format")
                         .arg(
                             Arg::with_name("file")
@@ -27,6 +27,26 @@ impl ArgumentsParser<'_> {
                             .value_name(" OUTPUT_FILE ")
                             .help("Destination File to Write Output to")
                             .takes_value(true)
+                        )
+                        .subcommand(
+                            SubCommand::with_name("recurse")
+                                       .author("carlos diaz | @dfirence")
+                                       .version(" - v.0.0.8")
+                                       .about("Works Recursively with Folders")
+                                       .arg(
+                                           Arg::with_name("directory")
+                                               .short("d")
+                                               .value_name("Directory PATH")
+                                               .help("Target Directory To Recurse Search")
+                                               .takes_value(true)
+                                       )
+                                       .arg(
+                                           Arg::with_name("filter")
+                                               .short("f")
+                                               .value_name("Pattern NON_REGEX")
+                                               .help("A Non-RegEx pattern to filter by")
+                                               .takes_value(true)
+                                       )
                         )
                         .get_matches()
         }
