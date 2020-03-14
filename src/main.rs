@@ -11,6 +11,7 @@ extern crate serde;
 extern crate clap;
 extern crate sha2;
 extern crate md5;
+extern crate fs2;
 
 /// Imports: Rust STD Lib
 

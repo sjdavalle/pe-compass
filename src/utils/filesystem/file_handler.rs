@@ -6,7 +6,7 @@ use std::path::Path;
 
 // 3rd Party
 use scroll::{ Pread, LE };
-
+use fs2::FileExt;
 
 // My Modules
 #[path = "../errors/custom_errors.rs"] mod custom_errors;
@@ -107,9 +107,10 @@ impl FileHandler {
      /// ```
      pub fn write(&mut self, _content: &String) -> Result<(), Box<dyn std::error::Error>>
      {
-        let mut stdout = io::stdout();
+        self.handle.lock_exclusive()?;
         self.handle.write(_content.as_bytes())?;
-        stdout.flush().expect("Unable to Flush Stdout Buffer");
+        self.handle.flush()?;
+        self.handle.unlock()?;
         Ok(())
      }
      /// # FileHandler Delete Method
