@@ -45,7 +45,7 @@ fn main() -> Result<()>
         let _sample = _args.inputs.value_of("file").unwrap();
         let _pe = PeParser::new(_sample);
         let _file = _pe.inspect_file();
-        let _content = serde_json::to_string_pretty(&_file)?;
+        let _content = serde_json::to_string(&_file)?;
         
         if _args.inputs.is_present("output") {
             let _ov = _args.inputs.value_of("output").unwrap();

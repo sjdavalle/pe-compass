@@ -12,7 +12,7 @@ impl ArgumentsParser<'_> {
         ArgumentsParser {
             inputs: App::new("\n\npe-compass")
                         .author("carlos diaz | @dfirence")
-                        .version(" - v.0.0.1")
+                        .version(" - v.0.0.7")
                         .about("A Study of the Portable Executable Format")
                         .arg(
                             Arg::with_name("file")

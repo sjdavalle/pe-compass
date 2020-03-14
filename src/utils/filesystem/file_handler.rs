@@ -108,7 +108,7 @@ impl FileHandler {
      pub fn write(&mut self, _content: &String) -> Result<(), Box<dyn std::error::Error>>
      {
         self.handle.lock_exclusive()?;
-        self.handle.write(_content.as_bytes())?;
+        self.handle.write_all(_content.as_bytes())?;
         self.handle.flush()?;
         self.handle.unlock()?;
         Ok(())

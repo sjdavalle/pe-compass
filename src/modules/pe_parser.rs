@@ -628,10 +628,10 @@ impl PeParser {
                 _part = self.content.pread_with(_offset, LE).unwrap();
                 let _bytes = _part.to_le_bytes();
                 let _dbytes: Vec<char> = _part.to_le_bytes().iter()
-                    .map(|x| * x as u8)
-                    .filter(|x| x.is_ascii())
-                    .map(|x| x as char)
-                    .collect();
+                                                            .map(|x| * x as u8)
+                                                            .filter(|x| x.is_ascii())
+                                                            .map(|x| x as char)
+                                                            .collect();
     
                 for _d in _dbytes {
                     _function.push(_d);
@@ -674,11 +674,11 @@ impl PeParser {
                 _part = self.content.pread_with(_offset, LE).unwrap();
                 let _bytes = _part.to_le_bytes();
                 let _dbytes: Vec<char> = _part.to_le_bytes().iter()
-                    .map(|x| * x as u8)
-                    .filter(|x| x.is_ascii())
-                    .map(|x| x as char)
-                    .collect();
-    
+                                                            .map(|x| * x as u8)
+                                                            .filter(|x| x.is_ascii())
+                                                            .map(|x| x as char)
+                                                            .collect();
+                                            
                 for _d in _dbytes {
                     _function.push(_d);
                 }
