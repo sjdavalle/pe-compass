@@ -1,5 +1,7 @@
 # pe-compass
 A Study of the PE Format through the RUST programming language.
+<br/>
+<br/>
 
 # PROJECT STATUS
 The project is being developed and you should use the `releases` section
@@ -35,6 +37,7 @@ The true power of this project is the custom datasets you can build in a databas
 for analytics, and it is those analytics that can allow you to better understand
 which types of telemetry collection approaches are useful for large-scale visibility
 programs tracing computer systems and the programs they run.
+<br/>
 
 # Documentation Articles
 Title|URL|
@@ -43,6 +46,8 @@ PE Rich Data Structure: Undocumented|[LINK](http://bytepointer.com/articles/the_
 PE Things They Did not tell you...|[LINK](http://bytepointer.com/articles/rich_header_lifewire_vxmags_29A-8.009.htm)|
 PE MindMap By Ero Carrera|[LINK](http://www.openrce.org/reference_library/files/reference/PE%20Format.pdf)|
 PE MSDN Article|[LINK](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format)|
+PE Understanding RVAs, Sunshine|[LINK](http://www.sunshine2k.de/reversing/tuts/tut_rvait.htm)|
+<br/>
 
 # To Do
 * Implement PE Renderer: CSV & TABULAR
@@ -51,6 +56,9 @@ PE MSDN Article|[LINK](https://docs.microsoft.com/en-us/windows/win32/debug/pe-f
 * Implement Database Workers: SQLITE & PGSQL
 * Optimization Parsing: From String to &str lifetimes
 * Support Parsing of UPX0 packed sections
+
+<br/>
+<hr/>
 
 # Current Progress
 Currently, the program is run like this:
