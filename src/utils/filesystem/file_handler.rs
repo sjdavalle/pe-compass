@@ -146,13 +146,19 @@ impl FileHandler {
         }
         Ok(())
      }
+     /// # FileHandler - ReadAsVecBytes
+     /// This method allows reading into a buffer made of a vector of bytes.
+     /// Note this method should be used to read a file into memory as it reads the
+     /// entire content of the file into a Vec<u8>.
+     /// ```
+     /// let _f = FileHandler::open("foo.exe", "r");
      ///
+     ///     _f.read_as_vecbytes()?;
      ///
-     ///
-     ///
+     ///     println!("{:#?}", f.content);
+     /// ```
      pub fn read_as_vecbytes(&self, n_bytes: u64) -> Result<Vec<u8>, Box<dyn std::error::Error>>
      {
-        //
         let mut _bytes: Vec<u8> = Vec::with_capacity(n_bytes as usize);
         let mut _bufr = BufReader::new(&self.handle);
                 _bufr.read_to_end(&mut _bytes)?;
