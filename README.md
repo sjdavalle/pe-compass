@@ -1,8 +1,40 @@
 # pe-compass
-A Study of PE Format through the RUST programming language.
+A Study of the PE Format through the RUST programming language.
 
 # PROJECT STATUS
-** IN DEV-MODE** Do not download or use this for your environment yet.
+The project is being developed and you should use the `releases` section
+of this project to use stable versions suitable for productive work.
+
+The `Master` branch may not reflect the version of the `releases` section
+at times, although you can use the `Master` branch if  you want to be working
+with bleeding edge versions.
+
+Note:   If you decide to clone the `Master` branch you should have the stable
+        rust toolchain installed in your platform. Once you are setup with the
+        stable rustup toolchain, go ahead and compile with `cargo build --release`
+
+
+# PROJECT USAGE
+This project is not focused on building a binary parser, it is an analytics project.
+The binary provided here with rust is the `workhorse` that is used to baseline a
+computer's *on-disk* binaries from filesystem locations.
+
+The project is created as a need to build custom datasets and pipelines around 
+DLL telemetry and its context. By context we mean the informational value afforded
+by the type of data that can be acquired by DLLs imported in a Portable Executable
+file - PE file.
+
+At this time, the focus is to study the `imports` or `IAT` table from a PE file to
+identify the meaning of the question: *What is the notion of intent from the PE file?*
+
+As many security researchers and professional programmers have noted, the PE file is
+fairly intuitive based on the Microsoft usage of descriptive function name stemming
+from *hungarian notation*.
+
+The true power of this project is the custom datasets you can build in a database
+for analytics, and it is those analytics that can allow you to better understand
+which types of telemetry collection approaches are useful for large-scale visibility
+programs tracing computer systems and the programs they run.
 
 # Documentation Articles
 * PE Rich Data Structure: Undocumented: http://bytepointer.com/articles/the_microsoft_rich_header.htm
@@ -11,19 +43,73 @@ A Study of PE Format through the RUST programming language.
 * PE MSDN Arcticle:  https://docs.microsoft.com/en-us/windows/win32/debug/pe-format
 
 # To Do
-* Implement PE Renderer
-* Implement Database Workers
-* Optimmization Parsing
+* Implement PE Renderer: CSV & TABULAR
+* Implement Recursive Content Inspection & Validation
+* Implement Progress Indicators
+* Implement Database Workers: SQLITE & PGSQL
+* Optimization Parsing: From String to &str lifetimes
 * Support Parsing of UPX0 packed sections
 
 # Current Progress
 Currently, the program is run like this:
 
+## Help Menu
+You can get help by using the `-h` switch
+
+```bash
+$> pe-compass -h
+
+
+pe-compass  - v.0.0.8
+carlos diaz | @dfirence
+A Study of the Portable Executable Format
+
+USAGE:
+    pe-compass [OPTIONS] [SUBCOMMAND]
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -f < PE FILE >            File System Path of PEFILE to inspect
+    -o < OUTPUT_FILE >        Destination File to Write Output to
+
+SUBCOMMANDS:
+    help       Prints this message or the help of the given subcommand(s)
+    recurse    Works Recursively with Folders
+
+```
+## Parse A File
+To parse a single file, just use the `-f` switch and filepath of the pe file.
+
 ```bash
 $> pe-compass -f pe-samples/sqlite3x86.dll
 ```
+To parse a single file and save the parsed output, use the `-o` switch
 
-The output from above results in a limited json like this:
+```bash
+$> pe-compass -f pe-samples/sqlite3x86.dll -o sqlite.json
+```
+
+## Recursive Search
+To search for files based on filename extensions in the filesystem, use the
+`recurse` subcommand plus the `-d` switch, and the `-f` switch.
+
+```bash
+$> pe-compass recurse -d C:\Windows -f .exe
+```
+
+You can redirect the resultant list of filepaths from above
+
+```bash
+$> pe-compass recurse -d C:\Windows -f .exe > C:\targets.txt
+```
+
+
+# Output Samples
+
+The output of a file being parsed is show in the below json output.
 
 ```json 
 {
