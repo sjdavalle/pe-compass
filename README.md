@@ -1,5 +1,5 @@
 # pe-compass
-A Study of PE Format through the RUST programming language.
+A Study of the PE Format through the RUST programming language.
 
 # PROJECT STATUS
 The project is being developed and you should use the `releases` section
@@ -15,11 +15,11 @@ Note:   If you decide to clone the `Master` branch you should have the stable
 
 
 # PROJECT USAGE
-This project is not focused on building a binary parser, it is an anlytics project.
+This project is not focused on building a binary parser, it is an analytics project.
 The binary provided here with rust is the `workhorse` that is used to baseline a
 computer's *on-disk* binaries from filesystem locations.
 
-The project is created as a need to build custom datasets and pipelines around the
+The project is created as a need to build custom datasets and pipelines around 
 DLL telemetry and its context. By context we mean the informational value afforded
 by the type of data that can be acquired by DLLs imported in a Portable Executable
 file - PE file.
