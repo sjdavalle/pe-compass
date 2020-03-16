@@ -30,15 +30,15 @@ impl FileHandler {
      {
         let mut _path_string: String = String::from(fp);
 
-        if fp.contains(r"\r\n") {
+        if fp.ends_with(r"\r\n") {
             _path_string = _path_string.replace("\r\n", "");
         }
 
-        if fp.contains(r"\r") {
+        if fp.ends_with(r"\r") {
             _path_string = _path_string.replace(r"\r", "");
         }
 
-        if fp.contains(r"\n") {
+        if fp.ends_with(r"\n") {
             _path_string = _path_string.replace(r"\n", "");
         }
 
