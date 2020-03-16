@@ -5,7 +5,6 @@ use std::path::Path;
 
 
 // 3rd Party
-use scroll::{ Pread, LE };
 use fs2::FileExt;
 
 // My Modules
@@ -22,15 +21,30 @@ pub struct FileHandler {
     pub size:       u64
 }
 impl FileHandler {
+     /// # FileHandler - Open Method
+     /// This is a convenience function that mirrors Python's open method
+     /// by accepting a string switch parameter to read, write, create, append, etc.
+     /// For scenarios not consisting of Live systems triage where you need to acquire
+     /// a duplicate handle to read a file that is already open, this method works.
+     /// ```
+     /// let _f = FileHandler::open("foo.txt", "r");        // read mode
      ///
+     /// let _f = FileHandler::open("foo.txt", "w");        // write mode
      ///
+     /// let _f = FileHandler::open("foo.txt", "rw");       // read/write mode
      ///
+     /// let _f = FileHandler::open("foo.txt", "cra");      // append mode
      ///
+     /// let _f = FileHandler::open("foo.txt", "crt");      // truncate mode
+     ///
+     /// let _f = FileHandler::open("foo.txt", "crw");      // create new with write mode
+     ///
+     /// ```
      pub fn open(fp: &str, mode: &str) -> Self
      {
         let mut _path_string: String = String::from(fp);
 
-        if fp.ends_with(r"\r\n") {
+        if fp.ends_with(r"\r\n") {                                  // inspect string and strip trailing chars
             _path_string = _path_string.replace("\r\n", "");
         }
 
@@ -46,7 +60,6 @@ impl FileHandler {
 
         match mode {
             "r"|"rw"|"cra"|"crt" =>  {
-                // Sanity Checks
                 if _filepath.is_dir() {
                     exit_process("Desired Target is a Folder/Directory. Require a file");
                 }
@@ -103,7 +116,9 @@ impl FileHandler {
      ///```
      /// let mut _f = FileHandler::open("foo.txt", "crw");
      ///
-     /// _f.write("baz")?;
+     /// let _s = String::from("baz");
+     ///
+     /// _f.write(&_s)?;
      /// ```
      pub fn write(&mut self, _content: &String) -> Result<(), Box<dyn std::error::Error>>
      {
@@ -138,9 +153,9 @@ impl FileHandler {
      pub fn read_as_vecbytes(&self, n_bytes: u64) -> Result<Vec<u8>, Box<dyn std::error::Error>>
      {
         //
-        let mut _bufr = BufReader::new(&self.handle);
         let mut _bytes: Vec<u8> = Vec::with_capacity(n_bytes as usize);
-        _bufr.read_to_end(&mut _bytes)?;
+        let mut _bufr = BufReader::new(&self.handle);
+                _bufr.read_to_end(&mut _bytes)?;
         Ok(_bytes)
      }
      ///
@@ -150,7 +165,7 @@ impl FileHandler {
      pub fn read_as_bytesarray(&self, n_bytes: &mut [u8]) -> Result<(), Box<dyn std::error::Error>>
      {
         let mut _bufr = BufReader::new(&self.handle);
-        _bufr.read_exact(n_bytes)?;
+                _bufr.read_exact(n_bytes)?;
         Ok(())
      }
  }
