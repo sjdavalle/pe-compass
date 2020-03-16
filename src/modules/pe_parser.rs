@@ -21,7 +21,7 @@ use pe_structs::*;
 /// This module is used to parse the structures of the PE Format
 /// The parser should accomodate the identification of either a
 /// PE32 or PE64 being in scope, and subsequently, providing the
-/// relevant logic to parser the in scope object.
+/// relevant logic to handle the Structs of either 32 or 64 bit files.
 ///
 #[derive(Debug)]
 pub struct PeParser {
@@ -130,12 +130,10 @@ impl PeParser {
         let _md5: String = self.get_md5();
         let _sha2: String = self.get_sha2();
         
-        let _pehashes: PE_HASHES = PE_HASHES {
-                                        md5: _md5,
-                                        sha2: _sha2,
-                                    };
+        let _pehashes: PE_HASHES = PE_HASHES { md5: _md5, sha2: _sha2 };
+        
         //  Finally build the custom object PE_FILE with the essential data structures
-        //  to be used by the program.
+        //
         //  Note:   This is the object that represents the goal of the PeParser module.
         //          Remember, this module is only for serializing the file to human structs.
         PE_FILE {
@@ -185,8 +183,8 @@ impl PeParser {
         let _dos_stub: PE_DOS_STUB = self.content.pread_with(_offset, LE).unwrap();
         
         let mut _dos_string = String::with_capacity(40usize);
-        _dos_string.push_str(std::str::from_utf8(&_dos_stub.upper[..]).unwrap());
-        _dos_string.push_str(std::str::from_utf8(&_dos_stub.lower[..]).unwrap());
+                _dos_string.push_str(std::str::from_utf8(&_dos_stub.upper[..]).unwrap());
+                _dos_string.push_str(std::str::from_utf8(&_dos_stub.lower[..]).unwrap());
                 
         _dos_string
     }
@@ -438,7 +436,6 @@ impl PeParser {
         let mut _results: Vec<DLL_PROFILE> = vec![];
         let mut _offset: usize = _rva.file_offset as usize;
 
-        // Step 1
         // We begin by getting the DLLs imported by the PE file based on
         // the PE DIRECTORY ENTRY RVA matched from the relevant PE Section
         //
@@ -485,6 +482,10 @@ impl PeParser {
         }
         _results
     }
+    /// # PE Parser - CheckIfOrdinal32 Method
+    /// This method is applied to 32 bit pe files whose imports
+    /// in the IAT are checked to see if they are imported by ordinal
+    /// reference.
     fn check_if_ordinal32(&self, ord_va: u32) -> bool
     {
         const IMAGE_ORDINAL_FLAG32: u32 = 0x8000_0000;
@@ -501,6 +502,10 @@ impl PeParser {
             return false
         }
     }
+    /// # PE Parser - CheckIfOrdinal64 Method
+    /// This method is applied to 64 bit pe files whose imports
+    /// in the IAT are checked to see if they are imported by ordinal
+    /// reference.
     fn check_if_ordinal64(&self, ord_va: u64) -> bool
     {
         const IMAGE_ORDINAL_FLAG64: u64 = 0x80000000_00000000;
@@ -537,6 +542,7 @@ impl PeParser {
             for _d in _dbytes {
                 _dll_name.push(_d);
             }                             
+            
             if _dll_name.contains('\u{0}') { 
                 let _v: Vec<&str> = _dll_name.split(".").collect();
                 _dll_name = String::from(_v[0]);
@@ -569,6 +575,7 @@ impl PeParser {
                 break;
             }
             _is_ordinal = self.check_if_ordinal32(_thunk.Ordinal);
+            
             if _is_ordinal || _thunk.AddressOfData >= IMAGE_ORDINAL_FLAG32 {
                 _thunk_list.push(_thunk);       // Add The ThunkData For Ordinal temporarily
                 _thunk_list.pop();              // and remove it immediately
@@ -597,6 +604,7 @@ impl PeParser {
                 break;
             }
             _is_ordinal = self.check_if_ordinal64(_thunk.Ordinal);
+            
             if _is_ordinal || _thunk.AddressOfData >= IMAGE_ORDINAL_FLAG64 {
                 _thunk_list.push(_thunk);
                 _thunk_list.pop();
