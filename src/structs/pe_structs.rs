@@ -266,7 +266,6 @@ impl ::std::clone::Clone for IMAGE_IMPORT_DESCRIPTOR {
         *self
     }
 }
-
 impl IMAGE_IMPORT_DESCRIPTOR {
     /// Allows you to compare the null terminating descriptor
     /// to identify the end of the content for a PE file.
@@ -290,12 +289,11 @@ impl IMAGE_IMPORT_DESCRIPTOR {
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_THUNK_DATA32 {
-    pub AddressOfData:      DWORD,   // PIMAGE_IMPORT_BY_NAME
+    pub AddressOfData:      DWORD,  // PIMAGE_IMPORT_BY_NAME
     pub Function:           DWORD,  // PDWORD
     pub Ordinal:            DWORD,
     pub ForwarderString:    DWORD,  // PBYTE
 }
-
 impl ::std::clone::Clone for IMAGE_THUNK_DATA32 {
     fn clone(&self) -> Self {
         *self
@@ -403,9 +401,10 @@ impl ::std::clone::Clone for INSPECT_IMAGE_FILE_HEADER {
         *self
     }
 }
-///
-///
-///
+/// # INSPECT IMAGE OPTIONAL HEADER
+/// Custom Object used to parse the first 512 bytes of the PE file.
+/// This allows a developer to use the IMAGE OPTIONAL HEADER struct and its
+/// members to check for the valid presence of key fields.
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct INSPECT_IMAGE_OPTIONAL_HEADER {
@@ -424,7 +423,6 @@ impl ::std::clone::Clone for INSPECT_IMAGE_OPTIONAL_HEADER {
         *self
     }
 }
-
 /// # PE_OBJECTS
 /// These are the final objects used by the application to work with a PE file.
 /// After the initial INSPECTION, based on the `Magic` field in the IMAGE_OPTIONAL_HEADER
@@ -467,6 +465,8 @@ pub struct PE_OUTPUT {
 }
 ///
 ///
+///
+///
 #[derive(Debug, Deserialize, Serialize)]
 pub enum DLL_THUNK_DATA {
     x86(Vec<IMAGE_THUNK_DATA32>),
@@ -486,6 +486,7 @@ impl ::std::clone::Clone for IMAGE_NT_HEADERS {
         *self
     }
 }
+///
 ///
 ///
 ///
