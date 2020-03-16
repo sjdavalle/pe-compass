@@ -53,6 +53,33 @@ programs tracing computer systems and the programs they run.
 # Current Progress
 Currently, the program is run like this:
 
+## Help Menu
+You can get help by using the `-h` switch
+
+```bash
+$> pe-compass -h
+
+
+pe-compass  - v.0.0.8
+carlos diaz | @dfirence
+A Study of the Portable Executable Format
+
+USAGE:
+    pe-compass [OPTIONS] [SUBCOMMAND]
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -f < PE FILE >            File System Path of PEFILE to inspect
+    -o < OUTPUT_FILE >        Destination File to Write Output to
+
+SUBCOMMANDS:
+    help       Prints this message or the help of the given subcommand(s)
+    recurse    Works Recursively with Folders
+
+```
 ## Parse A File
 To parse a single file, just use the `-f` switch and filepath of the pe file.
 
@@ -62,7 +89,7 @@ $> pe-compass -f pe-samples/sqlite3x86.dll
 To parse a single file and save the parsed output, use the `-o` switch
 
 ```bash
-$> pe-compass 0f pe-samples/sqlite3x86.dll -o sqlite.json
+$> pe-compass -f pe-samples/sqlite3x86.dll -o sqlite.json
 ```
 
 ## Recursive Search
