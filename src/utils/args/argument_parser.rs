@@ -23,10 +23,10 @@ impl ArgumentsParser<'_> {
                         )
                         .arg(
                             Arg::with_name("output")
-                            .short("o")
-                            .value_name(" OUTPUT_FILE ")
-                            .help("Destination File to Write Output to")
-                            .takes_value(true)
+                                .short("o")
+                                .value_name(" OUTPUT_FILE ")
+                                .help("Destination File to Write Output to")
+                                .takes_value(true)
                         )
                         .subcommand(
                             SubCommand::with_name("recurse")

@@ -37,14 +37,16 @@ fn main() -> Result<()>
         let _sample = _args.inputs.value_of("file").unwrap();
         let _pe = PeParser::new(_sample);
         let _file = _pe.inspect_file();
-        let _content = serde_json::to_string(&_file)?;
         
         if _args.inputs.is_present("output") {
+            let _content = serde_json::to_string(&_file)?;
             let _ov = _args.inputs.value_of("output").unwrap();
             let mut _outfile = FileHandler::open(_ov, "crw");
             _outfile.write(&_content).expect("Could Not Write Content to Desired Output File");
+        } else {
+            let _content = serde_json::to_string_pretty(&_file)?; 
+            println!("{}", _content);
         }
-        println!("{}", _content);
     }
 
     if _args.inputs.is_present("recurse") {
