@@ -283,9 +283,10 @@ impl IMAGE_IMPORT_DESCRIPTOR {
         }
     }
 }
+/// # IMAGE THUNK DATA32
+/// 
 ///
-/// 
-/// 
+///
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct IMAGE_THUNK_DATA32 {
@@ -300,8 +301,9 @@ impl ::std::clone::Clone for IMAGE_THUNK_DATA32 {
         *self
     }
 }
-///
+/// # IMAGE THUNK DATA64
 /// 
+///
 ///
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
@@ -312,6 +314,39 @@ pub struct IMAGE_THUNK_DATA64 {
     pub ForwarderString:    QWORD,  // PBYTE
 }
 impl ::std::clone::Clone for IMAGE_THUNK_DATA64 {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+/// # IMAGE EXPORTS DIRECTORY
+/// The exports of a pe file are initially pointed to by the `exports directory entry 
+/// and those pointers lead to the struct IMAGE_EXPORT_DIRECTORY.
+///
+/// This struct is 40 Bytes in size.
+///
+/// The exported functions are obtained by following the RVA members below to its
+/// respective file offsets by calculating the RVAs.
+/// ```
+/// * RVA:  AddressOfFunctions member
+/// * RVA:  AddressOFNames member
+/// * RVA:  AddressOfNamesOrdinals member
+/// ```
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
+#[repr(C)]
+pub struct IMAGE_EXPORT_DIRECTORY {
+    pub Characteristics:        DWORD,
+    pub TimeDateStamp:          DWORD,
+    pub MajorVersion:           WORD,
+    pub MinorVersion:           WORD,
+    pub Name:                   DWORD,
+    pub Base:                   DWORD,
+    pub NumberOfFunctions:      DWORD,
+    pub NumberOfNames:          DWORD,
+    pub AddressOfFunctions:     DWORD,  // RVA from base of image
+    pub AddressOfNames:         DWORD,  // RVA from base of image
+    pub AddressOfNameOrdinals:  DWORD   // RVA from base of image
+}
+impl ::std::clone::Clone for IMAGE_EXPORT_DIRECTORY {
     fn clone(&self) -> Self {
         *self
     }
@@ -348,9 +383,10 @@ impl ::std::clone::Clone for INSPECT_NT_HEADERS {
         *self
     }
 }
-///
-/// 
-/// 
+/// # INSPECT IMAGE FILE HEADER
+/// Custom Object used to parse the first 512 bytes of the PE file.
+/// This allows a developer to use the FILE HEADER struct and its
+/// members to check for the valid presence of key fields.
 #[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
 #[repr(C)]
 pub struct INSPECT_IMAGE_FILE_HEADER {
