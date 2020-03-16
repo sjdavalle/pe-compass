@@ -2,7 +2,39 @@
 A Study of PE Format through the RUST programming language.
 
 # PROJECT STATUS
-** IN DEV-MODE** Do not download or use this for your environment yet.
+The project is being developed and you should use the `releases` section
+of this project to use stable versions suitable for productive work.
+
+The `Master` branch may not reflect the version of the `releases` section
+at times, although you can use the `Master` branch if  you want to be working
+with bleeding edge versions.
+
+Note:   If you decide to clone the `Master` branch you should have the stable
+        rust toolchain installed in your platform. Once you are setup with the
+        stable rustup toolchain, go ahead and compile with `cargo build --release`
+
+
+# PROJECT USAGE
+This project is not focused on building a binary parser, it is an anlytics project.
+The binary provided here with rust is the `workhorse` that is used to baseline a
+computer's *on-disk* binaries from filesystem locations.
+
+The project is created as a need to build custom datasets and pipelines around the
+DLL telemetry and its context. By context we mean the informational value afforded
+by the type of data that can be acquired by DLLs imported in a Portable Executable
+file - PE file.
+
+At this time, the focus is to study the `imports` or `IAT` table from a PE file to
+identify the meaning of the question: *What is the notion of intent from the PE file?*
+
+As many security researchers and professional programmers have noted, the PE file is
+fairly intuitive based on the Microsoft usage of descriptive function name stemming
+from *hungarian notation*.
+
+The true power of this project is the custom datasets you can build in a database
+for analytics, and it is those analytics that can allow you to better understand
+which types of telemetry collection approaches are useful for large-scale visibility
+programs tracing computer systems and the programs they run.
 
 # Documentation Articles
 * PE Rich Data Structure: Undocumented: http://bytepointer.com/articles/the_microsoft_rich_header.htm
