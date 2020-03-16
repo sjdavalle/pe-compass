@@ -43,19 +43,46 @@ programs tracing computer systems and the programs they run.
 * PE MSDN Arcticle:  https://docs.microsoft.com/en-us/windows/win32/debug/pe-format
 
 # To Do
-* Implement PE Renderer
-* Implement Database Workers
-* Optimmization Parsing
+* Implement PE Renderer: CSV & TABULAR
+* Implement Recursive Content Inspection & Validation
+* Implement Progress Indicators
+* Implement Database Workers: SQLITE & PGSQL
+* Optimization Parsing: From String to &str lifetimes
 * Support Parsing of UPX0 packed sections
 
 # Current Progress
 Currently, the program is run like this:
 
+## Parse A File
+To parse a single file, just use the `-f` switch and filepath of the pe file.
+
 ```bash
 $> pe-compass -f pe-samples/sqlite3x86.dll
 ```
+To parse a single file and save the parsed output, use the `-o` switch
 
-The output from above results in a limited json like this:
+```bash
+$> pe-compass 0f pe-samples/sqlite3x86.dll -o sqlite.json
+```
+
+## Recursive Search
+To search for files based on filename extensions in the filesystem, use the
+`recurse` subcommand plus the `-d` switch, and the `-f` switch.
+
+```bash
+$> pe-compass recurse -d C:\Windows -f .exe
+```
+
+You can redirect the resultant list of filepaths from above
+
+```bash
+$> pe-compass recurse -d C:\Windows -f .exe > C:\targets.txt
+```
+
+
+# Output Samples
+
+The output of a file being parsed is show in the below json output.
 
 ```json 
 {
