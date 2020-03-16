@@ -37,10 +37,12 @@ which types of telemetry collection approaches are useful for large-scale visibi
 programs tracing computer systems and the programs they run.
 
 # Documentation Articles
-* PE Rich Data Structure: Undocumented: http://bytepointer.com/articles/the_microsoft_rich_header.htm
-* PE Things They Did not tell you...: http://bytepointer.com/articles/rich_header_lifewire_vxmags_29A-8.009.htm
-* PE MindMap By Ero Carrera: http://www.openrce.org/reference_library/files/reference/PE%20Format.pdf
-* PE MSDN Arcticle:  https://docs.microsoft.com/en-us/windows/win32/debug/pe-format
+Title|URL|
+-----|---|
+PE Rich Data Structure: Undocumented|[LINK](http://bytepointer.com/articles/the_microsoft_rich_header.htm)|
+PE Things They Did not tell you...|[LINK](http://bytepointer.com/articles/rich_header_lifewire_vxmags_29A-8.009.htm)|
+PE MindMap By Ero Carrera|[LINK](http://www.openrce.org/reference_library/files/reference/PE%20Format.pdf)|
+PE MSDN Article|[LINK](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format)|
 
 # To Do
 * Implement PE Renderer: CSV & TABULAR
