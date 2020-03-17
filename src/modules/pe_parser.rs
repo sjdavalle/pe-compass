@@ -29,7 +29,7 @@ pub struct PeParser {
     content: Vec<u8>,
 }
 impl PeParser {
-    /// # Pe Parser New Method
+    /// # Pe Parser - Constructor
     /// Creates a new instance of the PE Parser Object
     /// and it loads a PE file for parsing.
     /// 
@@ -343,7 +343,11 @@ impl PeParser {
         }
         _section_table_headers
     }
-    /// # Parse the Import Address Table and Functions
+    /// # PE Parser - Get RVA From Directory Entries
+    /// This is an important method as it is what allows for the identification of the PE
+    /// section that contains the relevant content and offsets for a desired directory entry.
+    ///
+    /// ## Parse the Import Address Table and Functions
     /// Read the Function Signature Cafefully, we are passing things by reference.
     /// 
     /// The following notes show which struct members of the section header are relevant
@@ -418,7 +422,7 @@ impl PeParser {
         }
         _rva_tracker
     }
-    /// #Pe Parser - GetDLLImports Methods
+    /// # PE Parser - GetDLLImports Methods
     /// This method parses the names of the DLLs involved and names of functions
     /// within the DLL being imported.
     /// 
@@ -522,7 +526,7 @@ impl PeParser {
             false
         }
     }
-    /// #Pe Parser - GetDLLName
+    /// # PE Parser - GetDLLName
     /// This method obtains the name of the DLL imported by the file
     /// as seen in the IMAGE_IMPORT_DESCRIPTOR struct and its member
     /// called `Name`
@@ -557,7 +561,7 @@ impl PeParser {
         }
         _dll_name
     }
-    /// #Pe Parser - GetDLLThunks32
+    /// # PE Parser - GetDLLThunks32
     /// This method is for 32bit files, and it is focused on parsing the 
     /// IMAGE_IMPORT_BY_NAME struct pointed to from the IMAGE_IMPORT_DESCRIPTOR
     /// struct.
@@ -586,7 +590,7 @@ impl PeParser {
         }
         _thunk_list
     }
-    /// #Pe Parser - GetDLLThunks64
+    /// # PE Parser - GetDLLThunks64
     /// This method is for 64bit files, and it is focused on parsing the 
     /// IMAGE_IMPORT_BY_NAME struct pointed to from the IMAGE_IMPORT_DESCRIPTOR
     /// struct.
@@ -615,7 +619,7 @@ impl PeParser {
         }
         _thunk_list
     }
-    /// #Pe Parser - GetDLLFunctionNames32
+    /// # PE Parser - GetDLLFunctionNames32
     /// This method is for 32bit files, and it is focused on parsing the 
     /// IMAGE_IMPORT_BY_NAME struct pointed to from the IMAGE_THUNK_DATA32
     /// struct.
@@ -661,7 +665,7 @@ impl PeParser {
             functions: _functions_list
         }
     }
-    /// #Pe Parser - GetDLLFunctionNames64
+    /// # PE Parser - GetDLLFunctionNames64
     /// This method is for 64bit files, and it is focused on parsing the 
     /// IMAGE_IMPORT_BY_NAME struct pointed to from the IMAGE_THUNK_DATA64
     /// struct.
