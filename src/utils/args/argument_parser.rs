@@ -181,32 +181,3 @@ impl ArgumentsParser<'_> {
         }
     }
 }
-/*
-    if _args.inputs.is_present("recurse") {
-        let _subcommand = _args.inputs.subcommand_matches("recurse").unwrap();
-        if _subcommand.is_present("directory") {
-            let _arg = _subcommand.value_of("directory").unwrap();
-            let _path = Path::new(&_arg);
-
-            if _path.is_dir() && _path.exists() {
-                let mut _filter: &str = "";
-                let mut _wants_filter: bool = false;
-
-                if _subcommand.is_present("filter") {
-                    _wants_filter = true;
-                    _filter = _subcommand.value_of("filter").unwrap();
-                }
-                for _entry in WalkDir::new(_arg).into_iter().filter_map(|e| e.ok()) {
-                    if _wants_filter {
-                        let _e = _entry.path().to_str().unwrap();
-                        if _e.contains(_filter) {
-                            println!("{}",_e);
-                        }
-                    } else {
-                        println!("{}", _entry.path().display());
-                    }
-                }
-            }
-        }
-    }
-*/
