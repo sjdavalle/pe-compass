@@ -436,6 +436,7 @@ impl ::std::clone::Clone for INSPECT_IMAGE_OPTIONAL_HEADER {
 pub struct PE_FILE {
     pub pename:                 String,
     pub petype:                 u16,
+    pub pesubsystem:            u16,
     //pub ImageDosHeader:         IMAGE_DOS_HEADER,
     //pub ImageDosStub:           String,
     //pub ImageNtHeaders:         IMAGE_NT_HEADERS,

@@ -84,8 +84,9 @@ impl PeParser {
         let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
     
         let mut _petype: u16;
+        let mut _pesubsystem: u16;
         let mut _nt_headers: IMAGE_NT_HEADERS;
-        
+
         let mut _image_data_dir: [u64; 16] = [0u64; 16];
         let mut _dll_imports: Vec<DLL_PROFILE>;
         let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY>;
@@ -107,10 +108,10 @@ impl PeParser {
                     std::process::exit(0x0100);
                 }
             };
-            
+
             _image_data_dir = match &_nt_headers {
-                IMAGE_NT_HEADERS::x86(value) => value.OptionalHeader.DataDirectory,
-                IMAGE_NT_HEADERS::x64(value) => value.OptionalHeader.DataDirectory
+                IMAGE_NT_HEADERS::x86(value) => { _pesubsystem = value.OptionalHeader.Subsystem; value.OptionalHeader.DataDirectory },
+                IMAGE_NT_HEADERS::x64(value) => { _pesubsystem = value.OptionalHeader.Subsystem; value.OptionalHeader.DataDirectory },
             };
 
             _data_map = self.get_data_directories(&_image_data_dir);
@@ -139,6 +140,7 @@ impl PeParser {
         PE_FILE {
             pename:                 self.handler.name.clone(),
             petype:                 _petype,
+            pesubsystem:            _pesubsystem,
             //ImageDosHeader:         _doshdr,
             //ImageDosStub:           _dos_stub,
             //ImageNtHeaders:         _nt_headers,
