@@ -81,6 +81,13 @@ impl ArgumentsParser<'_> {
                                                .takes_value(true)
                                        )
                                        .arg(
+                                           Arg::with_name("extension")
+                                               .short("x")
+                                               .value_name("File Extension Name")
+                                               .help("Applies Ends With Pattern Match - NON-REGEX")
+                                               .takes_value(true)
+                                       )
+                                       .arg(
                                            Arg::with_name("filter")
                                                .short("f")
                                                .value_name("Pattern NON_REGEX")
@@ -162,6 +169,11 @@ impl ArgumentsParser<'_> {
             false => std::process::exit(0x0100)
         };
 
+        let _extension = match _subcommand.is_present("extension") {
+            true => _subcommand.value_of("extension").unwrap(),
+            false => "None"
+        };
+
         let _filter = match _subcommand.is_present("filter") {
             true => _subcommand.value_of("filter").unwrap(),
             false => "None"
@@ -172,10 +184,16 @@ impl ArgumentsParser<'_> {
         if _path.exists() && _path.is_dir() {
             for _entry in WalkDir::new(_path).into_iter().filter_map(|e| e.ok()) {
                 let _e = _entry.path().to_str().unwrap();
-                if _filter == "None" {
+                if _filter == "None" && _extension == "None" {
                     println!("{}", _e);
+                } else if _filter != "None" && _extension == "None" {
+                    if _e.contains(_filter) { println!("{}", _e); }
+                } else if _filter == "None" && _extension != "None" {
+                    if _e.ends_with(_extension) { println!("{}", _e); }
+                } else if _filter != "None" && _extension != "None" {
+                    if _e.contains(_filter) { if _e.ends_with(_extension) { println!("{}", _e); }}
                 } else {
-                     if _e.contains(_filter) { println!("{}", _e); }
+                    println!("{}", _e);
                 }
             }
         }
