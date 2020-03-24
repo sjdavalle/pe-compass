@@ -177,7 +177,8 @@ $> pe-compass recurse -d C:\Windows -f foo -x .exe
 
 # Output Samples
 
-The output of a file being parsed is show in the below json output.
+The output of a file being parsed is shown in the below json output. The default output is JSON. So it should be farily easy to build a custom database
+with this data that leverages JSON Documents.  Future releases are going to accomodate CSV and SQL output to build SQL databases <-- My FAVORITE
 
 ```json 
 {
