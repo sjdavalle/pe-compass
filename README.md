@@ -125,6 +125,7 @@ The output of a file being parsed is show in the below json output.
 {
   "pename": "sqlite3x86.dll",
   "petype": 267,
+  "pesubsystem": 3,				// Ojo, CLI or GUI here :)
   "ImageDLLImports": [
     {
       "name": "kernel32.dll",
