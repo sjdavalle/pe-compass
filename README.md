@@ -66,56 +66,114 @@ Currently, the program is run like this:
 ## Help Menu
 You can get help by using the `-h` switch
 
-```bash
+```text
 $> pe-compass -h
 
-
-pe-compass  - v.0.0.8
+pe-compass v.0.0.8
 carlos diaz | @dfirence
+
 A Study of the Portable Executable Format
 
 USAGE:
-    pe-compass [OPTIONS] [SUBCOMMAND]
+    pe-compass [SUBCOMMAND]
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+SUBCOMMANDS:
+    help       Prints this message or the help of the given subcommand(s)
+    inspect    Inspect a PE File's Imports Structure
+    recurse    Works Recursively with Folders
+```
+
+## Help Menu - Subcommands
+As the program works in subcommands mode, every `subcommand` has a built-in help menu accessed by the `-h` switch.
+
+The example below, shows how to access the help menu for the `inspect` subcommand mode.
+
+```text
+$> pe-compass inspect -h
+
+pe-compass-inspect v.0.0.8
+carlos diaz | @dfirence
+
+Inspect a PE File's Imports Structure
+
+USAGE:
+    pe-compass inspect [OPTIONS]
 
 FLAGS:
     -h, --help       Prints help information
     -V, --version    Prints version information
 
 OPTIONS:
-    -f < PE FILE >            File System Path of PEFILE to inspect
-    -o < OUTPUT_FILE >        Destination File to Write Output to
-
-SUBCOMMANDS:
-    help       Prints this message or the help of the given subcommand(s)
-    recurse    Works Recursively with Folders
-
+    -f <PE FILE>            File System Path of PEFILE to inspect
+    -o <OUTPUT FILE>        Destination File to Write Output to
 ```
+<br/>
+<br/>
+
 ## Parse A File
-To parse a single file, just use the `-f` switch and filepath of the pe file.
+To parse a single file, enter the `subcommand` options `inspect` and use the `-f` switch and filepath of the pe file.
 
 ```bash
-$> pe-compass -f pe-samples/sqlite3x86.dll
+$> pe-compass inspect -f pe-samples/sqlite3x86.dll
 ```
+
 To parse a single file and save the parsed output, use the `-o` switch
 
 ```bash
-$> pe-compass -f pe-samples/sqlite3x86.dll -o sqlite.json
+$> pe-compass inspect -f pe-samples/sqlite3x86.dll -o sqlite.json
 ```
+<br />
 
 ## Recursive Search
-To search for files based on filename extensions in the filesystem, use the
-`recurse` subcommand plus the `-d` switch, and the `-f` switch.
+The subcommand `recurse` is used to get a filelisting under a target folder/directory.  This will allow you to first
+find files matching your desired criteria **only based** on the filename. 
+
+By building a directory list you can then launch a scan for **parsing** the files in that list with the inspect subcommand options.
+<br/>
+
+### Build a list of target filepaths without filtering
+To scan a directory, use the `recurse` subcommand and the required `-d` switch followed by the directory path.
 
 ```bash
-$> pe-compass recurse -d C:\Windows -f .exe
+$> pe-compass recurse -d C:\Windows
 ```
+<br/>
 
-You can redirect the resultant list of filepaths from above
+### Build a list of target filepaths with filtering
+You can use the `-f` switch to filter by a string matching anywhere in the filename or absolute file path
 
 ```bash
-$> pe-compass recurse -d C:\Windows -f .exe > C:\targets.txt
-```
+# Recurse the C:\Windows folder, and filter for string "foo"
 
+$> pe-compass recurse -d C:\Windows -f foo > C:\targets.txt
+```
+<br/>
+
+You can instead do another filter that matches as **endwith** in the filename or absolute file paths
+
+```bash
+# Recurse the C:\Windows folder, and filter for anything matching at the end with ".exe"
+$> pe-compass recurse -d C:\Windows -x .exe > C:\targets.txt
+
+# Do the same but this time for ".dll" files
+$> pe-compass recurse -d C:\Windows -x .dll > C:\targets.txt
+
+# Or this time for ".sys" files
+$> pe-compass recurse -d C:\Windows -x .sys > C:\targets.txt
+```
+<br />
+
+One more approach is to use both filters offered by the `-f` and the `-x` to get more granularity, like this:
+
+```bash
+# Recurse the C:\Windows folder, and filter for the path "foo", and only provide files that end with ".exe"
+
+$> pe-compass recurse -d C:\Windows -f foo -x .exe
+```
 
 # Output Samples
 
@@ -125,7 +183,7 @@ The output of a file being parsed is show in the below json output.
 {
   "pename": "sqlite3x86.dll",
   "petype": 267,
-  "pesubsystem": 3,				// Ojo, CLI or GUI here :)
+  "pesubsystem": 3,
   "ImageDLLImports": [
     {
       "name": "kernel32.dll",
