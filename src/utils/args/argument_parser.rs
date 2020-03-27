@@ -14,7 +14,7 @@ use file_handler::FileHandler;
 
 /// # ArgumentsParser - Global Variables
 /// Convenient metadata used throughout the arguments parser object
-static _VERSION: &str = "v.0.0.8"; 
+static _VERSION: &str = "v.0.0.9"; 
 static _AUTHOR: &str = "carlos diaz | @dfirence\n\n";
 static _ABOUT: &str = "A Study of the Portable Executable Format";
 
