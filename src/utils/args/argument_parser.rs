@@ -182,7 +182,7 @@ impl ArgumentsParser<'_> {
         let _path = std::path::Path::new(&_directory);
 
         if _path.exists() && _path.is_dir() {
-            for _entry in WalkDir::new(_path).into_iter().filter_map(|e| e.ok()) {
+            for _entry in WalkDir::new(_path).max_depth(20).into_iter().filter_map(|e| e.ok()) {
                 let _e = _entry.path().to_str().unwrap();
                 if _filter == "None" && _extension == "None" {
                     println!("{}", _e);

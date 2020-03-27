@@ -1,6 +1,12 @@
 
-pub fn exit_process(msg: &str) {
-    println!("\n\n(?) Error | Process Exiting Due to:\n");
-    println!("{}", msg);
+pub fn exit_process(log_level: &str, msg: &str) {
+    let _dashes = "-".repeat(msg.len());
+    let _user_message = format!(r#"
+    (?) {} | Process Exiting Due To:
+    {}
+    {}
+    "#, log_level, _dashes, msg);
+
+    println!("{}", _user_message);
     std::process::exit(0x0100);
 }

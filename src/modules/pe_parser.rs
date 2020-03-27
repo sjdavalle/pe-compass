@@ -47,7 +47,7 @@ impl PeParser {
             // or parsing it further.
             let _bfile = FileHandler::open(fp, "r");
             if  _bfile.size  < 1024u64 {
-                exit_process("Desired Target is less than 64 Bytes. Likely Not a real PE File"); // sizeof DOS_HEADER
+                exit_process("Info", "Desired Target is less than 64 Bytes. Likely Not a real PE File"); // sizeof DOS_HEADER
             }
             // Load first 512 bytes
             // Use this array to inspect the DOS_HEADER and PE_SIGNATURE
@@ -56,7 +56,7 @@ impl PeParser {
             // Start Checks
             let _dos_signature: u16 = _x_bytes[..].pread_with(0usize, LE).unwrap();
             if _dos_signature != 23117u16 {
-                exit_process("Absent PE Magic - `MZ`");
+                exit_process("Info", "Absent PE Magic - `MZ` | Likely Not a PE File");
             }
         }
         // If the above checks did not fail then we have a real PE file.
@@ -255,7 +255,7 @@ impl PeParser {
             _data_directories.push(_data_dir);
         }
         if _data_directories[1].Size == 0 {
-            exit_process("PE Imports Directory Entry Size Zero: No Imports, process exiting")
+            exit_process("Info", "PE Imports Directory Entry Size Zero: No Imports, process exiting")
         }
         // Now Build the dataMap
         let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY> = HashMap::new();

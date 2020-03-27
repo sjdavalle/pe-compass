@@ -61,14 +61,14 @@ impl FileHandler {
         match mode {
             "r"|"rw"|"cra"|"crt" =>  {
                 if _filepath.is_dir() {
-                    exit_process("Desired Target is a Folder/Directory. Require a file");
+                    exit_process("Info", "Desired Target is a Folder/Directory. Require a file");
                 }
                 if !_filepath.exists() {
-                    exit_process("Desired Target Does Not Exists.  Require an existent file");
+                    exit_process("Info","Desired Target Does Not Exists.  Require an existent file");
                 }
             },
             "crw" =>  { println!("New File To Be Created: {}", fp); },
-            _     =>  exit_process("Desired File Mode Not Suppported, Process Exiting...")
+            _     =>  exit_process("Info", "Desired File Mode Not Suppported, Process Exiting...")
         }
 
         let mut _read       = false;
@@ -83,7 +83,7 @@ impl FileHandler {
             "crw"   =>  { _write = true; _create = true; },     // Create New
             "cra"   =>  { _write = true; _append = true; },     // Create Append
             "crt"   =>  { _write = true; _truncate = true; },   // Create Truncate
-            _       =>  exit_process("Desired File Mode Not Suppported, Process Exiting...")
+            _       =>  exit_process("Error", "Desired File Mode Not Suppported, Process Exiting...")
         }
 
         let _file = fs::OpenOptions::new()
@@ -142,7 +142,7 @@ impl FileHandler {
         if _filepath.exists() {
             fs::remove_file(_filepath)?;
         } else {
-            exit_process("Desired File For Deletion Does Not Exist, Process Exiting");
+            exit_process("Info", "Desired File For Deletion Does Not Exist, Process Exiting");
         }
         Ok(())
      }
