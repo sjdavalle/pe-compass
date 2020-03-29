@@ -88,7 +88,7 @@ impl PeParser {
         let mut _nt_headers: IMAGE_NT_HEADERS;
 
         let mut _image_data_dir: [u64; 16] = [0u64; 16];
-        let mut _dll_imports: Vec<DLL_PROFILE>;
+        let mut _dll_imports: Vec<DLL_PROFILE> = Vec::new();
         let mut _dll_exports: DLL_EXPORTS = DLL_EXPORTS { exports: 0 as usize, functions: vec![] };
         let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY>;
         let mut _section_table_headers: HashMap<String, IMAGE_SECTION_HEADER>;
@@ -123,10 +123,15 @@ impl PeParser {
         // either IAT table.
         {
             // Acquire IAT
-            let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
- 
-            let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", _eimp, &_section_table_headers);
-            _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports);
+            if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IMPORT".to_string()) {
+                println!("Has Imports");
+                let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
+                let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", _eimp, &_section_table_headers);
+                _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports);
+            } else {
+                let _d = DLL_PROFILE { name: "".to_string(), imports: 0 as usize, functions: vec![] };
+                _dll_imports.push(_d);
+            }
         }
         // 3rd Internal code block used for DLL exports - EAT
         // Once we optimize, we will refactor this.
@@ -292,9 +297,9 @@ impl PeParser {
             let _data_dir: IMAGE_DATA_DIRECTORY = _bytes.pread_with(_offset, LE).unwrap();
             _data_directories.push(_data_dir);
         }
-        if _data_directories[1].Size == 0 {
-            exit_process("Info", "PE Imports Directory Entry Size Zero: No Imports, process exiting")
-        }
+        //if _data_directories[1].Size == 0 {
+            //exit_process("Info", "PE Imports Directory Entry Size Zero: No Imports, process exiting")
+        //}
         // Now Build the dataMap
         let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY> = HashMap::new();
         let mut _type: String;
