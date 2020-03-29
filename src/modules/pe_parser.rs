@@ -124,7 +124,6 @@ impl PeParser {
         {
             // Acquire IAT
             if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IMPORT".to_string()) {
-                println!("Has Imports");
                 let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
                 let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", _eimp, &_section_table_headers);
                 _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports);
@@ -179,7 +178,7 @@ impl PeParser {
     pub fn get_dosheader(&self) -> IMAGE_DOS_HEADER
     {
         let _offset = 0 as usize;
-        let _doshdr: IMAGE_DOS_HEADER = self.content.pread_with(_offset, LE).unwrap();
+        let _doshdr: IMAGE_DOS_HEADER = self.content.pread_with(_offset, LE).expect("Unable to Serialize IMAGE_DOS_HEADER From PE File");
         _doshdr
     }
     /// # Pe Parser GetDosStubString Method
@@ -216,7 +215,7 @@ impl PeParser {
     pub fn inspect_nt_headers(&self, e_lfanew: i32) -> INSPECT_NT_HEADERS
     {
         let _offset = e_lfanew as usize;
-        let _nt_headers: INSPECT_NT_HEADERS = self.content.pread_with(_offset, LE).unwrap();
+        let _nt_headers: INSPECT_NT_HEADERS = self.content.pread_with(_offset, LE).expect("Unable to Serialize INSPECT_NT_HEADERS From e_lfanew");
         _nt_headers
     }
     /// # PE Parser GetImageNTHeaders32 Method
@@ -233,7 +232,7 @@ impl PeParser {
     fn get_image_nt_headers32(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS32
     {
         let _offset = e_lfanew as usize;       
-        let _peheader: IMAGE_NT_HEADERS32 = self.content.pread_with(_offset, LE).unwrap();
+        let _peheader: IMAGE_NT_HEADERS32 = self.content.pread_with(_offset, LE).expect("Unable to Serialize IMAGE_NT_HEADERS32 From e_lfanew");
         _peheader
     }
     /// # PE Parser GetImageNTHeaders64 Method
@@ -250,7 +249,7 @@ impl PeParser {
     fn get_image_nt_headers64(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS64
     {
         let _offset = e_lfanew as usize;       
-        let _peheader: IMAGE_NT_HEADERS64 = self.content.pread_with(_offset, LE).unwrap();
+        let _peheader: IMAGE_NT_HEADERS64 = self.content.pread_with(_offset, LE).expect("Unable to Serialize IMAGE_NT_HEADERS64 From e_lfanew");
         _peheader
     }
     ///
@@ -294,7 +293,7 @@ impl PeParser {
         // Serialize Each Data Directory
         for _d in data_dir.iter() {
             let _bytes = _d.to_le_bytes();
-            let _data_dir: IMAGE_DATA_DIRECTORY = _bytes.pread_with(_offset, LE).unwrap();
+            let _data_dir: IMAGE_DATA_DIRECTORY = _bytes.pread_with(_offset, LE).expect("Unable to Serialize IMAGE_DATA_DIRECTORY From NT_HEADERS");
             _data_directories.push(_data_dir);
         }
         //if _data_directories[1].Size == 0 {
@@ -372,7 +371,7 @@ impl PeParser {
         
         while _total_bytes_sections != 0 {
 
-            _section_header = self.content.pread_with(_offset_starts_sechdr, LE).unwrap();
+            _section_header = self.content.pread_with(_offset_starts_sechdr, LE).expect("Unable to Serialize SECTION_HEADER From SECTION_TABLE");
             
             _section_name = _section_header.Name.iter()                 // Remove Null Bytes from Section Name
                                                 .filter(|x| *x > &0)
@@ -492,7 +491,7 @@ impl PeParser {
         // Watch the offset change consistently to only parse this area of the PE File
         // Move on to Step 2 after this list is acquired.
         loop {                                                      // Find the Image Descriptors - i.e, DLLs
-            _dll = self.content.pread_with(_offset, LE).unwrap();   // Iterate through the file by offset
+            _dll = self.content.pread_with(_offset, LE).expect("Unable to Serialize IMPORT_DESCRIPTOR From Section Pointer");
             _dll_list.push(_dll);                                   // Add each descriptor found to the list
 
             _offset += SIZE_OF_IMAGE_IMPORT_DESCRIPTOR;             // Advance the file offset by 20 bytes
@@ -581,8 +580,8 @@ impl PeParser {
         let mut _dll_name: String = String::new();
         let mut _offset: usize = _offset;
         loop {                                         
-            let _part: u32 = self.content.pread_with(_offset, LE).unwrap();    // Read the DLL Name by 4 byte increment
-            let _bytes  = _part.to_le_bytes();   
+            let _part: u32 = self.content.pread_with(_offset, LE).expect("Unable to Serialize DLL_NAME from IMPORT_DESCRIPTOR");
+            let _bytes  = _part.to_le_bytes();   // Read the DLL Name by 4 byte increment
             let _dbytes: Vec<char> = _part.to_le_bytes().iter()
                                                         .map(|x| *x as u8)
                                                         .filter(|x| x.is_ascii())
@@ -619,7 +618,7 @@ impl PeParser {
         let mut _thunk_list: Vec<IMAGE_THUNK_DATA32> = vec![];
         let mut _offset: usize = _offset;
         loop {
-            _thunk = self.content.pread_with(_offset, LE).unwrap();
+            _thunk = self.content.pread_with(_offset, LE).expect("Unable to Serialize THUNK_DATA32 From IMAGE_DESCRIPTOR");
             if _thunk.AddressOfData == 0 {
                 break;
             }
@@ -648,7 +647,7 @@ impl PeParser {
         let mut _thunk_list: Vec<IMAGE_THUNK_DATA64> = vec![];
         let mut _offset: usize = _offset;
         loop {
-            _thunk = self.content.pread_with(_offset, LE).unwrap();
+            _thunk = self.content.pread_with(_offset, LE).expect("Unable to Serialize THUNK_DATA64 From IMAGE_DESCRIPTOR");
             if _thunk.AddressOfData == 0 {
                 break;
             }
@@ -682,7 +681,7 @@ impl PeParser {
         for _thunk in _thunk_list {
             _offset = _rva.new_offset_from(_thunk.AddressOfData + 2);
             loop {
-                _part = self.content.pread_with(_offset, LE).unwrap();
+                _part = self.content.pread_with(_offset, LE).expect("Unable to Serialize Function Name from THUNK_DATA32");
                 let _bytes = _part.to_le_bytes();
                 let _dbytes: Vec<char> = _part.to_le_bytes().iter()
                                                             .map(|x| * x as u8)
@@ -728,7 +727,7 @@ impl PeParser {
             let _x: u32 = (_thunk.AddressOfData + 2) as u32;
             _offset = _rva.new_offset_from(_x);
             loop {
-                _part = self.content.pread_with(_offset, LE).unwrap();
+                _part = self.content.pread_with(_offset, LE).expect("Unable to Serialize Function Name from THUNK_DATA64");
                 let _bytes = _part.to_le_bytes();
                 let _dbytes: Vec<char> = _part.to_le_bytes().iter()
                                                             .map(|x| * x as u8)
@@ -763,11 +762,16 @@ impl PeParser {
     fn get_dll_exports(&self, _rva: &mut PE_RVA_TRACKER) -> DLL_EXPORTS
     {
         let mut _offset = _rva.file_offset as usize;
-        let _exports: IMAGE_EXPORT_DIRECTORY = self.content.pread_with(_offset, LE).unwrap();
+        let _exports: IMAGE_EXPORT_DIRECTORY = self.content.pread_with(_offset, LE).expect("Unable to serialize IMAGE_EXPORT_DIRECTORY");
         let _names_total = _exports.NumberOfNames as usize;
+        let _funcs_total = _exports.NumberOfFunctions as usize;
         let mut _names_funcs: Vec<String> = Vec::with_capacity(_names_total);
         let mut _names = _rva.new_offset_from(_exports.AddressOfNames);
-        if _names_total > 0 {
+        if _funcs_total == 0usize {
+            let _null_exports = DLL_EXPORTS { exports: _funcs_total, functions: vec![] };
+            return _null_exports;
+        }
+        if _names_total > 0usize {
             let mut _names_count = 0;
             let mut _names_rvas: Vec<usize> = Vec::with_capacity(_names_total);
             let mut _function_name: String = String::new();
@@ -808,7 +812,7 @@ impl PeParser {
             }
         }
         DLL_EXPORTS {
-           exports:     _exports.NumberOfNames as usize,
+           exports:     _names_total,
            functions:   _names_funcs
         }
     }
