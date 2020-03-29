@@ -84,7 +84,7 @@ impl PeParser {
         let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
     
         let mut _petype: u16;
-        let mut _pesubsystem: u16;
+        let mut _pesubsystem: String;
         let mut _nt_headers: IMAGE_NT_HEADERS;
 
         let mut _image_data_dir: [u64; 16] = [0u64; 16];
@@ -109,12 +109,12 @@ impl PeParser {
                     std::process::exit(0x0100);
                 }
             };
-
+            let mut _subsystem: u16 = 0;
             _image_data_dir = match &_nt_headers {
-                IMAGE_NT_HEADERS::x86(value) => { _pesubsystem = value.OptionalHeader.Subsystem; value.OptionalHeader.DataDirectory },
-                IMAGE_NT_HEADERS::x64(value) => { _pesubsystem = value.OptionalHeader.Subsystem; value.OptionalHeader.DataDirectory },
+                IMAGE_NT_HEADERS::x86(value) => { _subsystem = value.OptionalHeader.Subsystem; value.OptionalHeader.DataDirectory },
+                IMAGE_NT_HEADERS::x64(value) => { _subsystem = value.OptionalHeader.Subsystem; value.OptionalHeader.DataDirectory },
             };
-
+            _pesubsystem = self.get_subsystem_type(_subsystem);
             _data_map = self.get_data_directories(&_image_data_dir);
             _section_table_headers = self.get_section_headers(&_doshdr.e_lfanew, &_nt_test);
         }
@@ -247,7 +247,33 @@ impl PeParser {
         let _offset = e_lfanew as usize;       
         let _peheader: IMAGE_NT_HEADERS64 = self.content.pread_with(_offset, LE).unwrap();
         _peheader
-    }    
+    }
+    ///
+    /// 
+    /// 
+    /// 
+    /// 
+    fn get_subsystem_type(&self, subsystem: u16) -> String
+    {
+        let _pe_subsystem = match subsystem {
+            0 => "An unknown subsystem",
+            1 => "Device drivers and native Windows processes",
+            2 => "The Windows graphical user interface (GUI) subsystem",
+            3 => "The Windows character (Cosole UI) subsystem",
+            5 => "The OS/2 character subsystem",
+            7 => "The Posix character subsystem",
+            8 => "Native Win9x driver",
+            9 => "Windows CE",
+           10 => "An Extensible Firmware Interface (EFI) application",
+           11 => "An EFI driver with boot services",
+           12 => "An EFI driver with run-time services",
+           13 => "An EFI ROM image",
+           14 => "XBOX",
+           16 => "Windows boot application",
+           _ => "ANOMALOUS_SUBSYSTEM_TYPE_FROM_SPECIFICATION" 
+        };
+        _pe_subsystem.to_string()
+    }  
     /// # PE Parser GetDataDirectories Method
     /// This parses the 16 data directories from the OPTIONAL_HEADER to return
     /// a Vector of IMAGE_DATA_DIRECTORY entries.
