@@ -443,6 +443,7 @@ pub struct PE_FILE {
     //pub ImageDataDirectory:     HashMap<String, IMAGE_DATA_DIRECTORY>,
     //pub ImageSectionHeaders:    HashMap<String, IMAGE_SECTION_HEADER>,
     pub ImageDLLImports:        Vec<DLL_PROFILE>,
+    pub ImageDLLExports:        DLL_EXPORTS,
     pub ImageHashSignatures:    PE_HASHES    
 }
 ///
@@ -568,5 +569,13 @@ impl PE_RVA_TRACKER {
 pub struct DLL_PROFILE {
     pub name:       String,
     pub imports:    usize,
+    pub functions:  Vec<String>
+}
+///
+/// 
+/// 
+#[derive(Hash, Debug, Eq, PartialEq, Deserialize, Serialize)]
+pub struct DLL_EXPORTS {
+    pub exports:    usize,
     pub functions:  Vec<String>
 }

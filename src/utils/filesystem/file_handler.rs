@@ -8,7 +8,8 @@ use std::path::Path;
 use fs2::FileExt;
 
 // My Modules
-#[path = "../errors/custom_errors.rs"] mod custom_errors;
+#[path = "../errors/custom_errors.rs"]
+mod custom_errors;
 use custom_errors::exit_process;
 
 
@@ -61,7 +62,7 @@ impl FileHandler {
         match mode {
             "r"|"rw"|"cra"|"crt" =>  {
                 if _filepath.is_dir() {
-                    exit_process("Info", "Desired Target is a Folder/Directory. Require a file");
+                    exit_process("Info","Desired Target is a Folder/Directory. Require a file");
                 }
                 if !_filepath.exists() {
                     exit_process("Info","Desired Target Does Not Exists.  Require an existent file");
@@ -83,7 +84,7 @@ impl FileHandler {
             "crw"   =>  { _write = true; _create = true; },     // Create New
             "cra"   =>  { _write = true; _append = true; },     // Create Append
             "crt"   =>  { _write = true; _truncate = true; },   // Create Truncate
-            _       =>  exit_process("Error", "Desired File Mode Not Suppported, Process Exiting...")
+            _       =>  exit_process("Info", "Desired File Mode Not Suppported, Process Exiting...")
         }
 
         let _file = fs::OpenOptions::new()

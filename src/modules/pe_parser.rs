@@ -89,6 +89,7 @@ impl PeParser {
 
         let mut _image_data_dir: [u64; 16] = [0u64; 16];
         let mut _dll_imports: Vec<DLL_PROFILE>;
+        let mut _dll_exports: DLL_EXPORTS = DLL_EXPORTS { exports: 0 as usize, functions: vec![] };
         let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY>;
         let mut _section_table_headers: HashMap<String, IMAGE_SECTION_HEADER>;
         
@@ -119,13 +120,23 @@ impl PeParser {
         }
         // 2nd Internal code block is used again to keep essential data structures.
         // However, here we want to focus on parsing tedious sections of the file that come from
-        // either EAT or IAT tables.
+        // either IAT table.
         {
             // Acquire IAT
             let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
  
             let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", _eimp, &_section_table_headers);
             _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports);
+        }
+        // 3rd Internal code block used for DLL exports - EAT
+        // Once we optimize, we will refactor this.
+        {
+            if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_EXPORT".to_string())
+            {
+                let _eexp = _data_map.get("IMAGE_DIRECTORY_ENTRY_EXPORT").expect("Unable to Get EAT Table From Section");
+                let mut _rva_exports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("exports", _eexp, &_section_table_headers);
+                _dll_exports = self.get_dll_exports(&mut _rva_exports);
+            }
         }
         //  Hash the file's contents
         let _md5: String = self.get_md5();
@@ -147,6 +158,7 @@ impl PeParser {
             //ImageDataDirectory:     _data_map,
             //ImageSectionHeaders:    _section_table_headers,
             ImageDLLImports:        _dll_imports,
+            ImageDLLExports:        _dll_exports,
             ImageHashSignatures:    _pehashes
         }
     }
@@ -711,6 +723,62 @@ impl PeParser {
             name: _dll_name.to_lowercase(),
             imports: _functions_list.len(),
             functions: _functions_list
+        }
+    }
+    /// # PE Parser - GetDLLExports
+    /// 
+    /// 
+    /// 
+    fn get_dll_exports(&self, _rva: &mut PE_RVA_TRACKER) -> DLL_EXPORTS
+    {
+        let mut _offset = _rva.file_offset as usize;
+        let _exports: IMAGE_EXPORT_DIRECTORY = self.content.pread_with(_offset, LE).unwrap();
+        let _names_total = _exports.NumberOfNames as usize;
+        let mut _names_funcs: Vec<String> = Vec::with_capacity(_names_total);
+        let mut _names = _rva.new_offset_from(_exports.AddressOfNames);
+        if _names_total > 0 {
+            let mut _names_count = 0;
+            let mut _names_rvas: Vec<usize> = Vec::with_capacity(_names_total);
+            let mut _function_name: String = String::new();
+            loop {
+                let _first_name: u32 = self.content.pread_with(_names, LE).expect("Unable to Serialize First Name");
+                let _first_name: usize = _rva.new_offset_from(_first_name);
+                _names_rvas.push(_first_name);
+                _names += 4;
+                _names_count += 1;
+                if _names_count == _names_total {
+                    break;
+                }
+            }
+            // Now that we have all RVAs for Exported Function Names, let's parse their strings (names)
+            _names_rvas.sort();
+            for (_idx, _rvaname) in _names_rvas.iter().enumerate() {
+                _offset = *_rvaname;
+                loop {
+                    let _part: u16 = self.content.pread_with(_offset, LE).expect("Unable to Serialize Export Function String Part");
+                    let _bytes = _part.to_le_bytes();
+                    let _dbytes: Vec<char> = _part.to_le_bytes().iter()
+                                                                .map(|x| * x as u8)
+                                                                .filter(|x| x.is_ascii())
+                                                                .map(|x| x as char)
+                                                                .collect();               
+                    for _d in _dbytes {
+                        _function_name.push(_d);
+                    }
+                        
+                    if _function_name.contains('\u{0}') {
+                        _function_name.retain(|x| x != '\u{0}');
+                        _names_funcs.push(_function_name.clone());
+                        break;
+                    }
+                    _offset += 2;                   
+                }
+                _function_name.clear();
+            }
+        }
+        DLL_EXPORTS {
+           exports:     _exports.NumberOfNames as usize,
+           functions:   _names_funcs
         }
     }
     /// # PE Parser: GetMD5Hash Method
