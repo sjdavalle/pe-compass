@@ -252,10 +252,10 @@ impl PeParser {
         let _peheader: IMAGE_NT_HEADERS64 = self.content.pread_with(_offset, LE).expect("Unable to Serialize IMAGE_NT_HEADERS64 From e_lfanew");
         _peheader
     }
-    ///
-    /// 
-    /// 
-    /// 
+    /// # PE Parser - GetSubsystemType
+    /// This parses the value of the subsystem member into a human string
+    /// representing the type of subsystem the PE file is intended to be
+    /// used for.
     /// 
     fn get_subsystem_type(&self, subsystem: u16) -> String
     {
@@ -296,9 +296,6 @@ impl PeParser {
             let _data_dir: IMAGE_DATA_DIRECTORY = _bytes.pread_with(_offset, LE).expect("Unable to Serialize IMAGE_DATA_DIRECTORY From NT_HEADERS");
             _data_directories.push(_data_dir);
         }
-        //if _data_directories[1].Size == 0 {
-            //exit_process("Info", "PE Imports Directory Entry Size Zero: No Imports, process exiting")
-        //}
         // Now Build the dataMap
         let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY> = HashMap::new();
         let mut _type: String;
@@ -688,7 +685,6 @@ impl PeParser {
                                                             .filter(|x| x.is_ascii())
                                                             .map(|x| x as char)
                                                             .collect();
-    
                 for _d in _dbytes {
                     _function.push(_d);
                 }
@@ -734,7 +730,6 @@ impl PeParser {
                                                             .filter(|x| x.is_ascii())
                                                             .map(|x| x as char)
                                                             .collect();
-                                            
                 for _d in _dbytes {
                     _function.push(_d);
                 }
