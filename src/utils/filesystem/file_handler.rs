@@ -68,7 +68,7 @@ impl FileHandler {
                     exit_process("Info","Desired Target Does Not Exists.  Require an existent file");
                 }
             },
-            "crw" =>  { print!("\rNew File To Be Created: {}", fp); },
+            "crw" =>  { println!("New File To Be Created: {}", fp) },
             _     =>  exit_process("Info", "Desired File Mode Not Suppported, Process Exiting...")
         }
 

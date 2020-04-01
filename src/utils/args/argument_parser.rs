@@ -184,6 +184,7 @@ impl ArgumentsParser<'_> {
         if _path.exists() && _path.is_dir() {
             for _entry in WalkDir::new(_path).max_depth(20).into_iter().filter_map(|e| e.ok()) {
                 let _e = _entry.path().to_str().unwrap();
+                let _e = format!("{}{}{}", "'", _e, "'");
                 if _filter == "None" && _extension == "None" {
                     println!("{}", _e);
                 } else if _filter != "None" && _extension == "None" {
