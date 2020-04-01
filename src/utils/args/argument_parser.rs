@@ -185,13 +185,13 @@ impl ArgumentsParser<'_> {
             for _entry in WalkDir::new(_path).max_depth(20).into_iter().filter_map(|e| e.ok()) {
                 let _e = _entry.path().to_str().unwrap();
                 if _filter == "None" && _extension == "None" {
-                    println!("{}", format!("{}{}{}", "\"", _e, "\""));
+                    let _e = format!("{}{}{}", "\"", _e, "\""); println!("{}", _e);
                 } else if _filter != "None" && _extension == "None" {
-                    if _e.contains(_filter) { println!("{}",format!("{}{}{}", "\"", _e, "\"")); }
+                    if _e.contains(_filter) { let _e = format!("{}{}{}", "\"", _e, "\""); println!("{}", _e); }
                 } else if _filter == "None" && _extension != "None" {
-                    if _e.ends_with(_extension) { println!("{}", format!("{}{}{}", "\"", _e, "\"")); }
+                    if _e.ends_with(_extension) { let _e = format!("{}{}{}", "\"", _e, "\""); println!("{}", _e); }
                 } else if _filter != "None" && _extension != "None" {
-                    if _e.contains(_filter) { if _e.ends_with(_extension) { println!("{}", format!("{}{}{}", "\"", _e, "\"")); }}
+                    if _e.contains(_filter) { if _e.ends_with(_extension) { let _e = format!("{}{}{}", "\"", _e, "\""); println!("{}", _e); }}
                 } else {
                     println!("{}", _e);
                 }
