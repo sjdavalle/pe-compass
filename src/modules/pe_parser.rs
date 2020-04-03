@@ -25,8 +25,9 @@ use pe_structs::*;
 ///
 #[derive(Debug)]
 pub struct PeParser {
-    handler: FileHandler,
-    content: Vec<u8>,
+    handler:    FileHandler,
+    content:    Vec<u8>,
+    is_pe:      bool
 }
 impl PeParser {
     /// # Pe Parser - Constructor
@@ -41,34 +42,32 @@ impl PeParser {
     /// ```
     pub fn new(fp: &str) -> Self
     {
+        // Perform a quick inspection of the target file by focusing on the first 512 bytes.
+        // If a target file does not pass these checks, we won't bother reading it into memory
+        // or parsing it further.
         {
-            // Perform a quick inspection of the target file by focusing on the first 512 bytes.
-            // If a target file does not pass these checks, we won't bother reading it into memory
-            // or parsing it further.
             let _bfile = FileHandler::open(fp, "r");
+            let _failed_parser = PeParser { handler: _bfile, content: 0u8, is_pe: false };                  // When checks fail return a failed object
             if  _bfile.size  < 1024u64 {
-                exit_process("Info", "Desired Target is less than 64 Bytes. Likely Not a real PE File"); // sizeof DOS_HEADER
+                exit_process("Info", "Desired Target is less than 1024 Bytes. Likely Not a real PE File");
             }
-            // Load first 512 bytes
-            // Use this array to inspect the DOS_HEADER and PE_SIGNATURE
-            let mut _x_bytes: [u8; 512] = [0; 512];
+
+            let mut _x_bytes: [u8; 512] = [0; 512];             // Load first 512 bytes
             _bfile.read_as_bytesarray(&mut _x_bytes).unwrap();
-            // Start Checks
+    
             let _dos_signature: u16 = _x_bytes[..].pread_with(0usize, LE).unwrap();
             if _dos_signature != 23117u16 {
-                exit_process("Info", "Absent PE Magic - `MZ` | Likely Not a PE File");
+                //exit_process("Info", "Absent PE Magic - `MZ` | Likely Not a PE File");
+                return _failed_pe_parser;
             }
         }
-        // If the above checks did not fail then we have a real PE file.
-        // However, the deep inspection will be performed after we load the entire file.
-        // For example, we can have a PE, but it may not have an `imports` section to use
-        // and we can not determine if that is true unless we load the NT_HEADERS.
         let _file = FileHandler::open(fp, "r");
         let _bytes: Vec<u8> = _file.read_as_vecbytes(_file.size).unwrap();
 
         PeParser {
             handler: _file,
             content: _bytes,
+            is_pe:   true
         }
     }
     /// # PE Parser InspectFile Method
@@ -88,10 +87,11 @@ impl PeParser {
         let mut _nt_headers: IMAGE_NT_HEADERS;
 
         let mut _image_data_dir: [u64; 16] = [0u64; 16];
-        let mut _dll_imports: Vec<DLL_PROFILE> = Vec::new();
-        let mut _dll_exports: DLL_EXPORTS = DLL_EXPORTS { exports: 0 as usize, functions: vec![] };
         let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY>;
         let mut _section_table_headers: HashMap<String, IMAGE_SECTION_HEADER>;
+        
+        let mut _dll_imports: Vec<DLL_PROFILE> = Vec::new();
+        let mut _dll_exports: DLL_EXPORTS = DLL_EXPORTS { exports: 0 as usize, functions: vec![] };
         
         //  1st Internal code block
         //  We use this block to drop non-essential data structures and save memory
@@ -103,10 +103,10 @@ impl PeParser {
 
             _nt_headers = match _petype {
                 267 => IMAGE_NT_HEADERS::x86(self.get_image_nt_headers32(_doshdr.e_lfanew)),
-                523 => IMAGE_NT_HEADERS::x64(self.get_image_nt_headers64(_doshdr.e_lfanew)),
-                _   => {
-                    println!("Desired PE Type Not Supported, only 32 or 64 bit allowed");
-                    std::process::exit(0x0100);
+                523 => IMAGE_NT_HEADERS::x64(self.get_image_nt_headers64(_doshdr.e_lfanew))
+                //_   => {
+                    //println!("Desired PE Type Not Supported, only 32 or 64 bit allowed");
+                    //std::process::exit(0x0100);
                 }
             };
             let mut _subsystem: u16 = 0;

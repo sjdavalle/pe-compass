@@ -142,17 +142,19 @@ impl ArgumentsParser<'_> {
         };
 
         let _pe = PeParser::new(_file_sample);
-        let _pe = _pe.inspect_file();
+        if _pe.is_pe {
+            let _pe = _pe.inspect_file();
 
-        match _outfile {
-            "None"  => {
-                let _content = serde_json::to_string_pretty(&_pe).expect("Unable To Parse PE Object");
-                println!("{}", _content);
-            },
-            _output => {
-                let _content = serde_json::to_string(&_pe).expect("Unable To Parse PE Object");
-                let mut _fhandle = FileHandler::open(_outfile, "crw");
-                        _fhandle.write(&_content).expect("Unable to Write Desired File Output");
+            match _outfile {
+                "None"  => {
+                    let _content = serde_json::to_string_pretty(&_pe).expect("Unable To Parse PE Object");
+                    println!("{}", _content);
+                },
+                _output => {
+                    let _content = serde_json::to_string(&_pe).expect("Unable To Parse PE Object");
+                    let mut _fhandle = FileHandler::open(_outfile, "crw");
+                            _fhandle.write(&_content).expect("Unable to Write Desired File Output");
+                }
             }
         }
     }
