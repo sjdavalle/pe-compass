@@ -1,3 +1,4 @@
+
 use clap::{ App, Arg, ArgMatches, SubCommand };
 use walkdir::{ WalkDir, DirEntry };
 use serde_json::*;
@@ -67,6 +68,14 @@ impl ArgumentsParser<'_> {
                                                 .help("Destination File to Write Output to")
                                                 .takes_value(true)
                                         )
+                                        .arg(
+                                            Arg::with_name("csv")
+                                                .short("c")
+                                                .long("csv")
+                                                .value_name("CSV Format")
+                                                .help("Provide Output as CSV Format")
+                                                .takes_value(false)
+                                        )                                        
                         )
                         .subcommand(
                             SubCommand::with_name("recurse")
@@ -136,6 +145,11 @@ impl ArgumentsParser<'_> {
             false => std::process::exit(0x0100)
         };
 
+        let _wants_csv = match _subcommand.is_present("csv") {
+            true => true,
+            false => false,
+        };
+
         let _outfile = match _subcommand.is_present("output") {
             true => _subcommand.value_of("output").unwrap(),
             false => "None"
@@ -144,14 +158,37 @@ impl ArgumentsParser<'_> {
         let _pe = PeParser::new(_file_sample);
         if _pe.is_pe {
             let _pe = _pe.inspect_file();
+            let _imports = _pe.ImageDLLImports.len();
+            let _exports = _pe.ImageDLLExports.exports as usize;
+            let mut _content: String = String::from("");
 
+            if _wants_csv {
+                if _imports > 0usize {
+                    for _dll in _pe.ImageDLLImports.iter() {
+                        for _imp in _dll.functions.iter() {
+                            let _s = format!("{},{},{},{},{},{}\n", _pe.pename, "imports", _dll.name, _imp, _pe.ImageHashSignatures.md5, _pe.ImageHashSignatures.sha2);
+                            _content.push_str(_s.as_str());
+                        }
+                    }
+                }
+                if _exports > 0usize {
+                    for _func in _pe.ImageDLLExports.functions.iter() {
+                        let _s = format!("{},{},{},{},{},{}\n", _pe.pename, "exports", _pe.pename, _func, _pe.ImageHashSignatures.md5, _pe.ImageHashSignatures.sha2);
+                        _content.push_str(_s.as_str());
+                    }
+                }
+            }
             match _outfile {
                 "None"  => {
-                    let _content = serde_json::to_string_pretty(&_pe).expect("Unable To Parse PE Object");
+                    if !_wants_csv {
+                        _content = serde_json::to_string_pretty(&_pe).expect("Unable To Parse PE Object");
+                    }
                     println!("{}", _content);
                 },
                 _output => {
-                    let _content = serde_json::to_string(&_pe).expect("Unable To Parse PE Object");
+                    if !_wants_csv {
+                        _content = serde_json::to_string(&_pe).expect("Unable To Parse PE Object");
+                    }
                     let mut _fhandle = FileHandler::open(_outfile, "crw");
                             _fhandle.write(&_content).expect("Unable to Write Desired File Output");
                 }
@@ -187,13 +224,13 @@ impl ArgumentsParser<'_> {
             for _entry in WalkDir::new(_path).max_depth(20).into_iter().filter_map(|e| e.ok()) {
                 let _e = _entry.path().to_str().unwrap();
                 if _filter == "None" && _extension == "None" {
-                    let _e = format!("{}{}{}", "\"", _e, "\""); println!("{}", _e);
+                    let _e = format!("{}{}{}", "'", _e, "'"); println!("{}", _e);
                 } else if _filter != "None" && _extension == "None" {
-                    if _e.contains(_filter) { let _e = format!("{}{}{}", "\"", _e, "\""); println!("{}", _e); }
+                    if _e.contains(_filter) { let _e = format!("{}{}{}", "'", _e, "'"); println!("{}", _e); }
                 } else if _filter == "None" && _extension != "None" {
-                    if _e.ends_with(_extension) { let _e = format!("{}{}{}", "\"", _e, "\""); println!("{}", _e); }
+                    if _e.ends_with(_extension) { let _e = format!("{}{}{}", "'", _e, "'"); println!("{}", _e); }
                 } else if _filter != "None" && _extension != "None" {
-                    if _e.contains(_filter) { if _e.ends_with(_extension) { let _e = format!("{}{}{}", "\"", _e, "\""); println!("{}", _e); }}
+                    if _e.contains(_filter) { if _e.ends_with(_extension) { let _e = format!("{}{}{}", "'", _e, "'"); println!("{}", _e); }}
                 } else {
                     println!("{}", _e);
                 }

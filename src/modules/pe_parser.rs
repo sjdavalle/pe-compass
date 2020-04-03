@@ -27,7 +27,7 @@ use pe_structs::*;
 pub struct PeParser {
     handler:    FileHandler,
     content:    Vec<u8>,
-    is_pe:      bool
+    pub is_pe:  bool
 }
 impl PeParser {
     /// # Pe Parser - Constructor
@@ -47,10 +47,10 @@ impl PeParser {
         // or parsing it further.
         {
             let _bfile = FileHandler::open(fp, "r");
-            let _failed_parser = PeParser { handler: _bfile, content: 0u8, is_pe: false };
+            
             if  _bfile.size  < 1024u64 {
                 //exit_process("Info", "Desired Target is less than 1024 Bytes. Likely Not a real PE File");
-                return _failed_pe_parser;
+                return PeParser { handler: _bfile, content: vec![], is_pe: false };
             }
 
             let mut _x_bytes: [u8; 512] = [0; 512];             // Load first 512 bytes
@@ -59,7 +59,7 @@ impl PeParser {
             let _dos_signature: u16 = _x_bytes[..].pread_with(0usize, LE).unwrap();
             if _dos_signature != 23117u16 {
                 //exit_process("Info", "Absent PE Magic - `MZ` | Likely Not a PE File");
-                return _failed_pe_parser;
+                return PeParser { handler: _bfile, content: vec![], is_pe: false };
             }
         }
         let _file = FileHandler::open(fp, "r");
@@ -104,16 +104,16 @@ impl PeParser {
 
             _nt_headers = match _petype {
                 267 => IMAGE_NT_HEADERS::x86(self.get_image_nt_headers32(_doshdr.e_lfanew)),
-                523 => IMAGE_NT_HEADERS::x64(self.get_image_nt_headers64(_doshdr.e_lfanew))
-                //_   => {
-                    //println!("Desired PE Type Not Supported, only 32 or 64 bit allowed");
-                    //std::process::exit(0x0100);
+                523 => IMAGE_NT_HEADERS::x64(self.get_image_nt_headers64(_doshdr.e_lfanew)),
+                _   => {
+                    println!("Desired PE Type Not Supported, only 32 or 64 bit allowed");
+                    std::process::exit(0x0100);
                 }
             };
             let mut _subsystem: u16 = 0;
             _image_data_dir = match &_nt_headers {
                 IMAGE_NT_HEADERS::x86(value) => { _subsystem = value.OptionalHeader.Subsystem; value.OptionalHeader.DataDirectory },
-                IMAGE_NT_HEADERS::x64(value) => { _subsystem = value.OptionalHeader.Subsystem; value.OptionalHeader.DataDirectory },
+                IMAGE_NT_HEADERS::x64(value) => { _subsystem = value.OptionalHeader.Subsystem; value.OptionalHeader.DataDirectory }
             };
             _pesubsystem = self.get_subsystem_type(_subsystem);
             _data_map = self.get_data_directories(&_image_data_dir);
