@@ -47,9 +47,10 @@ impl PeParser {
         // or parsing it further.
         {
             let _bfile = FileHandler::open(fp, "r");
-            let _failed_parser = PeParser { handler: _bfile, content: 0u8, is_pe: false };                  // When checks fail return a failed object
+            let _failed_parser = PeParser { handler: _bfile, content: 0u8, is_pe: false };
             if  _bfile.size  < 1024u64 {
-                exit_process("Info", "Desired Target is less than 1024 Bytes. Likely Not a real PE File");
+                //exit_process("Info", "Desired Target is less than 1024 Bytes. Likely Not a real PE File");
+                return _failed_pe_parser;
             }
 
             let mut _x_bytes: [u8; 512] = [0; 512];             // Load first 512 bytes
