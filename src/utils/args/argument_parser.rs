@@ -57,7 +57,6 @@ impl ArgumentsParser<'_> {
                                        .arg(
                                             Arg::with_name("file")
                                                 .short("f")
-                                                .long("file")
                                                 .value_name("PE FILE")
                                                 .help("File System Path of PEFILE to inspect")
                                                 .takes_value(true)
@@ -65,7 +64,6 @@ impl ArgumentsParser<'_> {
                                         .arg(
                                             Arg::with_name("output")
                                                 .short("o")
-                                                .long(("outfile")
                                                 .value_name("OUTPUT FILE")
                                                 .help("Destination File to Write Output to")
                                                 .takes_value(true)
@@ -73,7 +71,6 @@ impl ArgumentsParser<'_> {
                                         .arg(
                                             Arg::with_name("csv")
                                                 .short("c")
-                                                .long("csv")
                                                 .value_name("CSV Format")
                                                 .help("Provide Output as CSV Format")
                                                 .takes_value(false)
@@ -87,7 +84,6 @@ impl ArgumentsParser<'_> {
                                        .arg(
                                            Arg::with_name("directory")
                                                .short("d")
-                                               .long("directory")
                                                .value_name("Directory PATH")
                                                .help("Target Directory To Recurse Search")
                                                .takes_value(true)
@@ -95,7 +91,6 @@ impl ArgumentsParser<'_> {
                                        .arg(
                                            Arg::with_name("extension")
                                                .short("x")
-                                               .long("extension")
                                                .value_name("File Extension Name")
                                                .help("Applies Ends With Pattern Match - NON-REGEX")
                                                .takes_value(true)
@@ -103,7 +98,6 @@ impl ArgumentsParser<'_> {
                                        .arg(
                                            Arg::with_name("filter")
                                                .short("f")
-                                               .long("filter")
                                                .value_name("Pattern NON_REGEX")
                                                .help("A Non-RegEx pattern to filter by")
                                                .takes_value(true)
@@ -163,7 +157,7 @@ impl ArgumentsParser<'_> {
         let _pe = PeParser::new(_file_sample);
         if _pe.is_pe {
             let _pe = _pe.inspect_file();
-            let mut _content: String = String:from("");
+            let mut _content: String = String::from("");
 
             if _wants_csv {
                 if _pe.ImageDLLImports.len() > 0usize {

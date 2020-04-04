@@ -84,7 +84,7 @@ impl PeParser {
         let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
     
         let mut _petype: u16;
-        let mut _pesubsystem: U16;
+        let mut _pesubsystem: u16;
         let mut _pesubsystem_caption: String;
         let mut _nt_headers: IMAGE_NT_HEADERS;
 
@@ -117,7 +117,7 @@ impl PeParser {
                 IMAGE_NT_HEADERS::x64(value) => { _subsystem = value.OptionalHeader.Subsystem; value.OptionalHeader.DataDirectory }
             };
             _pesubsystem_caption = self.get_subsystem_type(&_subsystem);
-            _pesusbsystem = _subsystem;
+            _pesubsystem = _subsystem;
             _data_map = self.get_data_directories(&_image_data_dir);
             _section_table_headers = self.get_section_headers(&_doshdr.e_lfanew, &_nt_test);
         }
