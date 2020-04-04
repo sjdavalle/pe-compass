@@ -162,10 +162,12 @@ impl ArgumentsParser<'_> {
             if _wants_csv {
                 if _pe.ImageDLLImports.len() > 0usize {
                     for _dll in _pe.ImageDLLImports.iter() {
-                        for _imp in _dll.functions.iter() {
-                            let _s = format!("{},{},{},{},{},{}\n",
-                                             _pe.pename, "imports", _dll.name, _imp, _pe.ImageHashSignatures.md5, _pe.ImageHashSignatures.sha2);
-                            _content.push_str(_s.as_str());
+                        if _dll.functions.len() > 0usize {
+                            for _imp in _dll.functions.iter() {
+                                let _s = format!("{},{},{},{},{},{}\n",
+                                                 _pe.pename, "imports", _dll.name, _imp, _pe.ImageHashSignatures.md5, _pe.ImageHashSignatures.sha2);
+                                _content.push_str(_s.as_str());
+                            }
                         }
                     }
                 }
