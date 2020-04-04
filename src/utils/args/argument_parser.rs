@@ -57,6 +57,7 @@ impl ArgumentsParser<'_> {
                                        .arg(
                                             Arg::with_name("file")
                                                 .short("f")
+                                                .long("file")
                                                 .value_name("PE FILE")
                                                 .help("File System Path of PEFILE to inspect")
                                                 .takes_value(true)
@@ -64,6 +65,7 @@ impl ArgumentsParser<'_> {
                                         .arg(
                                             Arg::with_name("output")
                                                 .short("o")
+                                                .long(("outfile")
                                                 .value_name("OUTPUT FILE")
                                                 .help("Destination File to Write Output to")
                                                 .takes_value(true)
@@ -85,6 +87,7 @@ impl ArgumentsParser<'_> {
                                        .arg(
                                            Arg::with_name("directory")
                                                .short("d")
+                                               .long("directory")
                                                .value_name("Directory PATH")
                                                .help("Target Directory To Recurse Search")
                                                .takes_value(true)
@@ -92,6 +95,7 @@ impl ArgumentsParser<'_> {
                                        .arg(
                                            Arg::with_name("extension")
                                                .short("x")
+                                               .long("extension")
                                                .value_name("File Extension Name")
                                                .help("Applies Ends With Pattern Match - NON-REGEX")
                                                .takes_value(true)
@@ -99,6 +103,7 @@ impl ArgumentsParser<'_> {
                                        .arg(
                                            Arg::with_name("filter")
                                                .short("f")
+                                               .long("filter")
                                                .value_name("Pattern NON_REGEX")
                                                .help("A Non-RegEx pattern to filter by")
                                                .takes_value(true)
