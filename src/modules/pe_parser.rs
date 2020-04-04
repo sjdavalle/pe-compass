@@ -84,7 +84,8 @@ impl PeParser {
         let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
     
         let mut _petype: u16;
-        let mut _pesubsystem: String;
+        let mut _pesubsystem: U16;
+        let mut _pesubsystem_caption: String;
         let mut _nt_headers: IMAGE_NT_HEADERS;
 
         let mut _image_data_dir: [u64; 16] = [0u64; 16];
@@ -115,7 +116,8 @@ impl PeParser {
                 IMAGE_NT_HEADERS::x86(value) => { _subsystem = value.OptionalHeader.Subsystem; value.OptionalHeader.DataDirectory },
                 IMAGE_NT_HEADERS::x64(value) => { _subsystem = value.OptionalHeader.Subsystem; value.OptionalHeader.DataDirectory }
             };
-            _pesubsystem = self.get_subsystem_type(_subsystem);
+            _pesubsystem_caption = self.get_subsystem_type(&_subsystem);
+            _pesusbsystem = _subsystem;
             _data_map = self.get_data_directories(&_image_data_dir);
             _section_table_headers = self.get_section_headers(&_doshdr.e_lfanew, &_nt_test);
         }
@@ -157,6 +159,7 @@ impl PeParser {
             pename:                 self.handler.name.clone(),
             petype:                 _petype,
             pesubsystem:            _pesubsystem,
+            pesubsystem_caption:    _pesubsystem_caption,
             //ImageDosHeader:         _doshdr,
             //ImageDosStub:           _dos_stub,
             //ImageNtHeaders:         _nt_headers,
@@ -258,7 +261,7 @@ impl PeParser {
     /// representing the type of subsystem the PE file is intended to be
     /// used for.
     /// 
-    fn get_subsystem_type(&self, subsystem: u16) -> String
+    fn get_subsystem_type(&self, subsystem: &u16) -> String
     {
         let _pe_subsystem = match subsystem {
             0 => "An unknown subsystem",
