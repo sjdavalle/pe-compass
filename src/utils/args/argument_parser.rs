@@ -166,14 +166,16 @@ impl ArgumentsParser<'_> {
                 if _imports > 0usize {
                     for _dll in _pe.ImageDLLImports.iter() {
                         for _imp in _dll.functions.iter() {
-                            let _s = format!("{},{},{},{},{},{}\n", _pe.pename, "imports", _dll.name, _imp, _pe.ImageHashSignatures.md5, _pe.ImageHashSignatures.sha2);
+                            let _s = format!("{},{},{},{},{},{}\n",
+                                             _pe.pename, "imports", _dll.name, _imp, _pe.ImageHashSignatures.md5, _pe.ImageHashSignatures.sha2);
                             _content.push_str(_s.as_str());
                         }
                     }
                 }
                 if _exports > 0usize {
                     for _func in _pe.ImageDLLExports.functions.iter() {
-                        let _s = format!("{},{},{},{},{},{}\n", _pe.pename, "exports", _pe.pename, _func, _pe.ImageHashSignatures.md5, _pe.ImageHashSignatures.sha2);
+                        let _s = format!("{},{},{},{},{},{}\n",
+                                         _pe.pename, "exports", _pe.pename, _func, _pe.ImageHashSignatures.md5, _pe.ImageHashSignatures.sha2);
                         _content.push_str(_s.as_str());
                     }
                 }
