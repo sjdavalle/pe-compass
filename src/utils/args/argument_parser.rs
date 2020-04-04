@@ -160,7 +160,7 @@ impl ArgumentsParser<'_> {
             let _pe = _pe.inspect_file();
             let _imports = _pe.ImageDLLImports.len();
             let _exports = _pe.ImageDLLExports.exports as usize;
-            let mut _content: String = String::from("");
+            let mut _content: String = String:from("");
 
             if _wants_csv {
                 if _imports > 0usize {
@@ -185,7 +185,7 @@ impl ArgumentsParser<'_> {
                     if !_wants_csv {
                         _content = serde_json::to_string_pretty(&_pe).expect("Unable To Parse PE Object");
                     }
-                    println!("{}", _content);
+                    print!("{}", _content);
                 },
                 _output => {
                     if !_wants_csv {
