@@ -163,12 +163,10 @@ impl ArgumentsParser<'_> {
         let _pe = PeParser::new(_file_sample);
         if _pe.is_pe {
             let _pe = _pe.inspect_file();
-            let _imports = _pe.ImageDLLImports.len();
-            let _exports = _pe.ImageDLLExports.exports as usize;
             let mut _content: String = String:from("");
 
             if _wants_csv {
-                if _imports > 0usize {
+                if _pe.ImageDLLImports.len() > 0usize {
                     for _dll in _pe.ImageDLLImports.iter() {
                         for _imp in _dll.functions.iter() {
                             let _s = format!("{},{},{},{},{},{}\n",
@@ -177,7 +175,7 @@ impl ArgumentsParser<'_> {
                         }
                     }
                 }
-                if _exports > 0usize {
+                if _pe.ImageDLLExports.exports > 0usize {
                     for _func in _pe.ImageDLLExports.functions.iter() {
                         let _s = format!("{},{},{},{},{},{}\n",
                                          _pe.pename, "exports", _pe.pename, _func, _pe.ImageHashSignatures.md5, _pe.ImageHashSignatures.sha2);
@@ -185,6 +183,7 @@ impl ArgumentsParser<'_> {
                     }
                 }
             }
+            
             match _outfile {
                 "None"  => {
                     if !_wants_csv {
