@@ -62,10 +62,12 @@ impl FileHandler {
         match mode {
             "r"|"rw"|"cra"|"crt" =>  {
                 if _filepath.is_dir() {
-                    exit_process("Info","Desired Target is a Folder/Directory. Require a file");
+                    let _msg = format!("{}{}\n{}", "Desired Target is a Folder/Directory: ", fp, "Requires a file");
+                    exit_process("Info",_msg.as_str());
                 }
                 if !_filepath.exists() {
-                    exit_process("Info","Desired Target Does Not Exists.  Require an existent file");
+                    let _msg = format!("{}{}\n{}", "Desired Target Does Not Exists: ", fp, "Require an existent file");
+                    exit_process("Info", _msg.as_str());
                 }
             },
             "crw" =>  { println!("New File To Be Created: {}", fp) },
