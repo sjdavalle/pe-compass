@@ -164,7 +164,7 @@ impl ArgumentsParser<'_> {
                     for _dll in _pe.ImageDLLImports.iter() {
                         if _dll.functions.len() > 0usize {
                             for _imp in _dll.functions.iter() {
-                                let _s = format!("{},{},{},{},{},{},{}\n",
+                                let _s = format!("\"{},{},{},{},{},{},{}\"\n",
                                                  _pe.pename, _pe.pesubsystem, "imports", _dll.name, _imp, _pe.ImageHashSignatures.md5, _pe.ImageHashSignatures.sha2);
                                 _content.push_str(_s.as_str());
                             }
@@ -173,7 +173,7 @@ impl ArgumentsParser<'_> {
                 }
                 if _pe.ImageDLLExports.exports > 0usize {
                     for _func in _pe.ImageDLLExports.functions.iter() {
-                        let _s = format!("{},{},{},{},{},{},{}\n",
+                        let _s = format!("\"{},{},{},{},{},{},{}\"\n",
                                          _pe.pename, _pe.pesubsystem, "exports", _pe.pename, _func, _pe.ImageHashSignatures.md5, _pe.ImageHashSignatures.sha2);
                         _content.push_str(_s.as_str());
                     }
@@ -235,7 +235,7 @@ impl ArgumentsParser<'_> {
                     if _e.ends_with(_extension) || _e.ends_with(&_extension.to_uppercase()) {
                         let _e = format!("{}{}{}", "'", _e, "'"); println!("{}", _e); 
                     }
-                    
+
                 } else if _filter != "None" && _extension != "None" {
                     if _e.contains(_filter) || _e.contains(&_filter.to_lowercase()) {
                         if _e.ends_with(_extension) || _e.ends_with(&_extension.to_uppercase()) {
