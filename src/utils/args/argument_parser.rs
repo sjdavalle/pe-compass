@@ -227,12 +227,21 @@ impl ArgumentsParser<'_> {
                 let _e = _entry.path().to_str().unwrap();
                 if _filter == "None" && _extension == "None" {
                     let _e = format!("{}{}{}", "'", _e, "'"); println!("{}", _e);
+
                 } else if _filter != "None" && _extension == "None" {
                     if _e.contains(_filter) { let _e = format!("{}{}{}", "'", _e, "'"); println!("{}", _e); }
+
                 } else if _filter == "None" && _extension != "None" {
-                    if _e.ends_with(_extension) { let _e = format!("{}{}{}", "'", _e, "'"); println!("{}", _e); }
+                    if _e.ends_with(_extension) || _e.ends_with(&_extension.to_uppercase()) {
+                        let _e = format!("{}{}{}", "'", _e, "'"); println!("{}", _e); 
+                    }
+                    
                 } else if _filter != "None" && _extension != "None" {
-                    if _e.contains(_filter) { if _e.ends_with(_extension) { let _e = format!("{}{}{}", "'", _e, "'"); println!("{}", _e); }}
+                    if _e.contains(_filter) || _e.contains(&_filter.to_lowercase()) {
+                        if _e.ends_with(_extension) || _e.ends_with(&_extension.to_uppercase()) {
+                            let _e = format!("{}{}{}", "'", _e, "'"); println!("{}", _e);
+                        }
+                    }
                 } else {
                     println!("{}", _e);
                 }
