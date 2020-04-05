@@ -145,7 +145,8 @@ impl FileHandler {
         if _filepath.exists() {
             fs::remove_file(_filepath)?;
         } else {
-            exit_process("Info", "Desired File For Deletion Does Not Exist, Process Exiting");
+            let _msg = format!("{}{}\n{}", "Desired File For Deletion Does Not Exist: ", fp, "Requires a file | Process Exiting"); 
+            exit_process("Info", _msg.as_str());
         }
         Ok(())
      }

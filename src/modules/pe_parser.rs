@@ -127,7 +127,8 @@ impl PeParser {
         {
             // Acquire IAT
             if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IMPORT".to_string()) {
-                let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").unwrap();
+                let _msg = format!("{} : {}", "Unable to Get IAT Table From Section", self.handler.name.as_str());
+                let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").expect(_msg.as_str());
                 let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", _eimp, &_section_table_headers);
                 _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports);
             } else {
@@ -140,7 +141,8 @@ impl PeParser {
         {
             if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_EXPORT".to_string())
             {
-                let _eexp = _data_map.get("IMAGE_DIRECTORY_ENTRY_EXPORT").expect("Unable to Get EAT Table From Section");
+                let _msg = format!("{} : {}", "Unable to Get EAT Table From Section", self.handler.name.as_str());
+                let _eexp = _data_map.get("IMAGE_DIRECTORY_ENTRY_EXPORT").expect(_msg.as_str());
                 let mut _rva_exports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("exports", _eexp, &_section_table_headers);
                 _dll_exports = self.get_dll_exports(&mut _rva_exports);
             }
@@ -182,7 +184,8 @@ impl PeParser {
     pub fn get_dosheader(&self) -> IMAGE_DOS_HEADER
     {
         let _offset = 0 as usize;
-        let _doshdr: IMAGE_DOS_HEADER = self.content.pread_with(_offset, LE).expect("Unable to Serialize IMAGE_DOS_HEADER From PE File");
+        let _msg = format!("{} : {}", "Unable to Serialize IMAGE_DOS_HEADER From PE File", self.handler.name.as_str());
+        let _doshdr: IMAGE_DOS_HEADER = self.content.pread_with(_offset, LE).expect(_msg.as_str());
         _doshdr
     }
     /// # Pe Parser GetDosStubString Method
@@ -219,7 +222,8 @@ impl PeParser {
     pub fn inspect_nt_headers(&self, e_lfanew: i32) -> INSPECT_NT_HEADERS
     {
         let _offset = e_lfanew as usize;
-        let _nt_headers: INSPECT_NT_HEADERS = self.content.pread_with(_offset, LE).expect("Unable to Serialize INSPECT_NT_HEADERS From e_lfanew");
+        let _msg = format!("{} : {}", "Unable to Serialize INSPECT_NT_HEADERS From e_lfanew", self.handler.name.as_str());
+        let _nt_headers: INSPECT_NT_HEADERS = self.content.pread_with(_offset, LE).expect(_msg.as_str());
         _nt_headers
     }
     /// # PE Parser GetImageNTHeaders32 Method
@@ -235,8 +239,9 @@ impl PeParser {
     /// ```    
     fn get_image_nt_headers32(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS32
     {
-        let _offset = e_lfanew as usize;       
-        let _peheader: IMAGE_NT_HEADERS32 = self.content.pread_with(_offset, LE).expect("Unable to Serialize IMAGE_NT_HEADERS32 From e_lfanew");
+        let _offset = e_lfanew as usize;     
+        let _msg = format!("{} : {}", "Unable to Serialize IMAGE_NT_HEADERS32 From e_lfanew", self.handler.name.as_str());  
+        let _peheader: IMAGE_NT_HEADERS32 = self.content.pread_with(_offset, LE).expect(_msg.as_str());
         _peheader
     }
     /// # PE Parser GetImageNTHeaders64 Method
@@ -252,8 +257,9 @@ impl PeParser {
     /// ```    
     fn get_image_nt_headers64(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS64
     {
-        let _offset = e_lfanew as usize;       
-        let _peheader: IMAGE_NT_HEADERS64 = self.content.pread_with(_offset, LE).expect("Unable to Serialize IMAGE_NT_HEADERS64 From e_lfanew");
+        let _offset = e_lfanew as usize;
+        let _msg = format!("{} : {}","Unable to Serialize IMAGE_NT_HEADERS64 From e_lfanew", self.handler.name.as_str());         
+        let _peheader: IMAGE_NT_HEADERS64 = self.content.pread_with(_offset, LE).expect(_msg.as_str());
         _peheader
     }
     /// # PE Parser - GetSubsystemType
@@ -297,7 +303,8 @@ impl PeParser {
         // Serialize Each Data Directory
         for _d in data_dir.iter() {
             let _bytes = _d.to_le_bytes();
-            let _data_dir: IMAGE_DATA_DIRECTORY = _bytes.pread_with(_offset, LE).expect("Unable to Serialize IMAGE_DATA_DIRECTORY From NT_HEADERS");
+            let _msg = format!("{} : {}","Unable to Serialize IMAGE_DATA_DIRECTORY From NT_HEADERS", self.handler.name.as_str());  
+            let _data_dir: IMAGE_DATA_DIRECTORY = _bytes.pread_with(_offset, LE).expect(_msg.as_str());
             _data_directories.push(_data_dir);
         }
         // Now Build the dataMap
@@ -369,10 +376,10 @@ impl PeParser {
 
         let mut _section_header: IMAGE_SECTION_HEADER;
         let mut _section_name: Vec<u8>;
-        
+        let _msg = format!("{} : {}","Unable to Serialize SECTION_HEADER From SECTION_TABLE", self.handler.name.as_str()); 
         while _total_bytes_sections != 0 {
 
-            _section_header = self.content.pread_with(_offset_starts_sechdr, LE).expect("Unable to Serialize SECTION_HEADER From SECTION_TABLE");
+            _section_header = self.content.pread_with(_offset_starts_sechdr, LE).expect(_msg.as_str());
             
             _section_name = _section_header.Name.iter()                 // Remove Null Bytes from Section Name
                                                 .filter(|x| *x > &0)
@@ -491,8 +498,9 @@ impl PeParser {
         // 1st Loop Code Block is used to create a list of the DLLs involved
         // Watch the offset change consistently to only parse this area of the PE File
         // Move on to Step 2 after this list is acquired.
+        let _msg = format!("{} : {}","Unable to Serialize IMPORT_DESCRIPTOR From Section Pointer", self.handler.name.as_str()); 
         loop {                                                      // Find the Image Descriptors - i.e, DLLs
-            _dll = self.content.pread_with(_offset, LE).expect("Unable to Serialize IMPORT_DESCRIPTOR From Section Pointer");
+            _dll = self.content.pread_with(_offset, LE).expect(_msg.as_str());
             _dll_list.push(_dll);                                   // Add each descriptor found to the list
 
             _offset += SIZE_OF_IMAGE_IMPORT_DESCRIPTOR;             // Advance the file offset by 20 bytes
@@ -580,8 +588,9 @@ impl PeParser {
         const RANGE_OF_DLL_NAME: usize = 4 as usize;
         let mut _dll_name: String = String::new();
         let mut _offset: usize = _offset;
+        let _msg = format!("{} : {}","Unable to Serialize DLL_NAME from IMPORT_DESCRIPTOR", self.handler.name.as_str()); 
         loop {                                         
-            let _part: u32 = self.content.pread_with(_offset, LE).expect("Unable to Serialize DLL_NAME from IMPORT_DESCRIPTOR");
+            let _part: u32 = self.content.pread_with(_offset, LE).expect(_msg.as_str());
             let _bytes  = _part.to_le_bytes();   // Read the DLL Name by 4 byte increment
             let _dbytes: Vec<char> = _part.to_le_bytes().iter()
                                                         .map(|x| *x as u8)
@@ -618,8 +627,9 @@ impl PeParser {
         let mut _thunk_size: usize = 4 as usize;
         let mut _thunk_list: Vec<IMAGE_THUNK_DATA32> = vec![];
         let mut _offset: usize = _offset;
+        let _msg = format!("{} : {}","Unable to Serialize THUNK_DATA32 From IMAGE_DESCRIPTOR", self.handler.name.as_str()); 
         loop {
-            _thunk = self.content.pread_with(_offset, LE).expect("Unable to Serialize THUNK_DATA32 From IMAGE_DESCRIPTOR");
+            _thunk = self.content.pread_with(_offset, LE).expect(_msg.as_str());
             if _thunk.AddressOfData == 0 {
                 break;
             }
@@ -647,8 +657,9 @@ impl PeParser {
         let mut _thunk_size: usize = 8 as usize;
         let mut _thunk_list: Vec<IMAGE_THUNK_DATA64> = vec![];
         let mut _offset: usize = _offset;
+        let _msg = format!("{} : {}","Unable to Serialize THUNK_DATA64 From IMAGE_DESCRIPTOR", self.handler.name.as_str()); 
         loop {
-            _thunk = self.content.pread_with(_offset, LE).expect("Unable to Serialize THUNK_DATA64 From IMAGE_DESCRIPTOR");
+            _thunk = self.content.pread_with(_offset, LE).expect(_msg.as_str());
             if _thunk.AddressOfData == 0 {
                 break;
             }
@@ -679,10 +690,11 @@ impl PeParser {
         let mut _function: String = String:: new();
         let mut _part: u16 = 0;
         let mut _offset: usize = 0;
+        let _msg = format!("{} : {}","Unable to Serialize Function Name from THUNK_DATA32", self.handler.name.as_str()); 
         for _thunk in _thunk_list {
             _offset = _rva.new_offset_from(_thunk.AddressOfData + 2);
             loop {
-                _part = self.content.pread_with(_offset, LE).expect("Unable to Serialize Function Name from THUNK_DATA32");
+                _part = self.content.pread_with(_offset, LE).expect(_msg.as_str());
                 let _bytes = _part.to_le_bytes();
                 let _dbytes: Vec<char> = _part.to_le_bytes().iter()
                                                             .map(|x| * x as u8)
@@ -723,11 +735,12 @@ impl PeParser {
         let mut _function: String = String:: new();
         let mut _part: u16 = 0;
         let mut _offset: usize = 0;
+        let _msg = format!("{} : {}","Unable to Serialize Function Name from THUNK_DATA64", self.handler.name.as_str()); 
         for _thunk in _thunk_list {
             let _x: u32 = (_thunk.AddressOfData + 2) as u32;
             _offset = _rva.new_offset_from(_x);
             loop {
-                _part = self.content.pread_with(_offset, LE).expect("Unable to Serialize Function Name from THUNK_DATA64");
+                _part = self.content.pread_with(_offset, LE).expect(_msg.as_str());
                 let _bytes = _part.to_le_bytes();
                 let _dbytes: Vec<char> = _part.to_le_bytes().iter()
                                                             .map(|x| * x as u8)
@@ -761,7 +774,8 @@ impl PeParser {
     fn get_dll_exports(&self, _rva: &mut PE_RVA_TRACKER) -> DLL_EXPORTS
     {
         let mut _offset = _rva.file_offset as usize;
-        let _exports: IMAGE_EXPORT_DIRECTORY = self.content.pread_with(_offset, LE).expect("Unable to serialize IMAGE_EXPORT_DIRECTORY");
+        let _msg = format!("{} : {}","Unable to serialize IMAGE_EXPORT_DIRECTORY", self.handler.name.as_str()); 
+        let _exports: IMAGE_EXPORT_DIRECTORY = self.content.pread_with(_offset, LE).expect(_msg.as_str());
         let _names_total = _exports.NumberOfNames as usize;
         let _funcs_total = _exports.NumberOfFunctions as usize;
         let mut _names_funcs: Vec<String> = Vec::with_capacity(_names_total);
@@ -774,8 +788,9 @@ impl PeParser {
             let mut _names_count = 0;
             let mut _names_rvas: Vec<usize> = Vec::with_capacity(_names_total);
             let mut _function_name: String = String::new();
+            let _msg = format!("{} : {}","Unable to Serialize First Name From Exports", self.handler.name.as_str()); 
             loop {
-                let _first_name: u32 = self.content.pread_with(_names, LE).expect("Unable to Serialize First Name");
+                let _first_name: u32 = self.content.pread_with(_names, LE).expect(_msg.as_str());
                 let _first_name: usize = _rva.new_offset_from(_first_name);
                 _names_rvas.push(_first_name);
                 _names += 4;
@@ -786,10 +801,11 @@ impl PeParser {
             }
             // Now that we have all RVAs for Exported Function Names, let's parse their strings (names)
             _names_rvas.sort();
+            let _msg = format!("{} : {}","Unable to Serialize Export Function String Part", self.handler.name.as_str()); 
             for (_idx, _rvaname) in _names_rvas.iter().enumerate() {
                 _offset = *_rvaname;
                 loop {
-                    let _part: u16 = self.content.pread_with(_offset, LE).expect("Unable to Serialize Export Function String Part");
+                    let _part: u16 = self.content.pread_with(_offset, LE).expect(_msg.as_str());
                     let _bytes = _part.to_le_bytes();
                     let _dbytes: Vec<char> = _part.to_le_bytes().iter()
                                                                 .map(|x| * x as u8)
