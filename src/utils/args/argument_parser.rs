@@ -164,8 +164,8 @@ impl ArgumentsParser<'_> {
                     for _dll in _pe.ImageDLLImports.iter() {
                         if _dll.functions.len() > 0usize {
                             for _imp in _dll.functions.iter() {
-                                let _s = format!("{},{},{},{},{},{},{}\n"
-                                                 _pe.pename, _pe.pesubsystem, "imports"
+                                let _s = format!("{},{},{},{},{},{},{}\n",
+                                                 _pe.pename, _pe.pesubsystem, "imports",
                                                  _dll.name, _imp, _pe.ImageHashSignatures.md5, _pe.ImageHashSignatures.sha2);
                                 _content.push_str(_s.as_str());
                             }
