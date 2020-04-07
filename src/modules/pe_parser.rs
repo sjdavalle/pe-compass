@@ -818,6 +818,9 @@ impl PeParser {
                         
                     if _function_name.contains('\u{0}') {
                         _function_name.retain(|x| x != '\u{0}');
+                        if _function_name.ends_with("S") {
+                            _function_name = _function_name.replace("S", "");
+                        }
                         _names_funcs.push(_function_name.clone());
                         break;
                     }
