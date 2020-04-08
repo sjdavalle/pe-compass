@@ -6,7 +6,7 @@ use std::path::Path;
 
 // 3rd Party
 use fs2::FileExt;
-
+use rand::Rng;
 // My Modules
 #[path = "../errors/custom_errors.rs"]
 mod custom_errors;
@@ -45,6 +45,7 @@ impl FileHandler {
      {
         let mut _path_string: String = String::from(fp);
 
+
         if fp.ends_with(r"\r\n") {                                  // inspect string and strip trailing chars
             _path_string = _path_string.replace("\r\n", "");
         }
@@ -56,9 +57,17 @@ impl FileHandler {
         if fp.ends_with(r"\n") {
             _path_string = _path_string.replace(r"\n", "");
         }
-
-        let _filepath = Path::new(&_path_string);
-
+        if mode == "crw" {
+            let mut rng = rand::thread_rng();
+            let _rand = rng.gen::<u32>();
+            let _rand = _rand.to_string();
+            _path_string = format!("{}__{}", _path_string, _rand);
+            //_path_string.push_str("__");
+            //_path_string.push_str(_rand.as_str());
+          
+        }
+        let mut _filepath = Path::new(&_path_string);
+        
         match mode {
             "r"|"rw"|"cra"|"crt" =>  {
                 if _filepath.is_dir() {
@@ -70,7 +79,7 @@ impl FileHandler {
                     exit_process("Info", _msg.as_str());
                 }
             },
-            "crw" =>  { println!("New File To Be Created: {}", fp) },
+            "crw" =>  { println!("New File To Be Created: {}", &_path_string); },
             _     =>  exit_process("Info", "Desired File Mode Not Suppported, Process Exiting...")
         }
 
