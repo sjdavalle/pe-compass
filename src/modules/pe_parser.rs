@@ -310,8 +310,6 @@ impl PeParser {
         // Serialize Each Data Directory
         let mut _null_data_dirs: u8 = 0;
         {
-            // Validation of Null Directory Entries
-            // If all 16 entries are null (0), we know
             for _n in data_dir {
                 if _n == &0u64 { _null_data_dirs += 1; }
             }
@@ -327,6 +325,8 @@ impl PeParser {
             let _data_dir: IMAGE_DATA_DIRECTORY = _bytes.pread_with(_offset, LE).expect(_msg.as_str());
             _data_directories.push(_data_dir);
         }
+
+
 
         for (_idx, _entry) in _data_directories.iter().enumerate() {
             if _entry.Size != 0 {
