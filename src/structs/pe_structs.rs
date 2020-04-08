@@ -80,6 +80,16 @@ impl ::std::clone::Clone for IMAGE_NT_HEADERS32 {
         *self
     }
 }
+impl IMAGE_NT_HEADERS32 {
+    pub fn load_null_image_nt_headers32() -> Self
+    {
+        IMAGE_NT_HEADERS32 {
+            Signature       : 0,
+            FileHeader      : IMAGE_FILE_HEADER::load_null_file_header(),
+            OptionalHeader  : IMAGE_OPTIONAL_HEADER32::load_null_optional_headers32()
+        }
+    }
+}
 /// # IMAGE_NT_HEADERS64
 /// Size: 268 Bytes
 ///         Signature:          4   Bytes
@@ -116,6 +126,20 @@ pub struct IMAGE_FILE_HEADER {
 impl ::std::clone::Clone for IMAGE_FILE_HEADER {
     fn clone(&self) -> Self {
         *self
+    }
+}
+impl IMAGE_FILE_HEADER {
+    pub fn load_null_file_header() -> Self
+    {
+        IMAGE_FILE_HEADER {
+            Machine             : 0,
+            NumberOfSections    : 0,
+            TimeDateStamp       : 0,
+            PointerToSymbolTable: 0,
+            NumberOfSymbols     : 0,
+            SizeOfOptionalHeader: 0,
+            Characteristics     : 0
+        }
     }
 }
 /// # IMAGE OPTIONAL HEADERS32
@@ -165,6 +189,44 @@ impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER32 {
         *self
     }
 }
+impl IMAGE_OPTIONAL_HEADER32 {
+    pub fn load_null_optional_headers32() -> Self
+    {
+        IMAGE_OPTIONAL_HEADER32 {
+            Magic                       : 0,
+            MajorLinkerVersion          : 0,
+            MinorLinkerVersion          : 0,
+            SizeOfCode                  : 0,
+            SizeOfInitializedData       : 0,
+            SizeOfUninitializedData     : 0,
+            AddressOfEntryPoint         : 0,
+            BaseOfCode                  : 0,
+            BaseOfData                  : 0,
+            ImageBase                   : 0,
+            SectionAlignment            : 0,
+            FileAlignment               : 0,
+            MajorOperatingSystemVersion : 0,
+            MinorOperatingSystemVersion : 0,
+            MajorImageVersion           : 0,
+            MinorImageVersion           : 0,
+            MajorSubsystemVersion       : 0,
+            MinorSubsystemVersion       : 0,
+            Win32VersionValue           : 0,
+            SizeOfImage                 : 0,
+            SizeOfHeaders               : 0,
+            CheckSum                    : 0,
+            Subsystem                   : 0,
+            DllCharacteristics          : 0,
+            SizeOfStackReserve          : 0,
+            SizeOfStackCommit           : 0,
+            SizeOfHeapReserve           : 0,
+            SizeOfHeapCommit            : 0,
+            LoaderFlags                 : 0,
+            NumberOfRvaAndSizes         : 0,
+            DataDirectory               : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]            
+        }
+    }
+}
 /// # IMAGE OPTIONAL HEADERS64
 /// Used for PE64 Bit files.
 /// Size = 240 Bytes
@@ -211,6 +273,43 @@ impl ::std::clone::Clone for IMAGE_OPTIONAL_HEADER64 {
         *self
     }
 }
+impl IMAGE_OPTIONAL_HEADER64 {
+    pub fn load_null_optional_headers64() -> Self
+    {
+        IMAGE_OPTIONAL_HEADER64 {
+            Magic                       : 0,
+            MajorLinkerVersion          : 0,
+            MinorLinkerVersion          : 0,
+            SizeOfCode                  : 0,
+            SizeOfInitializedData       : 0,
+            SizeOfUninitializedData     : 0,
+            AddressOfEntryPoint         : 0,
+            BaseOfCode                  : 0,         
+            ImageBase                   : 0,
+            SectionAlignment            : 0,
+            FileAlignment               : 0,
+            MajorOperatingSystemVersion : 0,
+            MinorOperatingSystemVersion : 0,
+            MajorImageVersion           : 0,
+            MinorImageVersion           : 0,
+            MajorSubsystemVersion       : 0,
+            MinorSubsystemVersion       : 0,
+            Win32VersionValue           : 0,
+            SizeOfImage                 : 0,
+            SizeOfHeaders               : 0,
+            CheckSum                    : 0,
+            Subsystem                   : 0,
+            DllCharacteristics          : 0,
+            SizeOfStackReserve          : 0,
+            SizeOfStackCommit           : 0,
+            SizeOfHeapReserve           : 0,
+            SizeOfHeapCommit            : 0,
+            LoaderFlags                 : 0,
+            NumberOfRvaAndSizes         : 0,
+            DataDirectory               : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]            
+        }       
+    }
+}
 /// # IMAGE_SECTION_HEADER
 /// Size: 40 Bytes
 /// 
@@ -234,6 +333,23 @@ impl ::std::clone::Clone for IMAGE_SECTION_HEADER {
         *self
     }
 }
+impl IMAGE_SECTION_HEADER {
+    pub fn load_null_section_header() -> Self
+    {
+        IMAGE_SECTION_HEADER {
+            Name                : [ 0, 0, 0, 0, 0, 0, 0, 0],
+            VirtualSize         : 0,
+            VirtualAddress      : 0,
+            SizeOfRawData       : 0,
+            PointerToRawData    : 0,
+            PointerToRelocations: 0,
+            PointerToLinenumbers: 0,
+            NumberOfRelocations : 0,
+            NumberOfLinenumbers : 0,
+            Characteristics     : 0,            
+        }
+    }
+}
 /// # IMAGE_DATA_DIRECTORY
 /// There are 16 data directory structs.
 /// 
@@ -246,6 +362,15 @@ pub struct IMAGE_DATA_DIRECTORY {
 impl ::std::clone::Clone for IMAGE_DATA_DIRECTORY {
     fn clone(&self) -> Self {
         *self
+    }
+}
+impl IMAGE_DATA_DIRECTORY {
+    pub fn load_null_data_directory() -> Self
+    {
+        IMAGE_DATA_DIRECTORY {
+            VirtualAddress  : 0,
+            Size            : 0
+        }
     }
 }
 /// # DATA DIRECTORY IMPORT - IMPORT DESCRIPTOR

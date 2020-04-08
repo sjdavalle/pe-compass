@@ -7,8 +7,8 @@ use sha2::{ Sha256, Digest };
 use md5::*;
 
 // My Modules
-#[path = "../utils/errors/custom_errors.rs"] mod custom_errors;
-use custom_errors::exit_process;
+//#[path = "../utils/errors/custom_errors.rs"] mod custom_errors;
+//use custom_errors::exit_process;
 
 #[path = "../utils/filesystem/file_handler.rs"] mod file_handler;
 use file_handler::FileHandler;
@@ -107,8 +107,9 @@ impl PeParser {
                 267 => IMAGE_NT_HEADERS::x86(self.get_image_nt_headers32(_doshdr.e_lfanew)),
                 523 => IMAGE_NT_HEADERS::x64(self.get_image_nt_headers64(_doshdr.e_lfanew)),
                 _   => {
-                    println!("Desired PE Type Not Supported, only 32 or 64 bit allowed");
-                    std::process::exit(0x0100);
+                    //std::process::exit(0x0100);
+                    let _null_nt_headers = IMAGE_NT_HEADERS32::load_null_image_nt_headers32();
+                    IMAGE_NT_HEADERS::x86(_null_nt_headers)
                 }
             };
             let mut _subsystem: u16 = 0;
@@ -130,7 +131,7 @@ impl PeParser {
                 let _msg = format!("{} : {}", "Unable to Get IAT Table From Section", self.handler.name.as_str());
                 let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").expect(_msg.as_str());
                 let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", _eimp, &_section_table_headers);
-                _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports);
+                _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports); // Validate:  _null_dummy object
             } else {
                 let _d = DLL_PROFILE { name: "".to_string(), imports: 0 as usize, functions: vec![] };
                 _dll_imports.push(_d);
@@ -148,11 +149,16 @@ impl PeParser {
             }
         }
         //  Hash the file's contents
-        let _md5: String = self.get_md5();
-        let _sha2: String = self.get_sha2();
-        
-        let _pehashes: PE_HASHES = PE_HASHES { md5: _md5, sha2: _sha2 };
-        
+        let mut _pehashes: PE_HASHES;
+
+        if _petype == 0 && _pesubsystem == 0 {
+            _pehashes = PE_HASHES { md5: "null".to_string(), sha2: "null".to_string() };
+        } else {
+            let _md5: String = self.get_md5();
+            let _sha2: String = self.get_sha2();
+            
+            _pehashes = PE_HASHES { md5: _md5, sha2: _sha2 };
+        }
         //  Finally build the custom object PE_FILE with the essential data structures
         //
         //  Note:   This is the object that represents the goal of the PeParser module.
@@ -298,18 +304,29 @@ impl PeParser {
     fn get_data_directories(&self, data_dir: &[u64; 16usize]) -> HashMap<String, IMAGE_DATA_DIRECTORY>
     {
         let mut _data_directories: Vec<IMAGE_DATA_DIRECTORY> = Vec::with_capacity(16usize);
+        let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY> = HashMap::new();
         let _offset = 0 as usize;
-
+        let mut _type: String;
         // Serialize Each Data Directory
+        let mut _null_data_dirs: u8 = 0;
+        {
+            // Validation of Null Directory Entries
+            // If all 16 entries are null (0), we know
+            for _n in data_dir {
+                if _n == &0u64 { _null_data_dirs += 1; }
+            }
+            if _null_data_dirs == 16u8 {
+                _type = String::from("IMAGE_DIRECTORY_NULL_DUMMY_ENTRY");
+                _data_map.insert(_type, IMAGE_DATA_DIRECTORY::load_null_data_directory());
+                return _data_map;
+            }
+        }
+        let _msg = format!("{} : {}","Unable to Serialize IMAGE_DATA_DIRECTORY From NT_HEADERS", self.handler.name.as_str());  
         for _d in data_dir.iter() {
             let _bytes = _d.to_le_bytes();
-            let _msg = format!("{} : {}","Unable to Serialize IMAGE_DATA_DIRECTORY From NT_HEADERS", self.handler.name.as_str());  
             let _data_dir: IMAGE_DATA_DIRECTORY = _bytes.pread_with(_offset, LE).expect(_msg.as_str());
             _data_directories.push(_data_dir);
         }
-        // Now Build the dataMap
-        let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY> = HashMap::new();
-        let mut _type: String;
 
         for (_idx, _entry) in _data_directories.iter().enumerate() {
             if _entry.Size != 0 {
@@ -355,27 +372,35 @@ impl PeParser {
     ) -> HashMap<String, IMAGE_SECTION_HEADER>
     {
         const SIZE_OF_SECTION_HEADER: usize  = 40; // 40 Bytes Long
-
-        // Steps:
-            //  Get Number of Sections in Scope for the PE File
-        let _numof_pe_sections: usize = _nt_headers.FileHeader.NumberOfSections as usize;
-        
-            //  Calculate Total Bytes to Read for All Sections
-        let mut _total_bytes_sections = SIZE_OF_SECTION_HEADER * _numof_pe_sections;
-
-            //  Get Size of Optional Header from FileHeader
-        let _sizeof_pe_opthdr: usize = _nt_headers.FileHeader.SizeOfOptionalHeader as usize;
-
-            //  Calculate The Starting Offset of the OptionalHeader from NtHeaders
-        let _offset_starts_opthdr = (e_lfanew + 24) as usize;
-        
-            //  Calculate The Starting Offset of the Section Headers
-        let mut _offset_starts_sechdr = _offset_starts_opthdr + _sizeof_pe_opthdr;
-        
+        let mut _numof_pe_sections: usize = 0;
+        let mut _total_bytes_sections = 0;
+        let mut _sizeof_pe_opthdr: usize = 0;
+        let mut _offset_starts_opthdr: usize = 0;
+        let mut _offset_starts_sechdr: usize = 0;
         let mut _section_table_headers: HashMap<String, IMAGE_SECTION_HEADER> = HashMap::new();
-
         let mut _section_header: IMAGE_SECTION_HEADER;
         let mut _section_name: Vec<u8>;
+        if _nt_headers.FileHeader.NumberOfSections == 0 {
+            let _null_section_header: IMAGE_SECTION_HEADER = IMAGE_SECTION_HEADER::load_null_section_header();
+            _section_table_headers.insert("PE_NULL_DUMMY_SECTION".to_string(), _null_section_header);
+            return _section_table_headers;
+
+        }
+        // Steps:
+        //  Get Number of Sections in Scope for the PE File
+        _numof_pe_sections = _nt_headers.FileHeader.NumberOfSections as usize;
+            
+        //  Calculate Total Bytes to Read for All Sections
+        _total_bytes_sections = SIZE_OF_SECTION_HEADER * _numof_pe_sections;
+
+        //  Get Size of Optional Header from FileHeader
+        _sizeof_pe_opthdr = _nt_headers.FileHeader.SizeOfOptionalHeader as usize;
+
+        //  Calculate The Starting Offset of the OptionalHeader from NtHeaders
+        _offset_starts_opthdr = (e_lfanew + 24) as usize;
+            
+        //  Calculate The Starting Offset of the Section Headers
+        _offset_starts_sechdr = _offset_starts_opthdr + _sizeof_pe_opthdr;
         let _msg = format!("{} : {}","Unable to Serialize SECTION_HEADER From SECTION_TABLE", self.handler.name.as_str()); 
         while _total_bytes_sections != 0 {
 
@@ -526,9 +551,17 @@ impl PeParser {
             _dll_thunks = match _pe_type {                                      // Get All ThunkData Structs
                 &267 => DLL_THUNK_DATA::x86(self.get_dll_thunks32(_offset)),    // 32Bit ThunkData
                 &523 => DLL_THUNK_DATA::x64(self.get_dll_thunks64(_offset)),    // 64Bit ThunkData
-                _ => std::process::exit(0x0100)
+                //_ => std::process::exit(0x0100)
+                _ => {
+                    _results.push(DLL_PROFILE {                             // populate the dll profile list
+                            name: "null_dummy_dll".to_string(),
+                            imports: 0usize,
+                            functions: vec![]
+                        });
+                    return _results;                                         // Return Early with a dummy object
+                }
             };
-            
+
             let _functions_list: DLL_PROFILE;
 
             _functions_list = match _dll_thunks {

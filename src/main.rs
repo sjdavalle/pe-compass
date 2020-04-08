@@ -18,9 +18,12 @@ extern crate fs2;
 mod utils;
 use utils::args::argument_parser::ArgumentsParser;
 
-fn main() -> Result<(), Box<dyn std::error::Error>>
+fn main()
 {
     let _args = ArgumentsParser::new();
-        _args.parse();
-    Ok(())
+    std::process::exit( match _args.parse() {
+        Ok(_) => 0,
+        Err(err) => { eprintln!("Program Error: {:?}", err); 1 }
+
+    });
 }
