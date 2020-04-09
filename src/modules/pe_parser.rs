@@ -128,9 +128,9 @@ impl PeParser {
         {
             // Acquire IAT
             if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IMPORT".to_string()) {
-                let _msg = format!("{} : {}", "Unable to Get IAT Table From Section", self.handler.name.as_str());
+                let _msg = format!("{} : {}", "Unable to Entry Imports From Section", self.handler.name.as_str());
                 let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").expect(_msg.as_str());
-                let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", _eimp, &_section_table_headers);
+                let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", *_eimp, &_section_table_headers);
                 _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports); // Validate:  _null_dummy object
             } else {
                 let _d = DLL_PROFILE { name: "".to_string(), imports: 0 as usize, functions: vec![] };
@@ -144,7 +144,7 @@ impl PeParser {
             {
                 let _msg = format!("{} : {}", "Unable to Get EAT Table From Section", self.handler.name.as_str());
                 let _eexp = _data_map.get("IMAGE_DIRECTORY_ENTRY_EXPORT").expect(_msg.as_str());
-                let mut _rva_exports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("exports", _eexp, &_section_table_headers);
+                let mut _rva_exports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("exports", *_eexp, &_section_table_headers);
                 _dll_exports = self.get_dll_exports(&mut _rva_exports);
             }
         }
@@ -325,9 +325,6 @@ impl PeParser {
             let _data_dir: IMAGE_DATA_DIRECTORY = _bytes.pread_with(_offset, LE).expect(_msg.as_str());
             _data_directories.push(_data_dir);
         }
-
-
-
         for (_idx, _entry) in _data_directories.iter().enumerate() {
             if _entry.Size != 0 {
                 match _idx {
@@ -455,41 +452,40 @@ impl PeParser {
     fn get_rva_from_directory_entry(
         &self,
         _entry_name: &str,
-        _dir_entry: &IMAGE_DATA_DIRECTORY,
+        _dir_entry: IMAGE_DATA_DIRECTORY,
         _section_table: &HashMap<String, IMAGE_SECTION_HEADER>
     ) -> PE_RVA_TRACKER
     {
         let mut _rva_tracker = PE_RVA_TRACKER::new();
         {
-            let mut _rvas_x: Vec<&DWORD> = vec![];
-            let mut _rvas_y: Vec<&DWORD> = vec![];
+            let mut _rvas_x: Vec<DWORD> = vec![];
+            let mut _rvas_y: Vec<DWORD> = vec![];
 
             for _v in _section_table.values() {
-                _rvas_x.push(&_v.VirtualAddress);
+                _rvas_x.push(_v.VirtualAddress);
             }
-            _rvas_x.sort();             // Sort All VAs from smallest to largest
-            
-            _rvas_y = _rvas_x.clone();  // Build Second List of VAs
-            _rvas_y.push(&0);           // Push Zero Padding to the end 
-            _rvas_y.remove(0);          // Remove first element; aligned for zip iter
+            _rvas_x.sort();                             // Sort All VAs from smallest to largest
+            let _ta = _dir_entry.VirtualAddress;
+            _rvas_y = _rvas_x.clone();                  // Build Second List of VAs
+            _rvas_y.push(_ta + 1);                      // Push +1 Padding to the end 
+            _rvas_y.remove(0);                          // Remove first element; aligned for zip iter
 
             let _list_virtual_addresses = _rvas_x.iter().zip(_rvas_y);
-
             for (_x, _y) in _list_virtual_addresses {
-                let _range = Range { start: _x, end: &_y };
-                let _ta = &&&_dir_entry.VirtualAddress;
+                let _start = *_x;
+                let _end   = _y;
+                let _range = Range { start: _start, end: _end };
 
-                if _range.contains(_ta) {    
-                    if _ta >= &_x && _ta <= &&_y {
+                if _range.contains(&_ta) {    
+                    if _ta >= _start && _ta <= _end {
                         
                         for (_key, _value) in _section_table.iter() {
-                            if &&_value.VirtualAddress == _x {
+                            if _value.VirtualAddress == _start {
                                 _rva_tracker.update(_entry_name,                            // Dir Entry Name
-                                                    ***_ta,                                 // Dir Entry VA; Deref
-                                                    **_x,                                   // Section VA; Deref
+                                                    _ta,                                 // Dir Entry VA; Deref
+                                                    _start,                                   // Section VA; Deref
                                                     _section_table[_key].PointerToRawData,  // Section RA
-                                                    _key.to_string());                      // Name of PE Section
-                                                    
+                                                    _key.to_string());                      // Name of PE Section          
                                 _rva_tracker.get_file_offset();
                             }
                         }
@@ -537,38 +533,43 @@ impl PeParser {
         }
         // Now that we have all the DLLs involved, let's parse the imports
         // At this stage all we have are IMAGE_IMPORT_DESCRIPTOR structs
+        let mut _invalid_offsets: u32 = 0;
         for _dll in _dll_list {
             _offset = _rva.new_offset_from(_dll.Name);
-            let _dll_name = self.get_dll_name(_offset);
+            if _offset != 1usize {
+                let _dll_name = self.get_dll_name(_offset);
 
-            _offset = match _dll.OriginalFirstThunk {                   // Check if OFT is Zero, then use the FT
-                0 => { _rva.new_offset_from(_dll.FirstThunk) },         // Use the FT to point to the IAT
-                _ => { _rva.new_offset_from(_dll.OriginalFirstThunk) }  // Else, use the OFT to point to the IAT
-            };
-
-            let _dll_thunks: DLL_THUNK_DATA;
-            
-            _dll_thunks = match _pe_type {                                      // Get All ThunkData Structs
-                &267 => DLL_THUNK_DATA::x86(self.get_dll_thunks32(_offset)),    // 32Bit ThunkData
-                &523 => DLL_THUNK_DATA::x64(self.get_dll_thunks64(_offset)),    // 64Bit ThunkData
-                //_ => std::process::exit(0x0100)
-                _ => {
-                    _results.push(DLL_PROFILE {                             // populate the dll profile list
-                            name: "null_dummy_dll".to_string(),
-                            imports: 0usize,
-                            functions: vec![]
-                        });
-                    return _results;                                         // Return Early with a dummy object
-                }
-            };
-
-            let _functions_list: DLL_PROFILE;
-
-            _functions_list = match _dll_thunks {
-                DLL_THUNK_DATA::x86(value) => { self.get_dll_function_names32(_rva, _dll_name, value) },
-                DLL_THUNK_DATA::x64(value) => { self.get_dll_function_names64(_rva, _dll_name, value) }
-            };
-            _results.push(_functions_list);
+                _offset = match _dll.OriginalFirstThunk {                   // Check if OFT is Zero, then use the FT
+                    0 => { _rva.new_offset_from(_dll.FirstThunk) },         // Use the FT to point to the IAT
+                    _ => { _rva.new_offset_from(_dll.OriginalFirstThunk) }  // Else, use the OFT to point to the IAT
+                };
+    
+                let _dll_thunks: DLL_THUNK_DATA;
+                
+                _dll_thunks = match _pe_type {                                      // Get All ThunkData Structs
+                    &267 => DLL_THUNK_DATA::x86(self.get_dll_thunks32(_offset)),    // 32Bit ThunkData
+                    &523 => DLL_THUNK_DATA::x64(self.get_dll_thunks64(_offset)),    // 64Bit ThunkData
+                    //_ => std::process::exit(0x0100)
+                    _ => {
+                        _results.push(DLL_PROFILE {                             // populate the dll profile list
+                                name: "null_dummy_dll".to_string(),
+                                imports: 0usize,
+                                functions: vec![]
+                            });
+                        return _results;                                         // Return Early with a dummy object
+                    }
+                };
+    
+                let _functions_list: DLL_PROFILE;
+    
+                _functions_list = match _dll_thunks {
+                    DLL_THUNK_DATA::x86(value) => { self.get_dll_function_names32(_rva, _dll_name, value) },
+                    DLL_THUNK_DATA::x64(value) => { self.get_dll_function_names64(_rva, _dll_name, value) }
+                };
+                _results.push(_functions_list);
+            } else {
+                _invalid_offsets += 1;
+            }
         }
         _results
     }

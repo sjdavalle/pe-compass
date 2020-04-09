@@ -683,8 +683,14 @@ impl PE_RVA_TRACKER {
     pub fn new_offset_from(&mut self, new_target_address: u32) -> usize
     {
         self.ta = new_target_address;
+        let mut _result: usize = 0;
+        if self.ta < self.va {
+            let _invalid: usize = 1;
+            return _invalid;
+        }
         self.file_offset = (self.ta - self.va) + self.ra;
-        (self.ta - self.va + self.ra) as usize
+        _result = (self.ta - self.va + self.ra) as usize;
+        _result
     }
 }
 /// PE DLL IMPORTS - DLL PROFILE
