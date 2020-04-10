@@ -19,6 +19,7 @@ use custom_errors::exit_process;
 pub struct FileHandler {
     pub success:    bool,
     pub handle:     File,
+    pub full_path:  String,
     pub name:       String, 
     pub meta:       Metadata,
     pub size:       u64
@@ -109,6 +110,8 @@ impl FileHandler {
                                     .open(_filepath)
                                     .unwrap();
 
+        let _full_path = _filepath.to_str().unwrap();
+        let _full_path = String::from(_full_path);
         let _name = _filepath.file_name().unwrap();
         let _name = _name.to_str().unwrap();
         let _name = String::from(_name);          
@@ -116,11 +119,12 @@ impl FileHandler {
         let _size = _meta.len();
 
         FileHandler {
-            handle: _file,
-            name:   _name,
-            meta:   _meta,
-            size:   _size,
-            success: true
+            handle:     _file,
+            full_path:  _full_path,
+            name:       _name,
+            meta:       _meta,
+            size:       _size,
+            success:    true
         }
      }
      /// # FileHandler Write Method

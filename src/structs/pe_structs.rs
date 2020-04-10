@@ -563,6 +563,7 @@ pub struct PE_FILE {
     pub petype:                 u16,
     pub pesubsystem:            u16,
     pub pesubsystem_caption:    String,
+    pub pepath:                 String,
     //pub ImageDosHeader:         IMAGE_DOS_HEADER,
     //pub ImageDosStub:           String,
     //pub ImageNtHeaders:         IMAGE_NT_HEADERS,

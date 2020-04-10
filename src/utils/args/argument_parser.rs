@@ -164,14 +164,15 @@ impl ArgumentsParser<'_> {
                             if _dll.functions.len() > 0usize {
                                 for _imp in _dll.functions.iter() {
                                     let _s = format!(
-                                        "{},{},{},{},{},{},{}\n",
+                                        "{},{},{},{},{},{},{},{}\n",
                                         _pe.pename,
                                         _pe.pesubsystem,
                                         "imports",
                                         _dll.name,
                                         _imp,
                                         _pe.ImageHashSignatures.md5,
-                                        _pe.ImageHashSignatures.sha2
+                                        _pe.ImageHashSignatures.sha2,
+                                        _pe.pepath
                                     );
                                     _content.push_str(_s.as_str());
                                 }
@@ -181,14 +182,15 @@ impl ArgumentsParser<'_> {
                     if _pe.ImageDLLExports.exports > 0usize {
                         for _func in _pe.ImageDLLExports.functions.iter() {
                             let _s = format!(
-                                "{},{},{},{},{},{},{}\n",
+                                "{},{},{},{},{},{},{},{}\n",
                                 _pe.pename,
                                 _pe.pesubsystem,
                                 "exports",
                                 _pe.pename,
                                 _func,
                                 _pe.ImageHashSignatures.md5,
-                                _pe.ImageHashSignatures.sha2
+                                _pe.ImageHashSignatures.sha2,
+                                _pe.pepath
                             );
                             _content.push_str(_s.as_str());
                         }

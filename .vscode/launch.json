@@ -9,7 +9,7 @@
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}/target/debug/pe-compass",
-            "args": ["inspect", "-f", "c:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE"],
+            "args": ["inspect", "-f", "c:\\Program Files (x86)\\ExeinfoPe\\exeinfope.exe"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
