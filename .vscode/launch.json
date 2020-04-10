@@ -5,60 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
-            "type": "cppdbg",
+            "name": "(Windows) Launch",
+            "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}/target/debug/pe-compass",
-            "args": [],
+            "args": ["inspect", "-f", "c:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
+            "externalConsole": false
         },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug executable 'pe-compass'",
-            "cargo": {
-                "args": [
-                    "build",
-                    "--bin=pe-compass",
-                    "--package=pe-compass"
-                ],
-                "filter": {
-                    "name": "pe-compass",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug unit tests in executable 'pe-compass'",
-            "cargo": {
-                "args": [
-                    "test",
-                    "--no-run",
-                    "--bin=pe-compass",
-                    "--package=pe-compass"
-                ],
-                "filter": {
-                    "name": "pe-compass",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        }
     ]
 }
