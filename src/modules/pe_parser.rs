@@ -126,12 +126,21 @@ impl PeParser {
         // However, here we want to focus on parsing tedious sections of the file that come from
         // either IAT table.
         {
-            // Acquire IAT
+            // Acquire IAT ENTRY RVA
+            let mut _rva_iat: PE_RVA_TRACKER;
+            if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IAT".to_string()) {
+                let _msg = format!("{} : {}", "Unable to Entry Imports From Section", self.handler.name.as_str());
+                let _eiat = _data_map.get("IMAGE_DIRECTORY_ENTRY_IAT").expect(_msg.as_str());
+                _rva_iat = self.get_rva_from_directory_entry("imports_iat", *_eiat, &_section_table_headers);
+            } else {
+                _rva_iat = PE_RVA_TRACKER::new();
+            }
+            // Acquire IMPORT TABLE
             if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IMPORT".to_string()) {
                 let _msg = format!("{} : {}", "Unable to Entry Imports From Section", self.handler.name.as_str());
                 let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").expect(_msg.as_str());
                 let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", *_eimp, &_section_table_headers);
-                _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports); // Validate:  _null_dummy object
+                _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports, &mut _rva_iat);
             } else {
                 let _d = DLL_PROFILE { name: "".to_string(), imports: 0 as usize, functions: vec![] };
                 _dll_imports.push(_d);
@@ -500,7 +509,7 @@ impl PeParser {
     /// within the DLL being imported.
     /// 
     /// *Note* this method avoids/ignores imports by ordinal value
-    fn get_dll_imports(&self, _pe_type: &u16, _rva: &mut PE_RVA_TRACKER) -> Vec<DLL_PROFILE>
+    fn get_dll_imports(&self, _pe_type: &u16, _rva: &mut PE_RVA_TRACKER, _rva_iat: &mut PE_RVA_TRACKER) -> Vec<DLL_PROFILE>
     {
         const SIZE_OF_IMAGE_IMPORT_DESCRIPTOR: usize = 20 as usize;
         const RANGE_OF_DLL_NAME: usize = 4 as usize;
@@ -509,7 +518,8 @@ impl PeParser {
         
         let mut _dll: IMAGE_IMPORT_DESCRIPTOR;
         let mut _dll_list: Vec<IMAGE_IMPORT_DESCRIPTOR> = vec![];
-        
+        let mut _failed_import_descriptors: Vec<IMAGE_IMPORT_DESCRIPTOR> = vec![];
+
         let mut _results: Vec<DLL_PROFILE> = vec![];
         let mut _offset: usize = _rva.file_offset as usize;
 
@@ -524,12 +534,11 @@ impl PeParser {
             _dll = self.content.pread_with(_offset, LE).expect(_msg.as_str());
             _dll_list.push(_dll);                                   // Add each descriptor found to the list
 
-            _offset += SIZE_OF_IMAGE_IMPORT_DESCRIPTOR;             // Advance the file offset by 20 bytes
-
             if _dll == _null_dll {                                  // Check If Reached End of DLL list
                 _dll_list.pop();                                    // remove the null descriptor
                 break;
             }
+            _offset += SIZE_OF_IMAGE_IMPORT_DESCRIPTOR;             // Advance the file offset by 20 bytes
         }
         // Now that we have all the DLLs involved, let's parse the imports
         // At this stage all we have are IMAGE_IMPORT_DESCRIPTOR structs
@@ -569,7 +578,63 @@ impl PeParser {
                 _results.push(_functions_list);
             } else {
                 _invalid_offsets += 1;
+                _failed_import_descriptors.push(_dll);
             }
+        }
+        if _invalid_offsets > 0 {
+            let _iat_results: Vec<DLL_PROFILE> = self.get_dll_imports_from_iat(_pe_type, _rva_iat, &_failed_import_descriptors);
+            println!("Failed Descriptors Acquires: \n{:#?}", _iat_results);
+            for _iat_result in _iat_results {
+                _results.push(_iat_result);
+            }
+        }
+        _results
+    }
+    fn get_dll_imports_from_iat(
+            &self,
+            _pe_type: &u16,
+            _rva_iat: &mut PE_RVA_TRACKER,
+            _img_descriptors: &Vec<IMAGE_IMPORT_DESCRIPTOR>
+        ) -> Vec<DLL_PROFILE>
+    {
+        let mut _invalid_offsets: u32 = 0;
+        let mut _results: Vec<DLL_PROFILE> = vec![];
+        let mut _offset: usize = _rva_iat.file_offset as usize;
+        for _dll in _img_descriptors {
+            _offset = _rva_iat.new_offset_from(_dll.Name);
+            if _offset != 1usize {
+                let _dll_name = self.get_dll_name(_offset);
+
+                _offset = match _dll.OriginalFirstThunk {                   // Check if OFT is Zero, then use the FT
+                    0 => { _rva_iat.new_offset_from(_dll.FirstThunk) },         // Use the FT to point to the IAT
+                    _ => { _rva_iat.new_offset_from(_dll.OriginalFirstThunk) }  // Else, use the OFT to point to the IAT
+                };
+    
+                let _dll_thunks: DLL_THUNK_DATA;
+                
+                _dll_thunks = match _pe_type {                                      // Get All ThunkData Structs
+                    &267 => DLL_THUNK_DATA::x86(self.get_dll_thunks32(_offset)),    // 32Bit ThunkData
+                    &523 => DLL_THUNK_DATA::x64(self.get_dll_thunks64(_offset)),    // 64Bit ThunkData
+                    //_ => std::process::exit(0x0100)
+                    _ => {
+                        _results.push(DLL_PROFILE {                             // populate the dll profile list
+                                name: "null_dummy_dll".to_string(),
+                                imports: 0usize,
+                                functions: vec![]
+                            });
+                        return _results;                                         // Return Early with a dummy object
+                    }
+                };
+                let _functions_list: DLL_PROFILE;
+    
+                _functions_list = match _dll_thunks {
+                    DLL_THUNK_DATA::x86(value) => { self.get_dll_function_names32(_rva_iat, _dll_name, value) },
+                    DLL_THUNK_DATA::x64(value) => { self.get_dll_function_names64(_rva_iat, _dll_name, value) }
+                };
+                _results.push(_functions_list);
+            } else {
+                _invalid_offsets += 1;
+            }                                
         }
         _results
     }
