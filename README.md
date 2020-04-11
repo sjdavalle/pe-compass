@@ -111,7 +111,29 @@ OPTIONS:
     -o <OUTPUT FILE>        Destination File to Write Output to
 ```
 <br/>
+
+This example shows the options for the `recurse` subcommand
+
+```text
+pe-compass-recurse v.0.0.10
+carlos diaz | @dfirence
+
+Works Recursively with Folders
+
+USAGE:
+    pe-compass recurse [OPTIONS]
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -d <Directory PATH>             Target Directory To Recurse Search
+    -x <File Extension Name>        Applies Ends With Pattern Match - NON-REGEX
+    -f <Pattern NON_REGEX>          A Non-RegEx pattern to filter by
+```
 <br/>
+<br />
 
 ## Parse A File
 To parse a single file, enter the `subcommand` options `inspect` and use the `-f` switch and filepath of the pe file.
