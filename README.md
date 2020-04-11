@@ -27,8 +27,7 @@ computer's *on-disk* binaries from filesystem locations.
 The project is created as a need to build custom datasets and pipelines around 
 DLL telemetry and its **context** with large scale requirements - i.e., > ~750K PE Files per day.
 
-By context we mean the informational value afforded
-by the type of data that can be acquired by DLLs imported in a Portable Executable
+By context we mean the informational value afforded by the type of data that can be acquired by DLLs imported in a Portable Executable
 file - PE file.
 
 At this time, the focus is to study the `imports` or `IAT` and `exports` or `EAT` tables from a PE file to
@@ -42,16 +41,16 @@ I hit a stumbling block, as I would move to bigger projects or clients.
 
 I grew so much frustration from:
 
-- The Python Tools would be slow or unreliable (crash with abnormal PE files)
-- Or the parsers would only support either one of 32bit or 64 bit PEs, but not both :(
-- Or the parsers were awesome, BUT ONLY in GUI Mode
-- Or the parsers are free but DO not provide the IAT and EAT as output, only some random properties
-- Or the Java parsers would break with new Java versions and the developer won't update the code
-- Or the Python, and Java parsers would require the installation of Java and Python Environments
-- Or the Python PIP_FREEZE executable binaries would now work across 32 or 64 bit Windows Platforms
-- Or the awesome C# tool created by someone could not run on Linux/MacOS for malware triaging workflows, again slowness :(
-- Or the output provided by the developers would not provide database interchange formats - i.e., CSV or JSON
-- Or worse I could not afford some awesome tool nor would my employers/clients buy them for me and the team :(
+1. The Python Tools would be slow or unreliable (crash with abnormal PE files)
+2. Or the parsers would only support either one of 32bit or 64 bit PEs, but not both :(
+3. Or the parsers were awesome, BUT ONLY in GUI Mode
+4. Or the parsers are free but DO not provide the IAT and EAT as output, only some random properties
+5. Or the Java parsers would break with new Java versions and the developer won't update the code
+6. Or the Python, and Java parsers would require the installation of Java and Python Environments
+7. Or the Python PIP_FREEZE executable binaries would NOT work across 32 or 64 bit Windows Platforms
+8. Or the awesome C# tool created by someone could not run on Linux/MacOS for malware triaging workflows, again slowness :(
+9. Or the output provided by the developers would not provide database interchange formats - i.e., CSV or JSON
+10. Or worse I could not afford some awesome tool nor would my employers/clients buy them for me and the team :(
 
 ## Education and Mastery - For Everyone (Me, You, and those of tomorrow)
 As I grew my skill set, I recognized how much energy and effort is needed to boost/uplift new team members without
