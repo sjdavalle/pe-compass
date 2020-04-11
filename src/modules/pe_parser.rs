@@ -2,10 +2,11 @@ use std::collections::{ HashMap, HashSet };
 use std::ops::Range;
 
 // 3rd Parties
+use chrono::{DateTime, SecondsFormat, NaiveDateTime, Utc};
 use scroll::{ Pread, LE };
-use rand::Rng;
 use sha2::{ Sha256, Digest };
 use md5::*;
+use rand::Rng;
 
 // My Modules
 //#[path = "../utils/errors/custom_errors.rs"] mod custom_errors;
@@ -89,8 +90,11 @@ impl PeParser {
         let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
     
         let mut _petype: u16;
+        let mut _pesize: u64;
         let mut _pesubsystem: u16;
         let mut _pesubsystem_caption: String;
+        let mut _pe_timedate_stamp: u32;
+        let mut _pe_timedate_human: String;
         let mut _nt_headers: IMAGE_NT_HEADERS;
 
         let mut _image_data_dir: [u64; 16] = [0u64; 16];
@@ -107,6 +111,9 @@ impl PeParser {
         {
             let _nt_test: INSPECT_NT_HEADERS = self.inspect_nt_headers(_doshdr.e_lfanew);   // Drop these headers after block
             _petype = _nt_test.OptionalHeader.Magic;
+            _pesize = self.handler.size;
+            _pe_timedate_stamp = _nt_test.FileHeader.TimeDateStamp;
+            _pe_timedate_human = self.get_human_datetime(_pe_timedate_stamp);
 
             _nt_headers = match _petype {
                 267 => IMAGE_NT_HEADERS::x86(self.get_image_nt_headers32(_doshdr.e_lfanew)),
@@ -134,7 +141,7 @@ impl PeParser {
             // Acquire IAT ENTRY RVA
             let mut _rva_iat: PE_RVA_TRACKER;
             if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IAT".to_string()) {
-                let _msg = format!("{} : {}", "Unable to Entry Imports From Section", self.handler.name.as_str());
+                let _msg = format!("{} : {}", "Unable to Get Entry Imports From Section", self.handler.name.as_str());
                 let _eiat = _data_map.get("IMAGE_DIRECTORY_ENTRY_IAT").expect(_msg.as_str());
                 _rva_iat = self.get_rva_from_directory_entry("imports_iat", *_eiat, &_section_table_headers);
             } else {
@@ -142,7 +149,7 @@ impl PeParser {
             }
             // Acquire IMPORT TABLE
             if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IMPORT".to_string()) {
-                let _msg = format!("{} : {}", "Unable to Entry Imports From Section", self.handler.name.as_str());
+                let _msg = format!("{} : {}", "Unable to Get Entry Imports From Section", self.handler.name.as_str());
                 let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").expect(_msg.as_str());
                 let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", *_eimp, &_section_table_headers);
                 _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports, &mut _rva_iat);
@@ -178,11 +185,14 @@ impl PeParser {
         //  Note:   This is the object that represents the goal of the PeParser module.
         //          Remember, this module is only for serializing the file to human structs.
         PE_FILE {
-            pename:                 self.handler.name.clone(),
-            petype:                 _petype,
-            pesubsystem:            _pesubsystem,
-            pesubsystem_caption:    _pesubsystem_caption,
-            pepath:                 self.handler.full_path.clone(),
+            pe_name:                 self.handler.name.clone(),
+            pe_type:                 _petype,
+            pe_size:                 _pesize,
+            pe_subsystem:            _pesubsystem,
+            pe_subsystem_caption:    _pesubsystem_caption,
+            pe_path:                 self.handler.full_path.clone(),
+            pe_timedate_stamp:       _pe_timedate_stamp,
+            pe_timedate_human:       _pe_timedate_human,
             //ImageDosHeader:         _doshdr,
             //ImageDosStub:           _dos_stub,
             //ImageNtHeaders:         _nt_headers,
@@ -192,6 +202,12 @@ impl PeParser {
             ImageDLLExports:        _dll_exports,
             ImageHashSignatures:    _pehashes
         }
+    }
+    fn get_human_datetime(&self, timestamp: u32) -> String
+    {
+        let _ts: i64 = timestamp as i64;
+        let _utc = DateTime::<Utc>::from_utc(NaiveDateTime::from_timestamp(_ts,0), Utc);
+        _utc.to_rfc3339_opts(SecondsFormat::Millis, true)
     }
     /// # PE Parser GetDosHeader Method
     /// This parses the initial IMAGE_DOS_HEADER struct from

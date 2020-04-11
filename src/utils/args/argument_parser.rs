@@ -153,8 +153,8 @@ impl ArgumentsParser<'_> {
         let _pe = PeParser::new(_file_sample);
         if _pe.is_pe {
             let _pe = _pe.inspect_file();
-            if _pe.petype != 0
-                && _pe.pesubsystem != 0
+            if _pe.pe_type != 0
+                && _pe.pe_subsystem != 0
                 && _pe.ImageHashSignatures.md5 != "null".to_string()
             {
                 let mut _content: String = String::from("");
@@ -164,15 +164,18 @@ impl ArgumentsParser<'_> {
                             if _dll.functions.len() > 0usize {
                                 for _imp in _dll.functions.iter() {
                                     let _s = format!(
-                                        "{},{},{},{},{},{},{},{}\n",
-                                        _pe.pename,
-                                        _pe.pesubsystem,
+                                        "{},{},{},{},{},{},{},{},{},{},{}\n",
+                                        _pe.pe_name,
+                                        _pe.pe_size,
+                                        _pe.pe_subsystem,
+                                        _pe.pe_timedate_stamp,
+                                        _pe.pe_timedate_human,
                                         "imports",
                                         _dll.name,
                                         _imp,
                                         _pe.ImageHashSignatures.md5,
                                         _pe.ImageHashSignatures.sha2,
-                                        _pe.pepath
+                                        _pe.pe_path
                                     );
                                     _content.push_str(_s.as_str());
                                 }
@@ -182,15 +185,18 @@ impl ArgumentsParser<'_> {
                     if _pe.ImageDLLExports.exports > 0usize {
                         for _func in _pe.ImageDLLExports.functions.iter() {
                             let _s = format!(
-                                "{},{},{},{},{},{},{},{}\n",
-                                _pe.pename,
-                                _pe.pesubsystem,
+                                "{},{},{},{},{},{},{},{},{},{},{}\n",
+                                _pe.pe_name,
+                                _pe.pe_size,
+                                _pe.pe_subsystem,
+                                _pe.pe_timedate_stamp,
+                                _pe.pe_timedate_human,
                                 "exports",
-                                _pe.pename,
+                                _pe.pe_name,
                                 _func,
                                 _pe.ImageHashSignatures.md5,
                                 _pe.ImageHashSignatures.sha2,
-                                _pe.pepath
+                                _pe.pe_path
                             );
                             _content.push_str(_s.as_str());
                         }

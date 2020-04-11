@@ -9,6 +9,7 @@ extern crate scroll;
 extern crate serde_json;
 extern crate serde;
 extern crate walkdir;
+extern crate chrono;
 extern crate rand;
 extern crate clap;
 extern crate sha2;

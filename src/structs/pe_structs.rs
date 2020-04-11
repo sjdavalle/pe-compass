@@ -559,11 +559,14 @@ impl ::std::clone::Clone for INSPECT_IMAGE_OPTIONAL_HEADER {
 ///
 #[derive(Debug, Deserialize, Serialize)]
 pub struct PE_FILE {
-    pub pename:                 String,
-    pub petype:                 u16,
-    pub pesubsystem:            u16,
-    pub pesubsystem_caption:    String,
-    pub pepath:                 String,
+    pub pe_name:                 String,
+    pub pe_type:                 u16,
+    pub pe_size:                 u64,
+    pub pe_subsystem:            u16,
+    pub pe_subsystem_caption:    String,
+    pub pe_path:                 String,
+    pub pe_timedate_stamp:       DWORD,
+    pub pe_timedate_human:       String,
     //pub ImageDosHeader:         IMAGE_DOS_HEADER,
     //pub ImageDosStub:           String,
     //pub ImageNtHeaders:         IMAGE_NT_HEADERS,
@@ -581,16 +584,6 @@ pub struct PE_FILE {
 pub struct PE_HASHES {
     pub md5:    String,
     pub sha2:   String
-}
-///
-/// 
-/// 
-/// 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct PE_OUTPUT {
-    pub pename:             String,
-    pub petype:             u16,
-    pub ImageDLLImports:    Vec<DLL_PROFILE>
 }
 ///
 ///
