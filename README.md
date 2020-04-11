@@ -254,7 +254,7 @@ PS C:\> Get-Content my_targets.txt | ForEach-Object { $base=[System.IO.Path]::Ge
 
 ```powershell
 # Assumes you want CSV Output
-PS C:\> Get-Content my_targets.txt | ForEach-Object { $base=[System.IO.Path]::GetFileName $_.Replace("'",""); pe-compass inspect -f $_.Replace("'","") -o .\dumps\$base.csv -c }
+PS C:\> Get-Content my_targets.txt | ForEach-Object { $base=[System.IO.Path]::GetFileName $_.Replace("'",""); pe-compass inspect -f $_.Replace("'","") -o .\dumps\$base.csv -c };
 ```
 <br/>
 <br />
