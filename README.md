@@ -41,16 +41,29 @@ I hit a stumbling block, as I would move to bigger projects or clients.
 
 I grew so much frustration from:
 
+```text
 1. The Python Tools would be slow or unreliable (crash with abnormal PE files)
+
 2. Or the parsers would only support either one of 32bit or 64 bit PEs, but not both :(
+
 3. Or the parsers were awesome, BUT ONLY in GUI Mode
+
 4. Or the parsers are free but DO not provide the IAT and EAT as output, only some random properties
+
 5. Or the Java parsers would break with new Java versions and the developer won't update the code
+
 6. Or the Python, and Java parsers would require the installation of Java and Python Environments
+
 7. Or the Python PIP_FREEZE executable binaries would NOT work across 32 or 64 bit Windows Platforms
+
 8. Or the awesome C# tool created by someone could not run on Linux/MacOS for malware triaging workflows, again slowness :(
+
 9. Or the output provided by the developers would not provide database interchange formats - i.e., CSV or JSON
+
 10. Or worse I could not afford some awesome tool nor would my employers/clients buy them for me and the team :(
+```
+<br />
+
 
 ## Education and Mastery - For Everyone (Me, You, and those of tomorrow)
 As I grew my skill set, I recognized how much energy and effort is needed to boost/uplift new team members without
