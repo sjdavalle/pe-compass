@@ -41,7 +41,7 @@ I hit a stumbling block, as I would move to bigger projects or clients.
 
 I grew so much frustration from:
 
-```text
+
 1. The Python Tools would be slow or unreliable (crash with abnormal PE files)
 
 2. Or the parsers would only support either one of 32bit or 64 bit PEs, but not both :(
@@ -61,7 +61,7 @@ I grew so much frustration from:
 9. Or the output provided by the developers would not provide database interchange formats - i.e., CSV or JSON
 
 10. Or worse I could not afford some awesome tool nor would my employers/clients buy them for me and the team :(
-```
+
 <br />
 
 
@@ -71,6 +71,8 @@ good datasets.  People may not initially have malware analysis skills, but they 
 
 I noticed people of all backgrounds learn faster with data by doing, this motivated me to not loose energy in repeating myself
 but rather affording collaboration opportunities to tackle security problems together, regardless of tenure or experience.
+<br />
+
 
 ## Amplifying Existing Security Community Knowledge
 As many security researchers and professional programmers have noted, the PE file is
@@ -82,6 +84,7 @@ for analytics, and it is those analytics that can allow you to better understand
 which types of telemetry collection approaches are useful for large-scale visibility
 programs tracing computer systems and the programs they run.
 <br/>
+
 
 # Documentation Articles
 Title|URL|
