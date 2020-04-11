@@ -22,6 +22,8 @@ The binary provided here with rust is the `workhorse` that is used to baseline a
 computer's *on-disk* binaries from filesystem locations.
 
 # PROJECT MOTIVATION
+## Data Pipelines - Fast & Reliable, Please!
+
 The project is created as a need to build custom datasets and pipelines around 
 DLL telemetry and its **context** with large scale requirements - i.e., > ~750K PE Files per day.
 
@@ -29,11 +31,38 @@ By context we mean the informational value afforded
 by the type of data that can be acquired by DLLs imported in a Portable Executable
 file - PE file.
 
-At this time, the focus is to study the `imports` or `IAT` table from a PE file to
+At this time, the focus is to study the `imports` or `IAT` and `exports` or `EAT` tables from a PE file to
 identify the meaning of the question: *What is the notion of intent from the PE file?*
 
+## Better Tooling - Cross Platform Please! TOP 10 Frustrations
+I needed a tool that could be run on most environments without the gymnastics of compilation or having 3 codebases.
+
+I used many Python parsers in my past, and binaries provided by many people.  
+I hit a stumbling block, as I would move to bigger projects or clients.
+
+I grew so much frustration from:
+
+- The Python Tools would be slow or unreliable (crash with abnormal PE files)
+- Or the parsers would only support either one of 32bit or 64 bit PEs, but not both :(
+- Or the parsers were awesome, BUT ONLY in GUI Mode
+- Or the parsers are free but DO not provide the IAT and EAT as output, only some random properties
+- Or the Java parsers would break with new Java versions and the developer won't update the code
+- Or the Python, and Java parsers would require the installation of Java and Python Environments
+- Or the Python PIP_FREEZE executable binaries would now work across 32 or 64 bit Windows Platforms
+- Or the awesome C# tool created by someone could not run on Linux/MacOS for malware triaging workflows, again slowness :(
+- Or the output provided by the developers would not provide database interchange formats - i.e., CSV or JSON
+- Or worse I could not afford some awesome tool nor would my employers/clients buy them for me and the team :(
+
+## Education and Mastery - For Everyone (Me, You, and those of tomorrow)
+As I grew my skill set, I recognized how much energy and effort is needed to boost/uplift new team members without
+good datasets.  People may not initially have malware analysis skills, but they certainly have data analysis experience.
+
+I noticed people of all backgrounds learn faster with data by doing, this motivated me to not loose energy in repeating myself
+but rather affording collaboration opportunities to tackle security problems together, regardless of tenure or experience.
+
+## Amplifying Existing Security Community Knowledge
 As many security researchers and professional programmers have noted, the PE file is
-fairly intuitive based on the Microsoft usage of descriptive function name stemming
+fairly intuitive based on the Microsoft usage of descriptive function names stemming
 from *hungarian notation*.
 
 The true power of this project is the custom datasets you can build in a database
