@@ -248,13 +248,13 @@ PS C:\> mkdir dumps
 **Step 2 - Launch The Parsing**
 ```powershell
 # Assumes you want JSON Output
-PS C:\> Get-Content my_targets.txt | ForEach-Object $base=[System.IO.Path]::GetFileName $_.Replace("'",""); pe-compass inspect -f $_.Replace("'","") -o .\dumps\$base.json
+PS C:\> Get-Content my_targets.txt | ForEach-Object { $base=[System.IO.Path]::GetFileName $_.Replace("'",""); pe-compass inspect -f $_.Replace("'","") -o .\dumps\$base.json }
 ```
 <br/>
 
 ```powershell
 # Assumes you want CSV Output
-PS C:\> Get-Content my_targets.txt | ForEach-Object $base=[System.IO.Path]::GetFileName $_.Replace("'",""); pe-compass inspect -f $_.Replace("'","") -o .\dumps\$base.csv -c
+PS C:\> Get-Content my_targets.txt | ForEach-Object { $base=[System.IO.Path]::GetFileName $_.Replace("'",""); pe-compass inspect -f $_.Replace("'","") -o .\dumps\$base.csv -c }
 ```
 <br/>
 <br />
