@@ -64,8 +64,9 @@ impl FileHandler {
             let mut rng = rand::thread_rng();
             let _rand = rng.gen::<u32>();
             let _rand = _rand.to_string();
-            _path_string = format!("{}__{}", _rand, _path_string);
+            _path_string = format!("{}__{}", _path_string, _rand);
         }
+
         let mut _filepath = Path::new(&_path_string);
         
         match mode {
