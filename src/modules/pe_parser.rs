@@ -50,7 +50,7 @@ impl PeParser {
         {
             let _bfile = FileHandler::open(fp, "r");
             
-            if  _bfile.size  < 1024u64 {
+            if  _bfile.size < 1024u64 {
                 //exit_process("Info", "Desired Target is less than 1024 Bytes. Likely Not a real PE File");
                 return PeParser { handler: _bfile, content: vec![], is_pe: false };
             }
@@ -198,11 +198,15 @@ impl PeParser {
             //ImageNtHeaders:         _nt_headers,
             //ImageDataDirectory:     _data_map,
             //ImageSectionHeaders:    _section_table_headers,
-            ImageDLLImports:        _dll_imports,
-            ImageDLLExports:        _dll_exports,
-            ImageHashSignatures:    _pehashes
+            ImageDLLImports:         _dll_imports,
+            ImageDLLExports:         _dll_exports,
+            ImageHashSignatures:     _pehashes
         }
     }
+    /// # PE Parser GetHumanDateTime
+    /// Converts an u32 to human readable time string.
+    ///
+    ///
     fn get_human_datetime(&self, timestamp: u32) -> String
     {
         let _ts: i64 = timestamp as i64;
@@ -529,8 +533,8 @@ impl PeParser {
                         for (_key, _value) in _section_table.iter() {
                             if _value.VirtualAddress == _start {
                                 _rva_tracker.update(_entry_name,                            // Dir Entry Name
-                                                    _ta,                                 // Dir Entry VA; Deref
-                                                    _start,                                   // Section VA; Deref
+                                                    _ta,                                    // Dir Entry VA; Deref
+                                                    _start,                                 // Section VA; Deref
                                                     _section_table[_key].PointerToRawData,  // Section RA
                                                     _key.to_string());                      // Name of PE Section          
                                 _rva_tracker.get_file_offset();
@@ -547,7 +551,12 @@ impl PeParser {
     /// within the DLL being imported.
     /// 
     /// *Note* this method avoids/ignores imports by ordinal value
-    fn get_dll_imports(&self, _pe_type: &u16, _rva: &mut PE_RVA_TRACKER, _rva_iat: &mut PE_RVA_TRACKER) -> Vec<DLL_PROFILE>
+    fn get_dll_imports(
+            &self,
+            _pe_type: &u16,
+            _rva: &mut PE_RVA_TRACKER,
+            _rva_iat: &mut PE_RVA_TRACKER
+     ) -> Vec<DLL_PROFILE>
     {
         const SIZE_OF_IMAGE_IMPORT_DESCRIPTOR: usize = 20 as usize;
         const RANGE_OF_DLL_NAME: usize = 4 as usize;
