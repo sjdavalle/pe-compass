@@ -17,124 +17,6 @@ A Study of the PE Format through the RUST language and Databases.
 <br />
 <br />
 
-
-# PROJECT STATUS
-The project is being developed and you should use the `releases` section
-of this project to use stable versions suitable for productive work.
-
-The `Master` branch may not reflect the version of the `releases` section
-at times, although you can use the `Master` branch if  you want to be working
-with bleeding edge versions.
-
-Note:   If you decide to clone the `Master` branch you should have the stable
-        rust toolchain installed in your platform. Once you are setup with the
-        stable rustup toolchain, go ahead and compile with `cargo build --release`
-
-<br />
-<br />
-
-# PROJECT USAGE
-This project is not focused on building a binary parser, **it is an analytics project**.
-The binary provided here with rust is the `workhorse` that is used to baseline a
-computer's *on-disk* binaries from filesystem locations.
-<br />
-<br />
-
-# PROJECT MOTIVATION
-Making better decisions with a data driven approach is the main motivation. Seemingly, solving for monotonous time consuming daily tasks is the long term goal.
-Before I take action in applying an endpoint security control - I need to be confident in what I am going to disrupt, or what I expect to trigger as false positives
-to responsibly manage the effort required in removing these. I don't know of better ways, other than having data to support these needs.
-
-<br/>
-<br />
-
-## Data Pipelines - Fast & Reliable, Please!
-
-The project is created as a need to build custom datasets and pipelines around 
-DLL telemetry and its **context** with large scale requirements - i.e., > ~750K PE Files per day.
-
-By context we mean the informational value afforded by the type of data that can be acquired by DLLs imported in a Portable Executable
-file - PE file.
-
-At this time, the focus is to study the `imports` or `IAT` and `exports` or `EAT` tables from a PE file to
-identify the meaning of the question: *What is the notion of intent from the PE file?*
-<br />
-
-## Better Tooling - Cross Platform Please! TOP 10 Frustrations
-I needed a tool that could be run on most environments without the gymnastics of compilation or having 3 codebases.
-
-I used many Python parsers in my past, and binaries provided by many people.  
-I hit a stumbling block, as I would move to bigger projects or clients.
-
-I grew so much frustration from:
-
-
-1. The Python Tools would be slow or unreliable (crash with abnormal PE files)
-
-2. Or the parsers would only support either one of 32bit or 64 bit PEs, but not both :(
-
-3. Or the parsers were awesome, BUT ONLY in GUI Mode
-
-4. Or the parsers are free but DO not provide the IAT and EAT as output, only some random properties
-
-5. Or the Java parsers would break with new Java versions and the developer won't update the code
-
-6. Or the Python, and Java parsers would require the installation of Java and Python Environments
-
-7. Or the Python PIP_FREEZE executable binaries would NOT work across 32 or 64 bit Windows Platforms
-
-8. Or the awesome C# tool created by someone could not run on Linux/MacOS for malware triaging workflows, again slowness :(
-
-9. Or the output provided by the developers would not provide database interchange formats - i.e., CSV or JSON
-
-10. Or worse I could not afford some awesome tool nor would my employers/clients buy them for me and the team :(
-
-<br />
-
-
-## Education and Mastery - For Everyone (Me, You, and those of tomorrow)
-As I grew my skill set, I recognized how much energy and effort is needed to boost/uplift new team members without
-good datasets.  People may not initially have malware analysis skills, but they certainly have data analysis experience.
-
-I noticed people of all backgrounds learn faster with data by doing, this motivated me to not loose energy in repeating myself
-but rather affording collaboration opportunities to tackle security problems together, regardless of tenure or experience.
-<br />
-
-
-## Grow Existing Security Community Knowledge
-As many security researchers and professional programmers have noted, the PE file is
-fairly intuitive based on the Microsoft usage of descriptive function names stemming
-from *hungarian notation*.
-
-The true power of this project is the custom datasets you can build in a database
-for analytics, and it is those analytics that can allow you to better understand
-which types of telemetry collection approaches are useful for large-scale visibility
-programs tracing computer systems and the programs they run.
-<br />
-<br />
-
-
-# Documentation Articles
-Title|URL|
------|---|
-PE Rich Data Structure: Undocumented|[LINK](http://bytepointer.com/articles/the_microsoft_rich_header.htm)|
-PE Things They Did not tell you...|[LINK](http://bytepointer.com/articles/rich_header_lifewire_vxmags_29A-8.009.htm)|
-PE MindMap By Ero Carrera|[LINK](http://www.openrce.org/reference_library/files/reference/PE%20Format.pdf)|
-PE MSDN Article|[LINK](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format)|
-PE Understanding RVAs, Sunshine|[LINK](http://www.sunshine2k.de/reversing/tuts/tut_rvait.htm)|
-<br/>
-
-# To Do
-* Implement Recursive Content Inspection & Validation
-* Implement Database Bootstrap Content: SQLITE & PGSQL
-* Optimization Parsing: From String to &str lifetimes
-* Support Parsing of UPX0 packed sections
-* Implement PE Renderer: TABULAR
-* Implement Progress Indicators
-
-<br/>
-<hr/>
-
 # Current Progress
 Currently, the program is run like this:
 
@@ -785,3 +667,119 @@ sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll
 sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,FlushViewOfFile,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
 sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,FormatMessageA,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
 ```
+
+# PROJECT STATUS
+The project is being developed and you should use the `releases` section
+of this project to use stable versions suitable for productive work.
+
+The `Master` branch may not reflect the version of the `releases` section
+at times, although you can use the `Master` branch if  you want to be working
+with bleeding edge versions.
+
+Note:   If you decide to clone the `Master` branch you should have the stable
+        rust toolchain installed in your platform. Once you are setup with the
+        stable rustup toolchain, go ahead and compile with `cargo build --release`
+
+<br />
+<br />
+
+# PROJECT USAGE
+This project is not focused on building a binary parser, **it is an analytics project**.
+The binary provided here with rust is the `workhorse` that is used to baseline a
+computer's *on-disk* binaries from filesystem locations.
+<br />
+<br />
+
+# PROJECT MOTIVATION
+Making better decisions with a data driven approach is the main motivation. Seemingly, solving for monotonous time consuming daily tasks is the long term goal.
+Before I take action in applying an endpoint security control - I need to be confident in what I am going to disrupt, or what I expect to trigger as false positives
+to responsibly manage the effort required in removing these. I don't know of better ways, other than having data to support these needs.
+
+<br/>
+<br />
+
+## Data Pipelines - Fast & Reliable, Please!
+
+The project is created as a need to build custom datasets and pipelines around 
+DLL telemetry and its **context** with large scale requirements - i.e., > ~750K PE Files per day.
+
+By context we mean the informational value afforded by the type of data that can be acquired by DLLs imported in a Portable Executable
+file - PE file.
+
+At this time, the focus is to study the `imports` or `IAT` and `exports` or `EAT` tables from a PE file to
+identify the meaning of the question: *What is the notion of intent from the PE file?*
+<br />
+
+## Better Tooling - Cross Platform Please! TOP 10 Frustrations
+I needed a tool that could be run on most environments without the gymnastics of compilation or having 3 codebases.
+
+I used many Python parsers in my past, and binaries provided by many people.  
+I hit a stumbling block, as I would move to bigger projects or clients.
+
+I grew so much frustration from:
+
+
+1. The Python Tools would be slow or unreliable (crash with abnormal PE files)
+
+2. Or the parsers would only support either one of 32bit or 64 bit PEs, but not both :(
+
+3. Or the parsers were awesome, BUT ONLY in GUI Mode
+
+4. Or the parsers are free but DO not provide the IAT and EAT as output, only some random properties
+
+5. Or the Java parsers would break with new Java versions and the developer won't update the code
+
+6. Or the Python, and Java parsers would require the installation of Java and Python Environments
+
+7. Or the Python PIP_FREEZE executable binaries would NOT work across 32 or 64 bit Windows Platforms
+
+8. Or the awesome C# tool created by someone could not run on Linux/MacOS for malware triaging workflows, again slowness :(
+
+9. Or the output provided by the developers would not provide database interchange formats - i.e., CSV or JSON
+
+10. Or worse I could not afford some awesome tool nor would my employers/clients buy them for me and the team :(
+
+<br />
+
+
+## Education and Mastery - For Everyone (Me, You, and those of tomorrow)
+As I grew my skill set, I recognized how much energy and effort is needed to boost/uplift new team members without
+good datasets.  People may not initially have malware analysis skills, but they certainly have data analysis experience.
+
+I noticed people of all backgrounds learn faster with data by doing, this motivated me to not loose energy in repeating myself
+but rather affording collaboration opportunities to tackle security problems together, regardless of tenure or experience.
+<br />
+
+
+## Grow Existing Security Community Knowledge
+As many security researchers and professional programmers have noted, the PE file is
+fairly intuitive based on the Microsoft usage of descriptive function names stemming
+from *hungarian notation*.
+
+The true power of this project is the custom datasets you can build in a database
+for analytics, and it is those analytics that can allow you to better understand
+which types of telemetry collection approaches are useful for large-scale visibility
+programs tracing computer systems and the programs they run.
+<br />
+<br />
+
+
+# Documentation Articles
+Title|URL|
+-----|---|
+PE Rich Data Structure: Undocumented|[LINK](http://bytepointer.com/articles/the_microsoft_rich_header.htm)|
+PE Things They Did not tell you...|[LINK](http://bytepointer.com/articles/rich_header_lifewire_vxmags_29A-8.009.htm)|
+PE MindMap By Ero Carrera|[LINK](http://www.openrce.org/reference_library/files/reference/PE%20Format.pdf)|
+PE MSDN Article|[LINK](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format)|
+PE Understanding RVAs, Sunshine|[LINK](http://www.sunshine2k.de/reversing/tuts/tut_rvait.htm)|
+<br/>
+
+# To Do
+* Implement Recursive Content Inspection & Validation
+* Implement Database Bootstrap Content: SQLITE & PGSQL
+* Optimization Parsing: From String to &str lifetimes
+* Support Parsing of UPX0 packed sections
+* Implement PE Renderer: TABULAR
+* Implement Progress Indicators
+
+<br/>
