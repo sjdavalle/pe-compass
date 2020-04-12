@@ -2,12 +2,11 @@
 A Study of the PE Format through the RUST language and Databases.
 
 <br />
-<br />
 
 ## Current Support
 - 32 and 64 bit Executables
 - Unpacked Executables
-- CSV &JSON Database InterChange Capabilities
+- CSV &JSON Database InterChange Formats
 - Cross Platform, releases provide binaries for 64bit Debian, MacOsx, Windows
 - Parsed output focused on Imports & Exports by Name, Ordinals not focused on
 
@@ -59,6 +58,7 @@ file - PE file.
 
 At this time, the focus is to study the `imports` or `IAT` and `exports` or `EAT` tables from a PE file to
 identify the meaning of the question: *What is the notion of intent from the PE file?*
+<br />
 
 ## Better Tooling - Cross Platform Please! TOP 10 Frustrations
 I needed a tool that could be run on most environments without the gymnastics of compilation or having 3 codebases.
@@ -101,7 +101,7 @@ but rather affording collaboration opportunities to tackle security problems tog
 <br />
 
 
-## Amplifying Existing Security Community Knowledge
+## Grow Existing Security Community Knowledge
 As many security researchers and professional programmers have noted, the PE file is
 fairly intuitive based on the Microsoft usage of descriptive function names stemming
 from *hungarian notation*.
