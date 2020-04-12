@@ -1,6 +1,7 @@
 use clap::{App, Arg, ArgMatches, SubCommand};
 use serde_json::*;
 use walkdir::{DirEntry, WalkDir};
+use rand::Rng;
 
 #[path = "../../modules/pe_parser.rs"]
 mod pe_parser;
@@ -140,14 +141,29 @@ impl ArgumentsParser<'_> {
             false => std::process::exit(0x0100),
         };
 
+
         let _wants_csv = match _subcommand.is_present("csv") {
-            true => true,
-            false => false,
+            true  => true,
+            false => false
         };
 
         let _outfile = match _subcommand.is_present("output") {
-            true => _subcommand.value_of("output").unwrap(),
-            false => "None",
+            true => {
+                let mut _extension = "__.dummy";
+                let mut _path_string = String::from(_subcommand.value_of("output").unwrap());
+                let mut rng = rand::thread_rng();
+                let _rand = rng.gen::<u32>();
+                let _rand = _rand.to_string();
+                if _wants_csv {
+                    _extension = "__.csv";
+                    _path_string = format!("{}__{}{}", _path_string, _rand, _extension); 
+                } else {
+                    _extension = "__.json";
+                    _path_string = format!("{}__{}{}", _path_string, _rand, _extension);  
+                }
+                _path_string
+            },
+            false => "None".to_string()
         };
 
         let _pe = PeParser::new(_file_sample);
@@ -203,6 +219,7 @@ impl ArgumentsParser<'_> {
                     }
                 }
 
+                let _outfile = &_outfile[..];
                 match _outfile {
                     "None" => {
                         if !_wants_csv {
@@ -210,7 +227,7 @@ impl ArgumentsParser<'_> {
                                 .expect("Unable To Parse PE Object");
                         }
                         print!("{}", _content);
-                    }
+                    },
                     _output => {
                         if !_wants_csv {
                             _content =
