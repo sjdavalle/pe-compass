@@ -1,7 +1,23 @@
 # pe-compass
-A Study of the PE Format through the RUST programming language.
-<br/>
-<br/>
+A Study of the PE Format through the RUST language and Databases.
+
+<br />
+<br />
+
+## Current Support
+- 32 and 64 bit Executables
+- Unpacked Executables
+- CSV &JSON Database InterChange Capabilities
+- Cross Platform, releases provide binaries for 64bit Debian, MacOsx, Windows
+- Parsed output focused on Imports & Exports by Name, Ordinals not focused on
+
+## Current Benchmark Estimations
+- Reliably, ~1,400+ files per minute
+- Reliably, 50 MB PE files parsed in 500 mill is (half a second)
+
+<br />
+<br />
+
 
 # PROJECT STATUS
 The project is being developed and you should use the `releases` section
@@ -30,6 +46,7 @@ to responsibly manage the effort required in removing these. I don't know of bet
 
 <br/>
 <br />
+
 ## Data Pipelines - Fast & Reliable, Please!
 
 The project is created as a need to build custom datasets and pipelines around 
