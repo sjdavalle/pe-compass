@@ -16,7 +16,23 @@ A Study of the PE Format through the RUST language and Databases.
 
 On physical hosts, specially MacOs and Linux, the LLVM support is much faster than Windows compilation via VS.
 
+<br/>
+
+### Benchmark Example: Small Files Average Time | Warm Cache
+For small files, I am using Hyperfine with warmups, on MacOS, I am averaging `13 millis``or what this image is saying.
+
+![image](https://user-images.githubusercontent.com/11415591/79046797-f5813d80-7be0-11ea-9c44-d14c8329501a.png)
+
 <br />
+<br />
+
+### Benchmark Example: LargeFiles | Excel.exe
+The beloved Microsoft `excel.exe` is about 50 MBs in size, and we parse it in `500 millis` or half a second on Windows.
+
+![image](https://user-images.githubusercontent.com/11415591/79021711-43973200-7b4a-11ea-90e6-39c916eeea3a.png)
+
+<br />
+<br/>
 
 # Current Progress
 Currently, the program is run like this:
@@ -171,7 +187,7 @@ Upcoming features will allow `pe-compass` to inspect file content without using 
 
 Below are **examples** for using `BASH` on Unix/MacOS/Linux platforms, and the `POWERSHELL` way on Windows Platforms.
 
-### Linux/MacOS/Unix Recurse Inspection
+### Linux/MacOS/Unix Iterative Inspection
 **Step 1**
 ```bash
 $> IFS=$'\n'    # Critical, set this variable before you start
@@ -199,7 +215,7 @@ $> for x in $(cat my_targets.txt | tr -d "'"); do base=$(basename $x); pe-compas
 ```
 <br />
 
-### Microsoft Windows Recurse Inspection
+### Microsoft Windows Iterative Inspection
 
 **Step 1 - Create a Dumps Folder**
 ```powershell
