@@ -19,7 +19,7 @@ On physical hosts, specially MacOs and Linux, the LLVM support is much faster th
 <br/>
 
 ### Benchmark Example: Small Files Average Time | Warm Cache
-For small files, I am using Hyperfine with warmups, on MacOS, I am averaging `13 millis``or what this image is saying.
+For small files, I am using Hyperfine with warmups, on MacOS, I am averaging `13 millis` or what this image is saying.
 
 ![image](https://user-images.githubusercontent.com/11415591/79046797-f5813d80-7be0-11ea-9c44-d14c8329501a.png)
 
