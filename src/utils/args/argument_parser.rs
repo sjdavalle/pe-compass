@@ -165,6 +165,7 @@ impl ArgumentsParser<'_> {
             },
             false => "None".to_string()
         };
+        let _outfile = &_outfile[..];   // Convert it to &str for later use in OUTFILE Match
 
         let _pe = PeParser::new(_file_sample);
         if _pe.is_pe {
@@ -219,7 +220,7 @@ impl ArgumentsParser<'_> {
                     }
                 }
 
-                let _outfile = &_outfile[..];
+
                 match _outfile {
                     "None" => {
                         if !_wants_csv {
