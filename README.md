@@ -20,8 +20,16 @@ Note:   If you decide to clone the `Master` branch you should have the stable
 This project is not focused on building a binary parser, **it is an analytics project**.
 The binary provided here with rust is the `workhorse` that is used to baseline a
 computer's *on-disk* binaries from filesystem locations.
+<br />
+<br />
 
 # PROJECT MOTIVATION
+Making better decisions with a data driven approach is the main motivation. Seemingly, solving for monotonous time consuming daily tasks is the long term goal.
+Before I take action in applying an endpoint security control - I need to be confident in what I am going to disrupt, or what I expect to trigger as false positives
+to responsibly manage the effort required in removing these. I don't know of better ways, other than having data to support these needs.
+
+<br/>
+<br />
 ## Data Pipelines - Fast & Reliable, Please!
 
 The project is created as a need to build custom datasets and pipelines around 
