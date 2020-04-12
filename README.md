@@ -1,5 +1,5 @@
 # pe-compass
-A Study of the PE Format through the RUST language and Databases.
+An **Empirical Study** of the PE Format through the RUST language and Databases.
 
 <br />
 
