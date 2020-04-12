@@ -3,7 +3,7 @@ A Study of the PE Format through the RUST language and Databases.
 
 <br />
 
-## Current Support
+## Current Support - Focus Areas
 - 32 and 64 bit Executables
 - Unpacked Executables
 - CSV &JSON Database InterChange Formats
@@ -14,7 +14,8 @@ A Study of the PE Format through the RUST language and Databases.
 - Reliably, ~1,400+ files per minute
 - Reliably, 50 MB PE files parsed in 500 millis (half a second)
 
-<br />
+On physical hosts, specially MacOs and Linux, the LLVM support is much faster than Windows compilation via VS.
+
 <br />
 
 # Current Progress
@@ -138,7 +139,7 @@ $> pe-compass recurse -d C:\Windows -f foo > C:\targets.txt
 ```
 <br/>
 
-You can instead do another filter that matches as **endwith** in the filename or absolute file paths
+You can instead do another filter that matches as **ends_with** in the filename or absolute file paths
 
 ```bash
 # Recurse the "C:\Windows" folder, and filter for anything matching at the end with ".exe"
@@ -196,6 +197,7 @@ $> for x in $(cat my_targets.txt | tr -d "'"); do base=$(basename $x); pe-compas
 <br />
 
 ### Microsoft Windows Recurse Inspection
+
 **Step 1 - Create a Dumps Folder**
 ```powershell
 PS C:\> mkdir dumps
@@ -775,7 +777,8 @@ PE Understanding RVAs, Sunshine|[LINK](http://www.sunshine2k.de/reversing/tuts/t
 <br/>
 
 # To Do
-* Implement Recursive Content Inspection & Validation
+* Implement Recursive With File Content Inspection & Validation (non-shell iteration)
+* Implement Security Scanning Interfaces for Security Users
 * Implement Database Bootstrap Content: SQLITE & PGSQL
 * Optimization Parsing: From String to &str lifetimes
 * Support Parsing of UPX0 packed sections
