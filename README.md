@@ -6,7 +6,7 @@ A Study of the PE Format through the RUST language and Databases.
 ## Current Support - Focus Areas
 - 32 and 64 bit Executables
 - Unpacked Executables
-- CSV &JSON Database InterChange Formats
+- CSV & JSON Database InterChange Formats
 - Cross Platform, releases provide binaries for 64bit Debian, MacOsx, Windows
 - Parsed output focused on Imports & Exports by Name, Ordinals not focused on
 
@@ -163,10 +163,13 @@ $> pe-compass recurse -d C:\Windows -f foo -x .exe
 
 <br />
 
-## Recursive Inspection (Parsing Many Files)
-To recursively parse files, **you must have built** a list of target file paths as shown above.  Then you can use your platform's shell to iterate per line of the targets file you would have created.
+## Iterative Inspection (Parsing Many Files)
+- To recursively parse files, **you must have built** a list of target file paths as shown above. 
+- Then you can use your platform's shell to iterate per line of the targets file you would have created.
 
-Below are examples for using `BASH` on Unix/MacOS/Linux platforms, and the `POWERSHELL` way on Windows Platforms.
+Upcoming features will allow `pe-compass` to inspect file content without using iterative for-loops from a shell, stay tuned!
+
+Below are **examples** for using `BASH` on Unix/MacOS/Linux platforms, and the `POWERSHELL` way on Windows Platforms.
 
 ### Linux/MacOS/Unix Recurse Inspection
 **Step 1**
