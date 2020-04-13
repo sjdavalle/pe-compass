@@ -659,7 +659,6 @@ $>  pe-compass inspect -f pe-samples/sqlite3x86.dll
     ]
   },
   "ImageHashSignatures": {
-    "md5": "c75916b15535b1bc67d92975921e95e3",
     "sha2": "5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5"
   }
 ```
@@ -675,21 +674,20 @@ I prefer to work with SQL like databases, and the CSV imports to different SQL l
 ```
 ```bash
 # Snippet
-
-sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,AreFileApisANSI,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
-sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,CloseHandle,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
-sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,CreateFileA,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
-sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,CreateFileMappingA,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
-sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,CreateFileMappingW,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
-sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,CreateFileW,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
-sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,CreateMutexW,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
-sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,DeleteCriticalSection,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
-sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,DeleteFileA,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
-sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,DeleteFileW,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
-sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,EnterCriticalSection,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
-sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,FlushFileBuffers,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
-sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,FlushViewOfFile,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
-sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,FormatMessageA,c75916b15535b1bc67d92975921e95e3,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
+sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,AreFileApisANSI,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
+sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,CloseHandle,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
+sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,CreateFileA,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
+sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,CreateFileMappingA,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
+sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,CreateFileMappingW,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
+sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,CreateFileW,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
+sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,CreateMutexW,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
+sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,DeleteCriticalSection,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
+sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,DeleteFileA,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
+sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,DeleteFileW,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
+sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,EnterCriticalSection,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
+sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,FlushFileBuffers,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
+sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,FlushViewOfFile,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
+sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,FormatMessageA,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
 ```
 <br />
 <br />
