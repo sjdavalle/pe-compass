@@ -801,7 +801,11 @@ PE Understanding RVAs, Sunshine|[LINK](http://www.sunshine2k.de/reversing/tuts/t
 # Documentation Security Centric Resources
 Title|URL|
 -----|---|
+Sans Mind The Gap|[LINK](https://www.sans.org/cyber-security-summit/archives/file/summit-archive-1493841390.pdf)|
+Breaking ImpHash|[LINK](https://arxiv.org/pdf/1909.07630.pdf)|
+SSDEEP Hashing|[LINK](https://ssdeep-project.github.io/ssdeep/)|
 Malware Analysis Center|[LINK](https://practicalsecurityanalytics.com/malware-analysis-center/)|
+
 <br/>
 
 # To Do
