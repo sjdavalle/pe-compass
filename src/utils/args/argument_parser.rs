@@ -179,9 +179,9 @@ impl ArgumentsParser<'_> {
                     if _pe.ImageDLLImports.len() > 0usize {
                         for _dll in _pe.ImageDLLImports.iter() {
                             if _dll.functions.len() > 0usize {
-                                for _imp in _dll.functions.iter() {
+                                for _func in _dll.functions.iter() {
                                     let _s = format!(
-                                        "{},{},{},{},{},{},{},{},{},{},{}\n",
+                                        "{},{},{},{},{},{},{},{},{},{},\n",
                                         _pe.pe_name,
                                         _pe.pe_size,
                                         _pe.pe_subsystem,
@@ -189,8 +189,7 @@ impl ArgumentsParser<'_> {
                                         _pe.pe_timedate_human,
                                         "imports",
                                         _dll.name,
-                                        _imp,
-                                        _pe.ImageHashSignatures.md5,
+                                        _func,
                                         _pe.ImageHashSignatures.sha2,
                                         _pe.pe_path
                                     );
@@ -202,7 +201,7 @@ impl ArgumentsParser<'_> {
                     if _pe.ImageDLLExports.exports > 0usize {
                         for _func in _pe.ImageDLLExports.functions.iter() {
                             let _s = format!(
-                                "{},{},{},{},{},{},{},{},{},{},{}\n",
+                                "{},{},{},{},{},{},{},{},{},{},\n",
                                 _pe.pe_name,
                                 _pe.pe_size,
                                 _pe.pe_subsystem,
@@ -211,7 +210,6 @@ impl ArgumentsParser<'_> {
                                 "exports",
                                 _pe.pe_name,
                                 _func,
-                                _pe.ImageHashSignatures.md5,
                                 _pe.ImageHashSignatures.sha2,
                                 _pe.pe_path
                             );
