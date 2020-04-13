@@ -13,7 +13,6 @@ extern crate chrono;
 extern crate rand;
 extern crate clap;
 extern crate sha2;
-extern crate md5;
 extern crate fs2;
 
 
