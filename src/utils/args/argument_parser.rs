@@ -172,7 +172,7 @@ impl ArgumentsParser<'_> {
             let _pe = _pe.inspect_file();
             if _pe.pe_type != 0
                 && _pe.pe_subsystem != 0
-                && _pe.ImageHashSignatures.md5 != "null".to_string()
+                && _pe.ImageHashSignatures.sha2 != "null".to_string()
             {
                 let mut _content: String = String::from("");
                 if _wants_csv {
