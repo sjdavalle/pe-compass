@@ -5,7 +5,6 @@ use std::ops::Range;
 use chrono::{DateTime, SecondsFormat, NaiveDateTime, Utc};
 use scroll::{ Pread, LE };
 use sha2::{ Sha256, Digest };
-use md5::*;
 use rand::Rng;
 
 // My Modules
