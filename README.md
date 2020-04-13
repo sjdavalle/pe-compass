@@ -798,6 +798,12 @@ PE MSDN Article|[LINK](https://docs.microsoft.com/en-us/windows/win32/debug/pe-f
 PE Understanding RVAs, Sunshine|[LINK](http://www.sunshine2k.de/reversing/tuts/tut_rvait.htm)|
 <br/>
 
+# Documentation Security Centric Resources
+Title|URL|
+-----|---|
+Malware Analysis Center|[LINK](https://practicalsecurityanalytics.com/malware-analysis-center/)|
+<br/>
+
 # To Do
 * Implement Recursive With File Content Inspection & Validation (non-shell iteration)
 * Implement Security Scanning Interfaces for Security Users
