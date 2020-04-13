@@ -801,6 +801,7 @@ PE Understanding RVAs, Sunshine|[LINK](http://www.sunshine2k.de/reversing/tuts/t
 # Documentation Security Centric Resources
 Title|URL|
 -----|---|
+Fifty Shades of Malware Hashing|[LINK](https://medium.com/@tom_rock/fifty-shades-of-malware-hashing-3783d98df59c)|
 Sans Mind The Gap|[LINK](https://www.sans.org/cyber-security-summit/archives/file/summit-archive-1493841390.pdf)|
 Breaking ImpHash|[LINK](https://arxiv.org/pdf/1909.07630.pdf)|
 SSDEEP Hashing|[LINK](https://ssdeep-project.github.io/ssdeep/)|
