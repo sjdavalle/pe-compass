@@ -672,7 +672,7 @@ I prefer to work with SQL like databases, and the CSV imports to different SQL l
 ```bash
  $> pe-compass inspect -f pe-samples/sqlite3x86.dll -c 
 ```
-```bash
+```csv
 # Snippet
 sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,AreFileApisANSI,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
 sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,CloseHandle,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
