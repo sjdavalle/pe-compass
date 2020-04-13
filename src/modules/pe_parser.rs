@@ -173,12 +173,10 @@ impl PeParser {
         let mut _pehashes: PE_HASHES;
 
         if _petype == 0 && _pesubsystem == 0 {
-            _pehashes = PE_HASHES { md5: "null".to_string(), sha2: "null".to_string() };
+            _pehashes = PE_HASHES { sha2: "null".to_string() };
         } else {
-            let _md5: String = self.get_md5();
             let _sha2: String = self.get_sha2();
-            
-            _pehashes = PE_HASHES { md5: _md5, sha2: _sha2 };
+            _pehashes = PE_HASHES { sha2: _sha2 };
         }
         //  Finally build the custom object PE_FILE with the essential data structures
         //
@@ -976,18 +974,6 @@ impl PeParser {
            exports:     _names_total,
            functions:   _names_funcs
         }
-    }
-    /// # PE Parser: GetMD5Hash Method
-    /// This method calculates the MD5 Hash of the file being inspected.
-    /// ```
-    /// let _pe = PeParser::new("foo.exe");
-    /// let _md5 = _pe.get_md5(); // Takes a Ref<[u8]>
-    /// 
-    /// println!("MD5: {:x}", _md5);
-    /// ```
-    fn get_md5(&self) -> String
-    {
-        format!("{:x}", md5::compute(&self.content[..]))
     }
     ///
     /// 

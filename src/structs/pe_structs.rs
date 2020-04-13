@@ -583,7 +583,7 @@ pub struct PE_FILE {
 /// 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct PE_HASHES {
-    pub md5:    String,
+    //pub md5:    String,       //Deprecated
     pub sha2:   String
 }
 ///

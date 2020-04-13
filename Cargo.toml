@@ -8,7 +8,6 @@ edition = "2018"
 
 [dependencies]
 fs2 = "0.4.3"
-md5 = "0.7.0"
 sha2 = "0.8.1"
 rand = "0.7.3"
 clap = "2.33.0"
