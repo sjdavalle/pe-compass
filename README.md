@@ -792,6 +792,7 @@ programs tracing computer systems and the programs they run.
 # Documentation Articles
 Title|URL|
 -----|---|
+PE Resource Section & File Version|[LINK](http://blog.dkbza.org/2007/02/pefile-parsing-version-information-from.html)|
 PE Rich Data Structure: Undocumented|[LINK](http://bytepointer.com/articles/the_microsoft_rich_header.htm)|
 PE Things They Did not tell you...|[LINK](http://bytepointer.com/articles/rich_header_lifewire_vxmags_29A-8.009.htm)|
 PE MindMap By Ero Carrera|[LINK](http://www.openrce.org/reference_library/files/reference/PE%20Format.pdf)|
