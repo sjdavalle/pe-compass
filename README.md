@@ -1,3 +1,7 @@
+
+![Rust](https://github.com/dfirence/pe-compass/workflows/Rust/badge.svg)
+
+
 # pe-compass
 An **Empirical Study** of the PE Format through the RUST language and Databases.
 
