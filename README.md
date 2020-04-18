@@ -20,23 +20,39 @@ An **Empirical Study** of the PE Format through the RUST language and Databases.
 
 On physical hosts, specially MacOs and Linux, the LLVM support is much faster than Windows compilation via VS.
 
+### Benchmark Example: LargeFiles | Excel.exe
+The beloved Microsoft `excel.exe` is about 50 MBs in size, and we parse it in `500 millis` or half a second on Windows.
 <br/>
 
 ### Benchmark Example: Small Files Average Time | Warm Cache
 For small files, I am using Hyperfine with warmups, on MacOS, I am averaging `13 millis` or what this image is saying.
 
-![image](https://user-images.githubusercontent.com/11415591/79046797-f5813d80-7be0-11ea-9c44-d14c8329501a.png)
+```bash
+# Assumes Default JSON Output
 
+@[pe-compass]
+|
+|-> hyperfine -w 500 "pe-compass inspect -f pe-samples/sqlite3x64.dll"
+
+Benchmark #1: pe-compass inspect -f pe-samples/sqlite3x64.dll
+  Time (mean ± σ):      10.7 ms ±   0.8 ms    [User: 8.8 ms, System: 1.2 ms]
+  Range (min … max):     9.8 ms …  14.5 ms    230 runs
+```
 <br />
-<br />
 
-### Benchmark Example: LargeFiles | Excel.exe
-The beloved Microsoft `excel.exe` is about 50 MBs in size, and we parse it in `500 millis` or half a second on Windows.
+```bash
+# Assumes CSV Output
 
-![image](https://user-images.githubusercontent.com/11415591/79021711-43973200-7b4a-11ea-90e6-39c916eeea3a.png)
+@[pe-compass]
+|
+|--> hyperfine -w 500 "pe-compass inspect -f pe-samples/sqlite3x64.dll -c"
 
-<br />
+Benchmark #1: pe-compass inspect -f pe-samples/sqlite3x64.dll -c
+  Time (mean ± σ):      12.5 ms ±   1.5 ms    [User: 10.2 ms, System: 1.6 ms]
+  Range (min … max):    10.8 ms …  17.1 ms    198 runs
+```
 <br/>
+<br />
 
 # Current Progress
 Currently, the program is run like this:
