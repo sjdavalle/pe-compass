@@ -43,25 +43,39 @@ impl PeParser {
     /// ```
     pub fn new(fp: &str) -> Self
     {
+        let mut _msg: String = String::from("");
         // Perform a quick inspection of the target file by focusing on the first 512 bytes.
         // If a target file does not pass these checks, we won't bother reading it into memory
         // or parsing it further.
         {
             let _bfile = FileHandler::open(fp, "r");
-            
+
             if  _bfile.size < 1024u64 {
-                //exit_process("Info", "Desired Target is less than 1024 Bytes. Likely Not a real PE File");
                 return PeParser { handler: _bfile, content: vec![], is_pe: false };
             }
-
-            let mut _x_bytes: [u8; 512] = [0; 512];             // Load first 512 bytes
-            let _msg = format!("{} : {}","Unable to Read New PE As BytesArray", _bfile.name.as_str());
+            //  Load first 1040 bytes
+            //  We need this size as there are legacy PE files that have a `NE` signature and their
+            //  PE NT_HEADERS have a different size than standard PE32 or PE32+ files
+            let mut _x_bytes: [u8; 1040] = [0; 1040];
+            _msg = format!("{} : {}","Unable to Read New PE As BytesArray", _bfile.name.as_str());
             _bfile.read_as_bytesarray(&mut _x_bytes).expect(_msg.as_str());
     
-            let _msg = format!("{} : {}","Unable to Serialize New PE DOS_SIGNATURE", _bfile.name.as_str());
-            let _dos_signature: u16 = _x_bytes[..].pread_with(0usize, LE).expect(_msg.as_str());
-            if _dos_signature != 23117u16 {
-                //exit_process("Info", "Absent PE Magic - `MZ` | Likely Not a PE File");
+            _msg = format!("{} : {}","Unable to Serialize New PE || DOS_SIGNATURE: `MZ`", _bfile.name.as_str());
+            let _dos_signature: IMAGE_DOS_HEADER = _x_bytes[..].pread_with(0usize, LE).expect(_msg.as_str());
+
+            if _dos_signature.e_magic != 23117u16 {
+                println!("\n\n(?) Info:\t File Modification Observed\n\t\tExpected `MZ` Magic at Begining of File\n\n");
+                return PeParser { handler: _bfile, content: vec![], is_pe: false };
+            }
+            //  Validate the PE_MAGIC_SIGNATURE
+            //  When Real PE_32 or PE_32+,          then = <...PE...> || 17744 Decimal || 0x00004550 LE || 0x50450000 BE
+            //
+            //  When Not Real But Legacy PE Type,   then = <...NE...> || 1006978382 Decimal || 0x3C05454E LE || 0x4E45053C BE
+            let _offset: usize = _dos_signature.e_lfanew as usize;
+            _msg = format!("{} : {}","Unable to Serialize New PE || PE_SIGNATURE: `PE`", _bfile.name.as_str());
+            let _pe_signature: u32 = _x_bytes[..].pread_with(_offset, LE).expect(_msg.as_str());
+            if _pe_signature == 1006978382u32 {
+                println!("\n\n(?) Info:\tUnsupported PE File Type: Has `...NE...` signature\n\t\tOnly PE32 or PE32+ Files Are Supported\n\n");
                 return PeParser { handler: _bfile, content: vec![], is_pe: false };
             }
         }
