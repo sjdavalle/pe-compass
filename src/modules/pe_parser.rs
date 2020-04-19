@@ -355,7 +355,7 @@ impl PeParser {
         let mut _data_directories: Vec<IMAGE_DATA_DIRECTORY> = Vec::with_capacity(16usize);
         let mut _data_map: HashMap<String, IMAGE_DATA_DIRECTORY> = HashMap::new();
         let _offset = 0 as usize;
-        let mut _type: String;
+        let mut _type: String = String::from("");
         // Serialize Each Data Directory
         let mut _null_data_dirs: u8 = 0;
         {
@@ -363,35 +363,32 @@ impl PeParser {
                 if _n == &0u64 { _null_data_dirs += 1; }
             }
             if _null_data_dirs == 16u8 {
-                _type = String::from("IMAGE_DIRECTORY_NULL_DUMMY_ENTRY");
+                _type.push_str("IMAGE_DIRECTORY_NULL_DUMMY_ENTRY");
                 _data_map.insert(_type, IMAGE_DATA_DIRECTORY::load_null_data_directory());
                 return _data_map;
             }
         }
         let _msg = format!("{} : {}","Unable to Serialize IMAGE_DATA_DIRECTORY From NT_HEADERS", self.handler.name.as_str());  
-        for _d in data_dir.iter() {
+        for (_idx, _d) in data_dir.iter().enumerate() {
             let _bytes = _d.to_le_bytes();
-            let _data_dir: IMAGE_DATA_DIRECTORY = _bytes.pread_with(_offset, LE).expect(_msg.as_str());
-            _data_directories.push(_data_dir);
-        }
-        for (_idx, _entry) in _data_directories.iter().enumerate() {
+            let _entry: IMAGE_DATA_DIRECTORY = _bytes.pread_with(_offset, LE).expect(_msg.as_str());
             if _entry.Size != 0 {
                 match _idx {
-                    0   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_EXPORT")          ; _data_map.insert(_type, *_entry) },
-                    1   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_IMPORT")          ; _data_map.insert(_type, *_entry) },
-                    2   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_RESOURCE")        ; _data_map.insert(_type, *_entry) },
-                    3   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_EXCEPTION")       ; _data_map.insert(_type, *_entry) },
-                    4   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_SECURITY")        ; _data_map.insert(_type, *_entry) },
-                    5   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_BASERELOC")       ; _data_map.insert(_type, *_entry) },
-                    6   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_DEBUG")           ; _data_map.insert(_type, *_entry) },
-                    7   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_ARCHITECTURE")    ; _data_map.insert(_type, *_entry) },
-                    8   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_GLOBALPTR")       ; _data_map.insert(_type, *_entry) },
-                    9   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_TLS")             ; _data_map.insert(_type, *_entry) },
-                   10   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG")     ; _data_map.insert(_type, *_entry) },
-                   11   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT")    ; _data_map.insert(_type, *_entry) },
-                   12   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_IAT")             ; _data_map.insert(_type, *_entry) },
-                   13   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT")    ; _data_map.insert(_type, *_entry) },
-                   14   =>  { _type = String::from("IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR")  ; _data_map.insert(_type, *_entry) },
+                    0   =>  _data_map.insert("IMAGE_DIRECTORY_ENTRY_EXPORT".to_string(),        _entry),
+                    1   =>  _data_map.insert("IMAGE_DIRECTORY_ENTRY_IMPORT".to_string(),        _entry),
+                    2   =>  _data_map.insert("IMAGE_DIRECTORY_ENTRY_RESOURCE".to_string(),      _entry),
+                    3   =>  _data_map.insert("IMAGE_DIRECTORY_ENTRY_EXCEPTION".to_string(),     _entry),
+                    4   =>  _data_map.insert("IMAGE_DIRECTORY_ENTRY_SECURITY".to_string(),      _entry),
+                    5   =>  _data_map.insert("IMAGE_DIRECTORY_ENTRY_BASERELOC".to_string(),     _entry),
+                    6   =>  _data_map.insert("IMAGE_DIRECTORY_ENTRY_DEBUG".to_string(),         _entry),
+                    7   =>  _data_map.insert("IMAGE_DIRECTORY_ENTRY_ARCHITECTURE".to_string(),  _entry),
+                    8   =>  _data_map.insert("IMAGE_DIRECTORY_ENTRY_GLOBALPTR".to_string(),     _entry),
+                    9   =>  _data_map.insert("IMAGE_DIRECTORY_ENTRY_TLS".to_string(),           _entry),
+                   10   =>  _data_map.insert("IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG".to_string(),   _entry),
+                   11   =>  _data_map.insert("IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT".to_string(),  _entry),
+                   12   =>  _data_map.insert("IMAGE_DIRECTORY_ENTRY_IAT".to_string(),           _entry),
+                   13   =>  _data_map.insert("IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT".to_string(),  _entry),
+                   14   =>  _data_map.insert("IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR".to_string(), _entry),
                    _    =>  continue // reserved, undocumented
                 };
             }

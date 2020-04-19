@@ -9,7 +9,7 @@
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}/target/debug/pe-compass",
-            "args": ["inspect", "-f", "c:\\Program Files (x86)\\ExeinfoPe\\exeinfope.exe"],
+            "args": ["inspect", "-f", "C:\\Users\\cyballistic\\Documents\\rust-code\\pe-compass\\pe-samples\\sqlite3x86.dll"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
