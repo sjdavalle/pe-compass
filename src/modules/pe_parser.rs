@@ -117,8 +117,8 @@ impl PeParser {
         let mut _dll_imports: Vec<DLL_PROFILE> = Vec::new();
         let mut _dll_exports: DLL_EXPORTS = DLL_EXPORTS { exports: 0 as usize, functions: vec![] };
 
-        let mut _resource_directory: IMAGE_RESOURCE_DIRECTORY;
-        
+        let mut _resource_directory_table: IMAGE_RESOURCE_DIRECTORY_TABLE;
+        let mut _resource_directory_entries: Vec<IMAGE_RESOURCE_DIRECTORY_ENTRY> = vec![];
         //  1st Internal code block
         //  We use this block to drop non-essential data structures and save memory
         //  through the file inspection phase because we have to determine if a file
@@ -186,11 +186,13 @@ impl PeParser {
         }
         // 4th Internal Code Used for Resource Directory
         {
-            let mut _rva_resources: PE_RVA_TRACKER;
             if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_RESOURCE".to_string()) {
                 let _msg = format!("{} : {}", "Unable to Get Entry Imports From Section", self.handler.name.as_str());
                 let _rsrc = _data_map.get("IMAGE_DIRECTORY_ENTRY_RESOURCE").expect(_msg.as_str());
-                _rva_resources = self.get_rva_from_directory_entry("resources", *_rsrc, &_section_table_headers);
+                
+                let mut _rva_resources: PE_RVA_TRACKER = self.get_rva_from_directory_entry("resources", *_rsrc, &_section_table_headers);
+                _resource_directory_entries = self.get_resource_directory_entries(&mut _rva_resources);
+                // ToDo:  Parse the Resource Entries to Get Embedded FileName
             }
         }
         //  Hash the file's contents
@@ -1000,8 +1002,36 @@ impl PeParser {
     /// 
     /// 
     /// 
-    fn get_resource_directory_data(&self) {
-
+    fn get_resource_directory_entries(&self, _rva: &mut PE_RVA_TRACKER) -> Vec<IMAGE_RESOURCE_DIRECTORY_ENTRY>
+    {
+        // A message string used for panic handling with custom message
+        let mut _msg: String = String::from("");
+        // Allocate Resource Tree Structs
+        let mut _rsrc_list_entries: Vec<IMAGE_RESOURCE_DIRECTORY_ENTRY>;
+        let mut _rsrc_directory_table: IMAGE_RESOURCE_DIRECTORY_TABLE;
+        let mut _rsrc_directory_entry: IMAGE_RESOURCE_DIRECTORY_ENTRY;
+        let mut _rsrc_data_entry: IMAGE_RESOURCE_DATA_ENTRY; 
+        // Allocate record entries variables
+        let mut _total_rsrc_entries: usize = 0;
+        // Initialize an empty file offset
+        let mut _offset: usize =  _rva.file_offset as usize;
+        // Step 1: Serialize the RESOURCE_DIRECTORY_TABLE
+        _msg = format!("{} : {}","Unable to Serialize IMAGE_RESOURCE_DIRECTORY_TABLE", self.handler.name.as_str()); 
+        _rsrc_directory_table = self.content.pread_with(_offset, LE).expect(_msg.as_str());
+        // Step 2: Identify Number of IMAGE_RESOURCE_DIRECTORY_ENTRY records
+        _total_rsrc_entries = _rsrc_directory_table.NumberOfIdEntries as usize;
+        _rsrc_list_entries = Vec::with_capacity(_total_rsrc_entries);
+        // Advance the _offset ahead of the resource_table
+        _offset += 16;
+        // Iterate through the number of entries and serialize them
+        _msg = format!("{} : {}","Unable to Serialize IMAGE_RESOURCE_DIRECTORY_ENTRY", self.handler.name.as_str()); 
+        for _num in 0.._total_rsrc_entries {
+            _rsrc_directory_entry = self.content.pread_with(_offset, LE).expect(_msg.as_str());
+            _rsrc_list_entries.push(_rsrc_directory_entry);
+            _offset += 8;
+        }
+        println!("{:#?}", _rsrc_list_entries);
+        _rsrc_list_entries
     }
     ///
     /// 
