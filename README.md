@@ -709,6 +709,67 @@ sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll
 sqlite3x86.dll,944840,3,1580156954,2020-01-27T20:29:14.000Z,imports,kernel32.dll,FormatMessageA,5479d713d4cc5415a7f1d9272958da290758ac3f0f5bd73dd8f9afbf437745d5,pe-samples/sqlite3x86.dll
 ```
 <br />
+
+# DataPipeline - JSON
+For JSON databases, you can use the dumped JSON formats, below you can see an example using the `community` version of `couchabase-server` using the `cbimport` tool.
+
+```bash
+# Assumes You load all EXEs parsed into a CouchBase Bucket called `exes`
+# A `Bucket` is the equivalent of a SQL Table
+
+# -u == username
+# -p == password
+# -b == bucket name
+# -c == couchbase-server hostname:port
+# -f == couchbase data format, for loading files recursively, you need to set `sample`
+# -d == directory with json files, not you need to prefix with `file:://`
+
+
+pe-compass@[compass_dumps]
+|
+|> time cbimport json -u foo -p bar -b pecompass_exes -c http://127.0.0.1:8091 -f sample -d file://exes/json
+
+
+# Couchbase Command Result
+Json `file://exes/json` imported to `http://127.0.0.1:8091` successfully
+Documents imported: 2787 Documents failed: 0
+
+
+# How Long It Took
+real	0m0.314s
+user	0m0.424s
+sys	0m0.080s
+```
+
+
+```bash
+# Assumes You load all DLLs parsed into a CouchBase Bucket called `dlls`
+# A `Bucket` is the equivalent of a SQL Table
+
+# -u == username
+# -p == password
+# -b == bucket name
+# -c == couchbase-server hostname:port
+# -f == couchbase data format, for loading files recursively, you need to set `sample`
+# -d == directory with json files, not you need to prefix with `file:://`
+
+
+pe-compass@[compass_dumps]
+|
+|> time cbimport json -u foo -p bar -b pecompass_dlls -c http://127.0.0.1:8091 -f sample -d file://dlls/json
+
+
+# Couchbase Command Result
+Json `file://dlls/json` imported to `http://127.0.0.1:8091` successfully
+Documents imported: 18305 Documents failed: 0
+
+
+# How Long it took
+real	0m1.826s
+user	0m2.788s
+sys	0m0.348s
+```
+<br />
 <br />
 
 # PROJECT STATUS
@@ -739,7 +800,7 @@ to responsibly manage the effort required in removing these. I don't know of bet
 
 <br/>
 
-### Data Pipelines - Fast & Reliable, Please!
+### Better Data Pipelines - Fast & Reliable, Please!
 
 The project is created as a need to build custom datasets and pipelines around 
 DLL telemetry and its **context** with large scale requirements - i.e., > ~750K PE Files per day.
