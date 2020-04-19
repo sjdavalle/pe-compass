@@ -116,6 +116,8 @@ impl PeParser {
         
         let mut _dll_imports: Vec<DLL_PROFILE> = Vec::new();
         let mut _dll_exports: DLL_EXPORTS = DLL_EXPORTS { exports: 0 as usize, functions: vec![] };
+
+        let mut _resource_directory: IMAGE_RESOURCE_DIRECTORY;
         
         //  1st Internal code block
         //  We use this block to drop non-essential data structures and save memory
@@ -180,6 +182,15 @@ impl PeParser {
                 let _eexp = _data_map.get("IMAGE_DIRECTORY_ENTRY_EXPORT").expect(_msg.as_str());
                 let mut _rva_exports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("exports", *_eexp, &_section_table_headers);
                 _dll_exports = self.get_dll_exports(&mut _rva_exports);
+            }
+        }
+        // 4th Internal Code Used for Resource Directory
+        {
+            let mut _rva_resources: PE_RVA_TRACKER;
+            if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_RESOURCE".to_string()) {
+                let _msg = format!("{} : {}", "Unable to Get Entry Imports From Section", self.handler.name.as_str());
+                let _rsrc = _data_map.get("IMAGE_DIRECTORY_ENTRY_RESOURCE").expect(_msg.as_str());
+                _rva_resources = self.get_rva_from_directory_entry("resources", *_rsrc, &_section_table_headers);
             }
         }
         //  Hash the file's contents
@@ -984,6 +995,13 @@ impl PeParser {
            exports:     _names_total,
            functions:   _names_funcs
         }
+    }
+    ///
+    /// 
+    /// 
+    /// 
+    fn get_resource_directory_data(&self) {
+
     }
     ///
     /// 

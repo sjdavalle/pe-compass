@@ -5,7 +5,6 @@ use std::collections::HashMap;
 use serde_derive::{ Deserialize, Serialize };
 
 
-///
 /// # Portable Executable Structures
 /// 
 /// These structs are taken from the specification documented
@@ -473,6 +472,100 @@ pub struct IMAGE_EXPORT_DIRECTORY {
 impl ::std::clone::Clone for IMAGE_EXPORT_DIRECTORY {
     fn clone(&self) -> Self {
         *self
+    }
+}
+/// # IMAGE RESOURCE DIRECTORY
+/// The resource details of a PE file.
+/// Size 16 Bytes
+/// 
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
+#[repr(C)]
+pub struct IMAGE_RESOURCE_DIRECTORY {
+    pub Characteristics:         DWORD,
+    pub TimeDateStamp:           DWORD,
+    pub MajorVersion:            WORD,
+    pub MinorVersion:            WORD,
+    pub NumberOfNamedEntries:    WORD,
+    pub NumberOfIdEntries:       WORD,
+}
+impl ::std::clone::Clone for IMAGE_RESOURCE_DIRECTORY {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+impl IMAGE_RESOURCE_DIRECTORY {
+    pub fn load_null_resource_directory() -> Self
+    {
+        IMAGE_RESOURCE_DIRECTORY {
+            Characteristics         : 0,
+            TimeDateStamp           : 0,
+            MajorVersion            : 0,
+            MinorVersion            : 0,
+            NumberOfNamedEntries    : 0,
+            NumberOfIdEntries       : 0
+        }
+    }
+}
+/// # IMAGE RESOURCE DIRECTORY ENTRY
+/// Size is 26 Bytes
+/// 
+/// 
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
+#[repr(C)]
+pub struct IMAGE_RESOURCE_DIRECTORY_ENTRY {
+    pub NameOffset:          DWORD,
+    pub NameIsString:        DWORD,
+    pub Name:                DWORD,
+    pub Id:                  WORD,
+    pub OffsetToData:        DWORD,
+    pub OffsetToDirectory:   DWORD,
+    pub DataIsDirectory:     DWORD
+}
+impl ::std::clone::Clone for IMAGE_RESOURCE_DIRECTORY_ENTRY {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+impl IMAGE_RESOURCE_DIRECTORY_ENTRY {
+    pub fn load_null_resource_directory_entry() -> Self
+    {
+        IMAGE_RESOURCE_DIRECTORY_ENTRY {
+            NameOffset          : 0,
+            NameIsString        : 0,
+            Name                : 0,
+            Id                  : 0,
+            OffsetToData        : 0,
+            OffsetToDirectory   : 0,
+            DataIsDirectory     : 0
+        }
+    }
+}
+/// # IMAGE RESOURCE DIRECTORY DATA ENTRY
+/// Size is 16 Bytes
+/// 
+///
+#[derive(Debug, Copy, PartialEq, Pread, Pwrite, IOread, IOwrite, SizeWith, Deserialize, Serialize)]
+#[repr(C)]
+pub struct IMAGE_RESOURCE_DATA_ENTRY {
+    pub OffsetToData:   DWORD,
+    pub Size:           DWORD,            
+    pub CodePage:       DWORD,
+    pub Reserved:       DWORD
+}
+impl ::std::clone::Clone for IMAGE_RESOURCE_DATA_ENTRY {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+impl IMAGE_RESOURCE_DATA_ENTRY {
+    pub fn load_null_resource_data_entry() -> Self
+    {
+        IMAGE_RESOURCE_DATA_ENTRY {
+            OffsetToData    : 0,
+            Size            : 0,
+            CodePage        : 0,
+            Reserved        : 0,
+        }
     }
 }
 /// # PE Custom Object Structs - CO_STRUCTS
