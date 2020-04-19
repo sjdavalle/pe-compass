@@ -1030,7 +1030,7 @@ impl PeParser {
             _rsrc_list_entries.push(_rsrc_directory_entry);
             _offset += 8;
         }
-        println!("{:#?}", _rsrc_list_entries);
+        //println!("{:#?}", _rsrc_list_entries);
         _rsrc_list_entries
     }
     ///
