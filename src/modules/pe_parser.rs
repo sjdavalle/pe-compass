@@ -209,7 +209,7 @@ impl PeParser {
                 // ToDo:  Parse the Resource Entries to Get Embedded FileName
             }
             */
-            match _data_map.contains(&"IMAGE_DIRECTORY_ENTRY_RESOURCE".to_string()
+            match _data_map.contains(&"IMAGE_DIRECTORY_ENTRY_RESOURCE".to_string())
             {
                 true  => {
                     _msg = format!("{} : {}", "Unable to Get Entry Resources From Section",
