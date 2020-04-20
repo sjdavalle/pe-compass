@@ -160,55 +160,57 @@ impl PeParser {
         {
             let mut _rva_iat: PE_RVA_TRACKER;
             let mut _rva_imports: PE_RVA_TRACKER;
-            if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IAT".to_string())
+            match _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IAT".to_string())
             {
-                _msg = format!("{} : {}", "Unable to Get Entry Imports From Section",
-                                self.handler.name.as_str());
-                let _eiat = _data_map.get("IMAGE_DIRECTORY_ENTRY_IAT").expect(_msg.as_str());
-                _rva_iat = self.get_rva_from_directory_entry("imports_iat", *_eiat, &_section_table_headers);
-            } else {
-                _rva_iat = PE_RVA_TRACKER::new();
+                true => {
+                    _msg = format!("{} : {}", "Unable to Get Entry Imports From Section",
+                                    self.handler.name.as_str());
+                    let _eiat = _data_map.get("IMAGE_DIRECTORY_ENTRY_IAT").expect(_msg.as_str());
+                    _rva_iat = self.get_rva_from_directory_entry("imports_iat",
+                                                                 *_eiat,
+                                                                 &_section_table_headers);
+                },
+                false => { _rva_iat = PE_RVA_TRACKER::new(); }
             }
-
-            if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IMPORT".to_string())
+            match _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IMPORT".to_string())
             {
-                _msg = format!("{} : {}", "Unable to Get Entry Imports From Section",
-                                self.handler.name.as_str());
-                let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").expect(_msg.as_str());
-                _rva_imports = self.get_rva_from_directory_entry("imports", *_eimp, &_section_table_headers);
-                _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports, &mut _rva_iat);
-            } else {
-                let _d = DLL_PROFILE { name: "".to_string(), imports: 0 as usize, functions: vec![] };
-                _dll_imports.push(_d);
+                true => {
+                    _msg = format!("{} : {}", "Unable to Get Entry Imports From Section",
+                                    self.handler.name.as_str());
+                    let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").expect(_msg.as_str());
+                    
+                    _rva_imports = self.get_rva_from_directory_entry("imports",
+                                                                     *_eimp,
+                                                                     &_section_table_headers);
+                    _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports, &mut _rva_iat);
+                },
+                false => {
+                    _dll_imports_push(
+                        DLL_PROFILE { name: "".to_string(), imports: 0 as usize, functions: vec![] });
+                }
             }
         }
   
         {
             let mut _rva_exports: PE_RVA_TRACKER;
-            if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_EXPORT".to_string())
+            match _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_EXPORT".to_string())
             {
-                _msg = format!("{} : {}", "Unable to Get EAT Table From Section",
-                                self.handler.name.as_str());
-                let _eexp = _data_map.get("IMAGE_DIRECTORY_ENTRY_EXPORT").expect(_msg.as_str());
-                _rva_exports = self.get_rva_from_directory_entry("exports", *_eexp, &_section_table_headers);
-                _dll_exports = self.get_dll_exports(&mut _rva_exports);
+                true => {
+                    _msg = format!("{} : {}", "Unable to Get EAT Table From Section",
+                                    self.handler.name.as_str());
+                    let _eexp = _data_map.get("IMAGE_DIRECTORY_ENTRY_EXPORT").expect(_msg.as_str());
+                    
+                    _rva_exports = self.get_rva_from_directory_entry("exports",
+                                                                     *_eexp,
+                                                                     &_section_table_headers);
+                    _dll_exports = self.get_dll_exports(&mut _rva_exports);
+                },
+                false => { _dll_exports; }
             }
         }
         
         {
             let mut _rva_resources: PE_RVA_TRACKER;
-            /*
-            if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_RESOURCE".to_string())
-            {
-                _msg = format!("{} : {}", "Unable to Get Entry Imports From Section",
-                                self.handler.name.as_str());
-                let _rsrc = _data_map.get("IMAGE_DIRECTORY_ENTRY_RESOURCE").expect(_msg.as_str());
-                
-                _rva_resources = self.get_rva_from_directory_entry("resources", *_rsrc, &_section_table_headers);
-                _resource_directory_entries = self.get_resource_directory_table_entries(&mut _rva_resources);
-                // ToDo:  Parse the Resource Entries to Get Embedded FileName
-            }
-            */
             match _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_RESOURCE".to_string())
             {
                 true  => {
