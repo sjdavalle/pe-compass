@@ -67,7 +67,8 @@ impl PeParser {
             let _dos_signature: IMAGE_DOS_HEADER = _x_bytes[..].pread_with(0usize, LE).expect(_msg.as_str());
 
             if _dos_signature.e_magic != 23117u16 {
-                println!("\n\n(?) Info:\t File Modification Observed\n\t\tExpected `MZ` Magic at Begining of File\n\n");
+                println!(
+                    "\n\n(?) Info:\t File Modification Observed\n\t\tExpected `MZ` Magic at Begining of File\n\n");
                 return PeParser { handler: _bfile, content: vec![], is_pe: false };
             }
             //  Validate the PE_MAGIC_SIGNATURE
