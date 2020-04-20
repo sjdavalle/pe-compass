@@ -212,7 +212,7 @@ impl PeParser {
             match _data_map.contains(&"IMAGE_DIRECTORY_ENTRY_RESOURCE".to_string()
             {
                 true  => {
-                    _msg = format!("{} : {}", "Unable to Get Entry Imports From Section",
+                    _msg = format!("{} : {}", "Unable to Get Entry Resources From Section",
                                     self.handler.name.as_str());
                     let _rsrc = _data_map.get("IMAGE_DIRECTORY_ENTRY_RESOURCE").expect(_msg.as_str());
                 
