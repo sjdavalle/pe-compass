@@ -44,9 +44,6 @@ impl PeParser {
     pub fn new(fp: &str) -> Self
     {
         let mut _msg: String = String::from("");
-        // Perform a quick inspection of the target file by focusing on the first 512 bytes.
-        // If a target file does not pass these checks, we won't bother reading it into memory
-        // or parsing it further.
         {
             let _bfile = FileHandler::open(fp, "r");
 
