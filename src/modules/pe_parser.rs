@@ -57,10 +57,13 @@ impl PeParser {
             //  We need this size as there are legacy PE files that have a `NE` signature and their
             //  PE NT_HEADERS have a different size than standard PE32 or PE32+ files
             let mut _x_bytes: [u8; 1040] = [0; 1040];
-            _msg = format!("{} : {}","Unable to Read New PE As BytesArray", _bfile.name.as_str());
+            
+            _msg = format!("{} : {}","Unable to Read New PE As BytesArray",
+                            _bfile.name.as_str());
             _bfile.read_as_bytesarray(&mut _x_bytes).expect(_msg.as_str());
     
-            _msg = format!("{} : {}","Unable to Serialize New PE || DOS_SIGNATURE: `MZ`", _bfile.name.as_str());
+            _msg = format!("{} : {}","Unable to Serialize New PE || DOS_SIGNATURE: `MZ`",
+                            _bfile.name.as_str());
             let _dos_signature: IMAGE_DOS_HEADER = _x_bytes[..].pread_with(0usize, LE).expect(_msg.as_str());
 
             if _dos_signature.e_magic != 23117u16 {
@@ -75,7 +78,8 @@ impl PeParser {
             _msg = format!("{} : {}","Unable to Serialize New PE || PE_SIGNATURE: `PE`", _bfile.name.as_str());
             let _pe_signature: u32 = _x_bytes[..].pread_with(_offset, LE).expect(_msg.as_str());
             if _pe_signature == 1006978382u32 {
-                println!("\n\n(?) Info:\tUnsupported PE File Type: Has `...NE...` signature\n\t\tOnly PE32 or PE32+ Files Are Supported\n\n");
+                println!(
+                    "\n\n(?) Info:\tUnsupported PE File Type: Has `...NE...` signature\n\t\tOnly PE32 or PE32+ Files Are Supported\n\n");
                 return PeParser { handler: _bfile, content: vec![], is_pe: false };
             }
         }
@@ -259,7 +263,8 @@ impl PeParser {
     pub fn get_dosheader(&self) -> IMAGE_DOS_HEADER
     {
         let _offset = 0 as usize;
-        let _msg = format!("{} : {}", "Unable to Serialize IMAGE_DOS_HEADER From PE File", self.handler.name.as_str());
+        let _msg = format!("{}: {}", "Unable to Serialize IMAGE_DOS_HEADER From PE File",
+                            self.handler.name.as_str());
         let _doshdr: IMAGE_DOS_HEADER = self.content.pread_with(_offset, LE).expect(_msg.as_str());
         _doshdr
     }
@@ -279,14 +284,17 @@ impl PeParser {
     fn get_dos_stub_string(&self) -> String
     {
         let _offset = 0x4D as usize;
-        let _msg = format!("{} : {}","Unable to Serialize DOS String", self.handler.name.as_str());  
+        let mut _msg = format!("{} : {}","Unable to Serialize DOS String",
+                            self.handler.name.as_str());  
         let _dos_stub: PE_DOS_STUB = self.content.pread_with(_offset, LE).expect(_msg.as_str());
         let mut _dos_string = String::with_capacity(40usize);
 
-        let _msg = format!("{} : {}","Unable to Convert Upper Bound DOS String into &STR From UTF-8", self.handler.name.as_str());     
+        _msg = format!("{} : {}","Unable to Convert Upper Bound DOS String into &STR From UTF-8",
+                        self.handler.name.as_str());     
         _dos_string.push_str(std::str::from_utf8(&_dos_stub.upper[..]).expect(_msg.as_str()));
         
-        let _msg = format!("{} : {}","Unable to Convert Lower Bound DOS String into &STR From UTF-8", self.handler.name.as_str());     
+        _msg = format!("{} : {}","Unable to Convert Lower Bound DOS String into &STR From UTF-8",
+                        self.handler.name.as_str());     
         _dos_string.push_str(std::str::from_utf8(&_dos_stub.lower[..]).expect(_msg.as_str()));
                 
         _dos_string
@@ -300,7 +308,8 @@ impl PeParser {
     pub fn inspect_nt_headers(&self, e_lfanew: i32) -> INSPECT_NT_HEADERS
     {
         let _offset = e_lfanew as usize;
-        let _msg = format!("{} : {}", "Unable to Serialize INSPECT_NT_HEADERS From e_lfanew", self.handler.name.as_str());
+        let _msg = format!("{} : {}", "Unable to Serialize INSPECT_NT_HEADERS From e_lfanew",
+                            self.handler.name.as_str());
         let _nt_headers: INSPECT_NT_HEADERS = self.content.pread_with(_offset, LE).expect(_msg.as_str());
         _nt_headers
     }
@@ -318,7 +327,8 @@ impl PeParser {
     fn get_image_nt_headers32(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS32
     {
         let _offset = e_lfanew as usize;     
-        let _msg = format!("{} : {}", "Unable to Serialize IMAGE_NT_HEADERS32 From e_lfanew", self.handler.name.as_str());  
+        let _msg = format!("{} : {}", "Unable to Serialize IMAGE_NT_HEADERS32 From e_lfanew",
+                            self.handler.name.as_str());  
         let _peheader: IMAGE_NT_HEADERS32 = self.content.pread_with(_offset, LE).expect(_msg.as_str());
         _peheader
     }
@@ -336,7 +346,8 @@ impl PeParser {
     fn get_image_nt_headers64(&self, e_lfanew: i32) -> IMAGE_NT_HEADERS64
     {
         let _offset = e_lfanew as usize;
-        let _msg = format!("{} : {}","Unable to Serialize IMAGE_NT_HEADERS64 From e_lfanew", self.handler.name.as_str());         
+        let _msg = format!("{} : {}","Unable to Serialize IMAGE_NT_HEADERS64 From e_lfanew",
+                            self.handler.name.as_str());         
         let _peheader: IMAGE_NT_HEADERS64 = self.content.pread_with(_offset, LE).expect(_msg.as_str());
         _peheader
     }
@@ -391,7 +402,8 @@ impl PeParser {
                 return _data_map;
             }
         }
-        let _msg = format!("{} : {}","Unable to Serialize IMAGE_DATA_DIRECTORY From NT_HEADERS", self.handler.name.as_str());  
+        let _msg = format!("{} : {}","Unable to Serialize IMAGE_DATA_DIRECTORY From NT_HEADERS",
+                            self.handler.name.as_str());  
         for (_idx, _d) in data_dir.iter().enumerate() {
             let _bytes = _d.to_le_bytes();
             let _entry: IMAGE_DATA_DIRECTORY = _bytes.pread_with(_offset, LE).expect(_msg.as_str());
@@ -473,17 +485,20 @@ impl PeParser {
             
         //  Calculate The Starting Offset of the Section Headers
         _offset_starts_sechdr = _offset_starts_opthdr + _sizeof_pe_opthdr;
-        let _msg = format!("{} : {}","Unable to Serialize SECTION_HEADER From SECTION_TABLE", self.handler.name.as_str());
-        let _msg_2 = format!("{} : {}","Unable to Convert SECTION_NAME From UTF-8 Bytes", self.handler.name.as_str());
+        
+        let _msg = format!("{} : {}","Unable to Serialize SECTION_HEADER From SECTION_TABLE",
+                            self.handler.name.as_str());
+        let _msg_2 = format!("{} : {}","Unable to Convert SECTION_NAME From UTF-8 Bytes",
+                             self.handler.name.as_str());
 
         while _total_bytes_sections != 0 {
 
             _section_header = self.content.pread_with(_offset_starts_sechdr, LE).expect(_msg.as_str());
             
             _section_name_bytes = _section_header.Name.iter()                 // Remove Null Bytes from Section Name
-                                                .filter(|x| *x > &0)
-                                                .map(|x| *x as u8)
-                                                .collect();
+                                                 .filter(|x| *x > &0)
+                                                 .map(|x| *x as u8)
+                                                 .collect();
             _section_name = String::from_utf8(_section_name_bytes).expect(_msg_2.as_str()); 
             _clone = _section_name.clone();
             if _section_name_unique.contains(&_clone) {
@@ -607,7 +622,8 @@ impl PeParser {
         // 1st Loop Code Block is used to create a list of the DLLs involved
         // Watch the offset change consistently to only parse this area of the PE File
         // Move on to Step 2 after this list is acquired.
-        let _msg = format!("{} : {}","Unable to Serialize IMPORT_DESCRIPTOR From Section Pointer", self.handler.name.as_str()); 
+        let _msg = format!("{} : {}","Unable to Serialize IMPORT_DESCRIPTOR From Section Pointer",
+                            self.handler.name.as_str()); 
         loop {                                                      // Find the Image Descriptors - i.e, DLLs
             _dll = self.content.pread_with(_offset, LE).expect(_msg.as_str());
             _dll_list.push(_dll);                                   // Add each descriptor found to the list
@@ -660,7 +676,9 @@ impl PeParser {
             }
         }
         if _invalid_offsets > 0 {
-            let _iat_results: Vec<DLL_PROFILE> = self.get_dll_imports_from_iat(_pe_type, _rva_iat, &_failed_import_descriptors);
+            let _iat_results: Vec<DLL_PROFILE> = self.get_dll_imports_from_iat(_pe_type,
+                                                                               _rva_iat,
+                                                                               &_failed_import_descriptors);
             for _iat_result in _iat_results {
                 _results.push(_iat_result);
             }
@@ -692,7 +710,6 @@ impl PeParser {
                 _dll_thunks = match _pe_type {                                      // Get All ThunkData Structs
                     &267 => DLL_THUNK_DATA::x86(self.get_dll_thunks32(_offset)),    // 32Bit ThunkData
                     &523 => DLL_THUNK_DATA::x64(self.get_dll_thunks64(_offset)),    // 64Bit ThunkData
-                    //_ => std::process::exit(0x0100)
                     _ => {
                         _results.push(DLL_PROFILE {                             // populate the dll profile list
                                 name: "null_dummy_dll".to_string(),
@@ -764,7 +781,8 @@ impl PeParser {
         const RANGE_OF_DLL_NAME: usize = 4 as usize;
         let mut _dll_name: String = String::new();
         let mut _offset: usize = _offset;
-        let _msg = format!("{} : {}","Unable to Serialize DLL_NAME from IMPORT_DESCRIPTOR", self.handler.name.as_str()); 
+        let _msg = format!("{} : {}","Unable to Serialize DLL_NAME from IMPORT_DESCRIPTOR",
+                            self.handler.name.as_str()); 
         loop {                                         
             let _part: u32 = self.content.pread_with(_offset, LE).expect(_msg.as_str());
             let _bytes  = _part.to_le_bytes();   // Read the DLL Name by 4 byte increment
@@ -803,7 +821,8 @@ impl PeParser {
         let mut _thunk_size: usize = 4 as usize;
         let mut _thunk_list: Vec<IMAGE_THUNK_DATA32> = vec![];
         let mut _offset: usize = _offset;
-        let _msg = format!("{} : {}","Unable to Serialize THUNK_DATA32 From IMAGE_DESCRIPTOR", self.handler.name.as_str()); 
+        let _msg = format!("{} : {}","Unable to Serialize THUNK_DATA32 From IMAGE_DESCRIPTOR",
+                            self.handler.name.as_str()); 
         loop {
             _thunk = self.content.pread_with(_offset, LE).expect(_msg.as_str());
             if _thunk.AddressOfData == 0 {
@@ -833,7 +852,8 @@ impl PeParser {
         let mut _thunk_size: usize = 8 as usize;
         let mut _thunk_list: Vec<IMAGE_THUNK_DATA64> = vec![];
         let mut _offset: usize = _offset;
-        let _msg = format!("{} : {}","Unable to Serialize THUNK_DATA64 From IMAGE_DESCRIPTOR", self.handler.name.as_str()); 
+        let _msg = format!("{} : {}","Unable to Serialize THUNK_DATA64 From IMAGE_DESCRIPTOR",
+                            self.handler.name.as_str()); 
         loop {
             _thunk = self.content.pread_with(_offset, LE).expect(_msg.as_str());
             if _thunk.AddressOfData == 0 {
@@ -866,14 +886,15 @@ impl PeParser {
         let mut _function: String = String:: new();
         let mut _part: u16 = 0;
         let mut _offset: usize = 0;
-        let _msg = format!("{} : {}","Unable to Serialize Function Name from THUNK_DATA32", self.handler.name.as_str()); 
+        let _msg = format!("{} : {}","Unable to Serialize Function Name from THUNK_DATA32",
+                            self.handler.name.as_str()); 
         for _thunk in _thunk_list {
             _offset = _rva.new_offset_from(_thunk.AddressOfData + 2);
             loop {
                 _part = self.content.pread_with(_offset, LE).expect(_msg.as_str());
                 let _bytes = _part.to_le_bytes();
                 let _dbytes: Vec<char> = _part.to_le_bytes().iter()
-                                                            .map(|x| * x as u8)
+                                                            .map(|x| *x as u8)
                                                             .filter(|x| x.is_ascii())
                                                             .map(|x| x as char)
                                                             .collect();
@@ -911,7 +932,8 @@ impl PeParser {
         let mut _function: String = String:: new();
         let mut _part: u16 = 0;
         let mut _offset: usize = 0;
-        let _msg = format!("{} : {}","Unable to Serialize Function Name from THUNK_DATA64", self.handler.name.as_str()); 
+        let _msg = format!("{} : {}","Unable to Serialize Function Name from THUNK_DATA64",
+                            self.handler.name.as_str()); 
         for _thunk in _thunk_list {
             let _x: u32 = (_thunk.AddressOfData + 2) as u32;
             _offset = _rva.new_offset_from(_x);
@@ -919,7 +941,7 @@ impl PeParser {
                 _part = self.content.pread_with(_offset, LE).expect(_msg.as_str());
                 let _bytes = _part.to_le_bytes();
                 let _dbytes: Vec<char> = _part.to_le_bytes().iter()
-                                                            .map(|x| * x as u8)
+                                                            .map(|x| *x as u8)
                                                             .filter(|x| x.is_ascii())
                                                             .map(|x| x as char)
                                                             .collect();
@@ -950,7 +972,8 @@ impl PeParser {
     fn get_dll_exports(&self, _rva: &mut PE_RVA_TRACKER) -> DLL_EXPORTS
     {
         let mut _offset = _rva.file_offset as usize;
-        let _msg = format!("{} : {}","Unable to serialize IMAGE_EXPORT_DIRECTORY", self.handler.name.as_str()); 
+        let _msg = format!("{} : {}","Unable to serialize IMAGE_EXPORT_DIRECTORY",
+                            self.handler.name.as_str()); 
         let _exports: IMAGE_EXPORT_DIRECTORY = self.content.pread_with(_offset, LE).expect(_msg.as_str());
         let _names_total = _exports.NumberOfNames as usize;
         let _funcs_total = _exports.NumberOfFunctions as usize;
@@ -964,7 +987,8 @@ impl PeParser {
             let mut _names_count = 0;
             let mut _names_rvas: Vec<usize> = Vec::with_capacity(_names_total);
             let mut _function_name: String = String::new();
-            let _msg = format!("{} : {}","Unable to Serialize First Name From Exports", self.handler.name.as_str()); 
+            let _msg = format!("{} : {}","Unable to Serialize First Name From Exports",
+                                self.handler.name.as_str()); 
             loop {
                 let _first_name: u32 = self.content.pread_with(_names, LE).expect(_msg.as_str());
                 let _first_name: usize = _rva.new_offset_from(_first_name);
@@ -977,14 +1001,15 @@ impl PeParser {
             }
             // Now that we have all RVAs for Exported Function Names, let's parse their strings (names)
             _names_rvas.sort();
-            let _msg = format!("{} : {}","Unable to Serialize Export Function String Part", self.handler.name.as_str()); 
+            let _msg = format!("{} : {}","Unable to Serialize Export Function String Part",
+                                self.handler.name.as_str()); 
             for (_idx, _rvaname) in _names_rvas.iter().enumerate() {
                 _offset = *_rvaname;
                 loop {
                     let _part: u16 = self.content.pread_with(_offset, LE).expect(_msg.as_str());
                     let _bytes = _part.to_le_bytes();
                     let _dbytes: Vec<char> = _part.to_le_bytes().iter()
-                                                                .map(|x| * x as u8)
+                                                                .map(|x| *x as u8)
                                                                 .filter(|x| x.is_ascii())
                                                                 .map(|x| x as char)
                                                                 .collect();               
