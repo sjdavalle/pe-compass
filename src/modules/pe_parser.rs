@@ -218,7 +218,7 @@ impl PeParser {
                 
                     _rva_resources = self.get_rva_from_directory_entry("resources",
                                                                        *_rsrc,
-                                                                       &section_table_headers);
+                                                                       &_section_table_headers);
                     _rsrc_directory_entries = self.get_resource_directory_table_entries(&mut _rva_resources);
                     // ToDo:  Parse the Resource Entries to Get Embedded FileName
                 },
