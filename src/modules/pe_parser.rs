@@ -72,9 +72,11 @@ impl PeParser {
                 return PeParser { handler: _bfile, content: vec![], is_pe: false };
             }
             //  Validate the PE_MAGIC_SIGNATURE
-            //  When Real PE_32 or PE_32+,          then = <...PE...> || 17744 Decimal || 0x00004550 LE || 0x50450000 BE
+            //  When Real PE_32 or PE_32+ 
+            //      then = <...PE...> || 17744 Decimal || 0x00004550 LE || 0x50450000 BE
             //
-            //  When Not Real But Legacy PE Type,   then = <...NE...> || 1006978382 Decimal || 0x3C05454E LE || 0x4E45053C BE
+            //  When Not Real But Legacy PE Type
+            //      then = <...NE...> || 1006978382 Decimal || 0x3C05454E LE || 0x4E45053C BE
             let _offset: usize = _dos_signature.e_lfanew as usize;
             _msg = format!("{} : {}","Unable to Serialize New PE || PE_SIGNATURE: `PE`", _bfile.name.as_str());
             let _pe_signature: u32 = _x_bytes[..].pread_with(_offset, LE).expect(_msg.as_str());
