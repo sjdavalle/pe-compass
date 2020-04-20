@@ -209,7 +209,7 @@ impl PeParser {
                 // ToDo:  Parse the Resource Entries to Get Embedded FileName
             }
             */
-            match _data_map.contains(&"IMAGE_DIRECTORY_ENTRY_RESOURCE".to_string())
+            match _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_RESOURCE".to_string())
             {
                 true  => {
                     _msg = format!("{} : {}", "Unable to Get Entry Resources From Section",
@@ -222,7 +222,7 @@ impl PeParser {
                     _rsrc_directory_entries = self.get_resource_directory_table_entries(&mut _rva_resources);
                     // ToDo:  Parse the Resource Entries to Get Embedded FileName
                 },
-                false => { _rsrc_directory_entries }
+                false => { _rsrc_directory_entries; }
             }
         }
         //  Hash the file's contents
