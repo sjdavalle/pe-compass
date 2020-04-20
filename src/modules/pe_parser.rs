@@ -99,6 +99,7 @@ impl PeParser {
     ///
     pub fn inspect_file(&self) -> PE_FILE
     {
+        let mut _msg: String = String::from("");
         //let _dos_stub = self.get_dos_stub_string();
         let _doshdr: IMAGE_DOS_HEADER = self.get_dosheader();
     
@@ -119,10 +120,7 @@ impl PeParser {
 
         let mut _resource_directory_table: IMAGE_RESOURCE_DIRECTORY_TABLE;
         let mut _resource_directory_entries: Vec<IMAGE_RESOURCE_DIRECTORY_ENTRY> = vec![];
-        //  1st Internal code block
-        //  We use this block to drop non-essential data structures and save memory
-        //  through the file inspection phase because we have to determine if a file
-        //  that needs to be parsed is either a 32 or 64 bit PE.
+        
         {
             let _nt_test: INSPECT_NT_HEADERS = self.inspect_nt_headers(_doshdr.e_lfanew);   // Drop these headers after block
             _petype = _nt_test.OptionalHeader.Magic;
@@ -134,71 +132,83 @@ impl PeParser {
                 267 => IMAGE_NT_HEADERS::x86(self.get_image_nt_headers32(_doshdr.e_lfanew)),
                 523 => IMAGE_NT_HEADERS::x64(self.get_image_nt_headers64(_doshdr.e_lfanew)),
                 _   => {
-                    //std::process::exit(0x0100);
                     let _null_nt_headers = IMAGE_NT_HEADERS32::load_null_image_nt_headers32();
                     IMAGE_NT_HEADERS::x86(_null_nt_headers)
                 }
             };
             let mut _subsystem: u16 = 0;
             _image_data_dir = match &_nt_headers {
-                IMAGE_NT_HEADERS::x86(value) => { _subsystem = value.OptionalHeader.Subsystem; value.OptionalHeader.DataDirectory },
-                IMAGE_NT_HEADERS::x64(value) => { _subsystem = value.OptionalHeader.Subsystem; value.OptionalHeader.DataDirectory }
+                IMAGE_NT_HEADERS::x86(value) => {
+                    _subsystem = value.OptionalHeader.Subsystem;
+                    value.OptionalHeader.DataDirectory
+                },
+                IMAGE_NT_HEADERS::x64(value) => {
+                    _subsystem = value.OptionalHeader.Subsystem;
+                    value.OptionalHeader.DataDirectory
+                }
             };
             _pesubsystem_caption = self.get_subsystem_type(&_subsystem);
             _pesubsystem = _subsystem;
             _data_map = self.get_data_directories(&_image_data_dir);
             _section_table_headers = self.get_section_headers(&_doshdr.e_lfanew, &_nt_test);
         }
-        // 2nd Internal code block is used again to keep essential data structures.
-        // However, here we want to focus on parsing tedious sections of the file that come from
-        // either IAT table.
+        
         {
-            // Acquire IAT ENTRY RVA
             let mut _rva_iat: PE_RVA_TRACKER;
-            if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IAT".to_string()) {
-                let _msg = format!("{} : {}", "Unable to Get Entry Imports From Section", self.handler.name.as_str());
+            let mut _rva_imports: PE_RVA_TRACKER;
+            if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IAT".to_string())
+            {
+                _msg = format!("{} : {}", "Unable to Get Entry Imports From Section",
+                                self.handler.name.as_str());
                 let _eiat = _data_map.get("IMAGE_DIRECTORY_ENTRY_IAT").expect(_msg.as_str());
                 _rva_iat = self.get_rva_from_directory_entry("imports_iat", *_eiat, &_section_table_headers);
             } else {
                 _rva_iat = PE_RVA_TRACKER::new();
             }
-            // Acquire IMPORT TABLE
-            if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IMPORT".to_string()) {
-                let _msg = format!("{} : {}", "Unable to Get Entry Imports From Section", self.handler.name.as_str());
+
+            if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IMPORT".to_string())
+            {
+                _msg = format!("{} : {}", "Unable to Get Entry Imports From Section",
+                                self.handler.name.as_str());
                 let _eimp = _data_map.get("IMAGE_DIRECTORY_ENTRY_IMPORT").expect(_msg.as_str());
-                let mut _rva_imports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("imports", *_eimp, &_section_table_headers);
+                _rva_imports = self.get_rva_from_directory_entry("imports", *_eimp, &_section_table_headers);
                 _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports, &mut _rva_iat);
             } else {
                 let _d = DLL_PROFILE { name: "".to_string(), imports: 0 as usize, functions: vec![] };
                 _dll_imports.push(_d);
             }
         }
-        // 3rd Internal code block used for DLL exports - EAT
-        // Once we optimize, we will refactor this.
+  
         {
+            let mut _rva_exports: PE_RVA_TRACKER;
             if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_EXPORT".to_string())
             {
-                let _msg = format!("{} : {}", "Unable to Get EAT Table From Section", self.handler.name.as_str());
+                _msg = format!("{} : {}", "Unable to Get EAT Table From Section",
+                                self.handler.name.as_str());
                 let _eexp = _data_map.get("IMAGE_DIRECTORY_ENTRY_EXPORT").expect(_msg.as_str());
-                let mut _rva_exports: PE_RVA_TRACKER = self.get_rva_from_directory_entry("exports", *_eexp, &_section_table_headers);
+                _rva_exports = self.get_rva_from_directory_entry("exports", *_eexp, &_section_table_headers);
                 _dll_exports = self.get_dll_exports(&mut _rva_exports);
             }
         }
-        // 4th Internal Code Used for Resource Directory
+        
         {
-            if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_RESOURCE".to_string()) {
-                let _msg = format!("{} : {}", "Unable to Get Entry Imports From Section", self.handler.name.as_str());
+            let mut _rva_resources: PE_RVA_TRACKER;
+            if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_RESOURCE".to_string())
+            {
+                _msg = format!("{} : {}", "Unable to Get Entry Imports From Section",
+                                self.handler.name.as_str());
                 let _rsrc = _data_map.get("IMAGE_DIRECTORY_ENTRY_RESOURCE").expect(_msg.as_str());
                 
-                let mut _rva_resources: PE_RVA_TRACKER = self.get_rva_from_directory_entry("resources", *_rsrc, &_section_table_headers);
-                _resource_directory_entries = self.get_resource_directory_entries(&mut _rva_resources);
+                _rva_resources = self.get_rva_from_directory_entry("resources", *_rsrc, &_section_table_headers);
+                _resource_directory_entries = self.get_resource_directory_table_entries(&mut _rva_resources);
                 // ToDo:  Parse the Resource Entries to Get Embedded FileName
             }
         }
         //  Hash the file's contents
         let mut _pehashes: PE_HASHES;
 
-        if _petype == 0 && _pesubsystem == 0 {
+        if _petype == 0 && _pesubsystem == 0
+        {
             _pehashes = PE_HASHES { sha2: "null".to_string() };
         } else {
             let _sha2: String = self.get_sha2();
@@ -1002,29 +1012,34 @@ impl PeParser {
     /// 
     /// 
     /// 
-    fn get_resource_directory_entries(&self, _rva: &mut PE_RVA_TRACKER) -> Vec<IMAGE_RESOURCE_DIRECTORY_ENTRY>
+    fn get_resource_directory_table_entries(
+            self,
+            _rva: &mut PE_RVA_TRACKER
+        ) -> Vec<IMAGE_RESOURCE_DIRECTORY_ENTRY>
     {
-        // A message string used for panic handling with custom message
         let mut _msg: String = String::from("");
-        // Allocate Resource Tree Structs
+ 
         let mut _rsrc_list_entries: Vec<IMAGE_RESOURCE_DIRECTORY_ENTRY>;
         let mut _rsrc_directory_table: IMAGE_RESOURCE_DIRECTORY_TABLE;
         let mut _rsrc_directory_entry: IMAGE_RESOURCE_DIRECTORY_ENTRY;
         let mut _rsrc_data_entry: IMAGE_RESOURCE_DATA_ENTRY; 
-        // Allocate record entries variables
-        let mut _total_rsrc_entries: usize = 0;
-        // Initialize an empty file offset
+
         let mut _offset: usize =  _rva.file_offset as usize;
-        // Step 1: Serialize the RESOURCE_DIRECTORY_TABLE
-        _msg = format!("{} : {}","Unable to Serialize IMAGE_RESOURCE_DIRECTORY_TABLE", self.handler.name.as_str()); 
+        let mut _total_rsrc_entries: usize = 0;
+
+        _msg = format!("{}: {}","Unable to Serialize IMAGE_RESOURCE_DIRECTORY_TABLE",
+                        self.handler.name.as_str());
+
         _rsrc_directory_table = self.content.pread_with(_offset, LE).expect(_msg.as_str());
-        // Step 2: Identify Number of IMAGE_RESOURCE_DIRECTORY_ENTRY records
+ 
         _total_rsrc_entries = _rsrc_directory_table.NumberOfIdEntries as usize;
         _rsrc_list_entries = Vec::with_capacity(_total_rsrc_entries);
-        // Advance the _offset ahead of the resource_table
+
         _offset += 16;
-        // Iterate through the number of entries and serialize them
-        _msg = format!("{} : {}","Unable to Serialize IMAGE_RESOURCE_DIRECTORY_ENTRY", self.handler.name.as_str()); 
+
+        _msg = format!("{} : {}","Unable to Serialize IMAGE_RESOURCE_DIRECTORY_ENTRY",
+                        self.handler.name.as_str());
+  
         for _num in 0.._total_rsrc_entries {
             _rsrc_directory_entry = self.content.pread_with(_offset, LE).expect(_msg.as_str());
             _rsrc_list_entries.push(_rsrc_directory_entry);
