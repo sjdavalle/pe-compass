@@ -22,6 +22,38 @@ On physical hosts, specially MacOs and Linux, the LLVM support is much faster th
 
 ### Benchmark Example: LargeFiles | Excel.exe
 The beloved Microsoft `excel.exe` is about 50 MBs in size, and we parse it in `500 millis` or half a second on Windows.
+
+```powershell
+PS C:\> Get-Item  "C:\Program Files\Microsoft Office\root\Office16\EXCEL.exe"
+
+
+    Directory: C:\Program Files\Microsoft Office\root\Office16
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        1/18/2020   1:43 PM       56482504 EXCEL.exe
+
+```
+<br/>
+
+```powershell
+
+PS C:\> Measure-Command { pe-compass inspect -f "C:\Program Files\Microsoft Office\root\Office16\EXCEL.exe" }
+
+
+Days              : 0
+Hours             : 0
+Minutes           : 0
+Seconds           : 0
+Milliseconds      : 362
+Ticks             : 3627106
+TotalDays         : 4.19803935185185E-06
+TotalHours        : 0.000100752944444444
+TotalMinutes      : 0.00604517666666667 
+TotalSeconds      : 0.3627106
+TotalMilliseconds : 362.7106
+```
 <br/>
 
 ### Benchmark Example: Small Files Average Time | Warm Cache
