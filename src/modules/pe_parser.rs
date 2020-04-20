@@ -123,7 +123,7 @@ impl PeParser {
         let mut _dll_exports: DLL_EXPORTS = DLL_EXPORTS { exports: 0 as usize, functions: vec![] };
 
         let mut _resource_directory_table: IMAGE_RESOURCE_DIRECTORY_TABLE;
-        let mut _resource_directory_entries: Vec<IMAGE_RESOURCE_DIRECTORY_ENTRY> = vec![];
+        let mut _rsrc_directory_entries: Vec<IMAGE_RESOURCE_DIRECTORY_ENTRY> = vec![];
         
         {
             let _nt_test: INSPECT_NT_HEADERS = self.inspect_nt_headers(_doshdr.e_lfanew);   // Drop these headers after block
@@ -197,6 +197,7 @@ impl PeParser {
         
         {
             let mut _rva_resources: PE_RVA_TRACKER;
+            /*
             if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_RESOURCE".to_string())
             {
                 _msg = format!("{} : {}", "Unable to Get Entry Imports From Section",
@@ -206,6 +207,22 @@ impl PeParser {
                 _rva_resources = self.get_rva_from_directory_entry("resources", *_rsrc, &_section_table_headers);
                 _resource_directory_entries = self.get_resource_directory_table_entries(&mut _rva_resources);
                 // ToDo:  Parse the Resource Entries to Get Embedded FileName
+            }
+            */
+            match _data_map.contains(&"IMAGE_DIRECTORY_ENTRY_RESOURCE".to_string()
+            {
+                true  => {
+                    _msg = format!("{} : {}", "Unable to Get Entry Imports From Section",
+                                    self.handler.name.as_str());
+                    let _rsrc = _data_map.get("IMAGE_DIRECTORY_ENTRY_RESOURCE").expect(_msg.as_str());
+                
+                    _rva_resources = self.get_rva_from_directory_entry("resources",
+                                                                       *_rsrc,
+                                                                       &section_table_headers);
+                    _rsrc_directory_entries = self.get_resource_directory_table_entries(&mut _rva_resources);
+                    // ToDo:  Parse the Resource Entries to Get Embedded FileName
+                },
+                false => { _rsrc_directory_entries }
             }
         }
         //  Hash the file's contents
