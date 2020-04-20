@@ -185,7 +185,7 @@ impl PeParser {
                     _dll_imports = self.get_dll_imports(&_petype, &mut _rva_imports, &mut _rva_iat);
                 },
                 false => {
-                    _dll_imports_push(
+                    _dll_imports.push(
                         DLL_PROFILE { name: "".to_string(), imports: 0 as usize, functions: vec![] });
                 }
             }
