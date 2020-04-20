@@ -161,7 +161,6 @@ impl PeParser {
             _section_table_headers = self.get_section_headers(&_doshdr.e_lfanew, &_nt_test);
         }
         
-        {
            if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_IAT".to_string())
             {
                 _msg = format!("{} : {}", "Unable to Get Entry Imports From Section",
@@ -188,9 +187,7 @@ impl PeParser {
                 _dll_imports.push(
                 DLL_PROFILE { name: "".to_string(), imports: 0 as usize, functions: vec![] });
             }
-        }
-  
-        {
+
             if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_EXPORT".to_string())
             {
 
@@ -205,9 +202,7 @@ impl PeParser {
             } else {
                 _dll_exports = DLL_EXPORTS { exports: 0 as usize, functions: vec![] };
             }
-        }
         
-        {
             if _data_map.contains_key(&"IMAGE_DIRECTORY_ENTRY_RESOURCE".to_string())
             {
                 _msg = format!("{} : {}", "Unable to Get Entry Resources From Section",
@@ -220,7 +215,6 @@ impl PeParser {
                 _rsrc_directory_entries = self.get_resource_directory_table_entries(&mut _rva_resources);
                     // ToDo:  Parse the Resource Entries to Get Embedded FileName
             }
-        }
         //  Hash the file's contents
         let mut _pehashes: PE_HASHES;
 
