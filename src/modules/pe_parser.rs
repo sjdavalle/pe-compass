@@ -205,7 +205,7 @@ impl PeParser {
                                                                      &_section_table_headers);
                     _dll_exports = self.get_dll_exports(&mut _rva_exports);
                 },
-                false => { _dll_exports; }
+                false => { _dll_exports = DLL_EXPORTS { exports: 0 as usize, functions: vec![] }; }
             }
         }
         
