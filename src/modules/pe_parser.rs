@@ -1038,7 +1038,7 @@ impl PeParser {
     /// 
     /// 
     fn get_resource_directory_table_entries(
-            self,
+            &self,
             _rva: &mut PE_RVA_TRACKER
         ) -> Vec<IMAGE_RESOURCE_DIRECTORY_ENTRY>
     {
