@@ -153,7 +153,6 @@ impl PeParser {
                 }
             };
             _pesubsystem_caption = self.get_subsystem_type(&_pesubsystem);
-            //_pesubsystem = _subsystem;
             _data_map = self.get_data_directories(&_image_data_dir);
             _section_table_headers = self.get_section_headers(&_doshdr.e_lfanew, &_nt_test);
         }
