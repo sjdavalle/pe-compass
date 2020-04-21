@@ -1050,7 +1050,6 @@ impl PeParser {
         let mut _rsrc_list_entries: Vec<IMAGE_RESOURCE_DIRECTORY_ENTRY>;
         let mut _rsrc_directory_table: IMAGE_RESOURCE_DIRECTORY_TABLE;
         let mut _rsrc_directory_entry: IMAGE_RESOURCE_DIRECTORY_ENTRY;
-        let mut _rsrc_data_entry: IMAGE_RESOURCE_DATA_ENTRY; 
 
         let mut _offset: usize =  _rva.file_offset as usize;
         let mut _total_rsrc_entries: usize = 0;
