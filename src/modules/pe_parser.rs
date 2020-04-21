@@ -8,9 +8,6 @@ use sha2::{ Sha256, Digest };
 use rand::Rng;
 
 // My Modules
-//#[path = "../utils/errors/custom_errors.rs"] mod custom_errors;
-//use custom_errors::exit_process;
-
 #[path = "../utils/filesystem/file_handler.rs"] mod file_handler;
 use file_handler::FileHandler;
 
